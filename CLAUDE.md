@@ -53,3 +53,8 @@ Commands
 pnpm dev
 pnpm build
 pnpm lint
+
+Reference Docs
+
+- docs/reference: 참고용 PDF 등 문서를 두는 폴더. 여기에 있는 파일은 관련 작업 시 참고할 것.
+- docs/reference/api-manual: API 명세/매뉴얼 문서를 두는 폴더 (PDF, CSV, MD 등). API 연동 작업 시 참고할 것. xlsx/docx는 csv/md/txt로 변환 후 넣을 것.
