@@ -33,15 +33,15 @@ Code Style
 
 Architecture
 
-Use a clean architecture-inspired structure when the project grows.
+Use a feature-first, clean architecture-inspired structure when the project grows.
 
 - app: Next.js routes, layouts, pages, and API routes
-- presentation: UI components and view logic
-- domain: business logic, entities, and use cases
-- data: repositories, API clients, and external data access
-- shared: shared utilities, constants, and common components
+- features/<feature>: one folder per feature, each containing its own
+  - domain: business logic, entities, and use cases for that feature
+  - data: repositories, API clients, and external data access for that feature
+- shared: shared utilities, constants, and common components used across features
 
-Business logic should be placed in the domain layer, not directly inside UI components.
+Business logic should be placed in a feature's domain layer, not directly inside UI components. Only lift code out of a feature folder into `shared` once it's actually needed by more than one feature.
 
 Styling
 
