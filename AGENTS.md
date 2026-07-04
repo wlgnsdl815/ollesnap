@@ -1,5 +1,19 @@
 Project Guidelines
 
+Project Context
+
+- This project is a submission for the 2026 관광데이터 활용 공모전.
+- Judges are expected to review the application primarily on mobile devices.
+- Treat mobile as the primary platform, not desktop.
+- Design, implement, and test every screen mobile-first. Build and verify the mobile experience before adding tablet or desktop layouts.
+- Design and validate the primary UI using a reference viewport of approximately 390px.
+- The application must remain fully functional on any viewport width from 360px upward.
+- Use responsive breakpoints only to enhance larger screens (`sm:`/`md:`/`lg:` and up) — never design for desktop first and scale down with `max-width` overrides.
+- On larger viewports (foldables, tablets, desktops), the layout must adapt naturally to the available space — e.g. wider containers, multi-column arrangements, adjusted spacing — rather than simply stretching or centering the mobile layout with empty space on the sides.
+- If a design or implementation tradeoff is required, always prioritize the mobile user experience, even if it results in a less-than-ideal desktop layout.
+- UI components should provide touch-friendly interactions, including sufficiently large tap targets (approximately 44px) and spacing. Avoid hover-only interactions.
+- The goal is a genuine mobile web app experience that also scales into a polished desktop experience — not a desktop site adapted for mobile, and not a mobile layout awkwardly stretched for desktop.
+
 Tech Stack
 
 - Next.js
@@ -34,6 +48,8 @@ Styling
 - Use Tailwind CSS.
 - Prefer template literals for conditional Tailwind classes.
 - Do not use class name join helpers unless necessary.
+- Prefer icons from `lucide-react` over custom SVGs or other icon sets.
+- Before building a UI component from scratch, check whether a shadcn/ui component already covers it and use that first. Only hand-roll a component when shadcn has no equivalent.
 
 Example:
 
