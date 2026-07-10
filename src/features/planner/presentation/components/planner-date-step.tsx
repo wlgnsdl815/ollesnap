@@ -1,28 +1,33 @@
 "use client";
 
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
-import type { DateRange } from "react-day-picker";
 
+import {
+  PLANNER_CALENDAR_END_MONTH,
+  PLANNER_CALENDAR_START_MONTH,
+} from "@/features/planner/domain/entity/planner-date-range.entity";
+import { formatPlannerYearMonth } from "@/features/planner/domain/planner-date-formatter";
 import { Calendar } from "@/shared/components/ui/calendar";
 
-const CALENDAR_START_MONTH = new Date(2026, 0);
-const CALENDAR_INITIAL_MONTH = new Date(2026, 6);
-const CALENDAR_END_MONTH = new Date(2030, 11);
+import { usePlannerDateRangeSelection } from "../hooks/use-planner-date-range-selection";
 
 interface PlannerDateStepProps {
   onContinue: () => void;
 }
 
 export function PlannerDateStep({ onContinue }: PlannerDateStepProps) {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [calendarMonth, setCalendarMonth] = useState(CALENDAR_INITIAL_MONTH);
-  const dateRangeLabel = formatDateRangeLabel(dateRange);
-  const canContinue = Boolean(dateRange?.from && dateRange?.to);
-  const canGoPrevious =
-    getMonthIndex(calendarMonth) > getMonthIndex(CALENDAR_START_MONTH);
-  const canGoNext =
-    getMonthIndex(calendarMonth) < getMonthIndex(CALENDAR_END_MONTH);
+  const {
+    dateRange,
+    setDateRange,
+    calendarMonth,
+    setCalendarMonth,
+    dateRangeLabel,
+    canContinue,
+    canGoPrevious,
+    canGoNext,
+    goToPreviousMonth,
+    goToNextMonth,
+  } = usePlannerDateRangeSelection();
 
   return (
     <div className="flex flex-col gap-5">
@@ -33,19 +38,19 @@ export function PlannerDateStep({ onContinue }: PlannerDateStepProps) {
               type="button"
               aria-label="이전 달"
               disabled={!canGoPrevious}
-              onClick={() => setCalendarMonth((month) => addMonths(month, -1))}
+              onClick={goToPreviousMonth}
               className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground disabled:opacity-35"
             >
               <ChevronLeft className="size-5" />
             </button>
             <p className="min-w-0 flex-1 text-center text-base font-black">
-              {formatYearMonth(calendarMonth)}
+              {formatPlannerYearMonth(calendarMonth)}
             </p>
             <button
               type="button"
               aria-label="다음 달"
               disabled={!canGoNext}
-              onClick={() => setCalendarMonth((month) => addMonths(month, 1))}
+              onClick={goToNextMonth}
               className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary text-foreground disabled:opacity-35"
             >
               <ChevronRight className="size-5" />
@@ -58,13 +63,13 @@ export function PlannerDateStep({ onContinue }: PlannerDateStepProps) {
             selected={dateRange}
             onSelect={setDateRange}
             captionLayout="label"
-            startMonth={CALENDAR_START_MONTH}
-            endMonth={CALENDAR_END_MONTH}
+            startMonth={PLANNER_CALENDAR_START_MONTH}
+            endMonth={PLANNER_CALENDAR_END_MONTH}
             hideNavigation
             numberOfMonths={1}
             showOutsideDays={false}
             formatters={{
-              formatCaption: (month) => formatYearMonth(month),
+              formatCaption: (month) => formatPlannerYearMonth(month),
             }}
             className="w-full bg-card [--cell-size:2.5rem]"
             classNames={{
@@ -104,53 +109,4 @@ export function PlannerDateStep({ onContinue }: PlannerDateStepProps) {
       </button>
     </div>
   );
-}
-
-function formatDateRangeLabel(dateRange: DateRange | undefined): string {
-  if (!dateRange?.from) {
-    return "일정 미선택";
-  }
-
-  if (!dateRange.to) {
-    return `${formatDate(dateRange.from)} 출발`;
-  }
-
-  return `${formatDate(dateRange.from)} - ${formatDate(dateRange.to)}`;
-}
-
-function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat("ko-KR", {
-    month: "long",
-    day: "numeric",
-    weekday: "short",
-  }).format(date);
-}
-
-function formatYearMonth(date: Date): string {
-  return new Intl.DateTimeFormat("ko-KR", {
-    year: "numeric",
-    month: "long",
-  }).format(date);
-}
-
-function addMonths(date: Date, amount: number): Date {
-  return clampMonth(new Date(date.getFullYear(), date.getMonth() + amount, 1));
-}
-
-function clampMonth(date: Date): Date {
-  const monthIndex = getMonthIndex(date);
-
-  if (monthIndex < getMonthIndex(CALENDAR_START_MONTH)) {
-    return CALENDAR_START_MONTH;
-  }
-
-  if (monthIndex > getMonthIndex(CALENDAR_END_MONTH)) {
-    return CALENDAR_END_MONTH;
-  }
-
-  return date;
-}
-
-function getMonthIndex(date: Date): number {
-  return date.getFullYear() * 12 + date.getMonth();
 }

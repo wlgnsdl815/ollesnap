@@ -4,7 +4,7 @@ import Link from "next/link";
 import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
 import { getJejuSnapSpotsPage } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spots-page";
 
-import { SnapSpotsInfiniteGrid } from "./snap-spots-infinite-grid";
+import { SnapSpotsInfiniteGrid } from "@/features/photo-spot/presentation/pages/snap-spots-infinite-grid";
 
 const photoSpotRepository = createPhotoSpotRepository();
 

@@ -35,11 +35,15 @@ Architecture
 
 Use a feature-first, clean architecture-inspired structure when the project grows.
 
-- app: Next.js routes, layouts, pages, and API routes
+- app: Next.js routes, layouts, and API routes. Keep `page.tsx`/`layout.tsx` files thin — they should only handle routing concerns (params, searchParams, metadata, composing layouts, server-side data fetching) and render a feature's presentation component. Trivial route stubs with no state or logic (e.g. a static empty-state page) may stay inline.
 - features/<feature>: one folder per feature, each containing its own
   - domain: business logic, entities, and use cases for that feature
   - data: repositories, API clients, and external data access for that feature
-- shared: shared utilities, constants, and common components used across features
+  - presentation: the feature's UI layer, split into
+    - pages: top-level screen components that `app/` route files import and render directly (one per route)
+    - components: sub-components composed within this feature's pages, not directly rendered by any route
+    - hooks: stateful logic (state + effects) extracted out of pages/components once it's non-trivial enough to obscure the JSX — skip this for a single `useState` with no derived logic
+- shared: shared utilities, constants, and common components used across features. Only move a presentation component here once it's actually reused by more than one feature — don't pre-emptively generalize a component that currently has one caller.
 
 Business logic should be placed in a feature's domain layer, not directly inside UI components. Only lift code out of a feature folder into `shared` once it's actually needed by more than one feature.
 

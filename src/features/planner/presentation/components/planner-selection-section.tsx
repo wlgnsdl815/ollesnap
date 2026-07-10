@@ -12,35 +12,18 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-type ServiceSlotId = "snap" | "dress" | "makeup";
+import {
+  SERVICE_SLOTS,
+  type ServiceSlot,
+  type ServiceSlotId,
+} from "@/features/planner/domain/entity/service-slot.entity";
+import { formatPlannerDateLabel } from "@/features/planner/domain/planner-date-formatter";
 
-interface ServiceSlot {
-  id: ServiceSlotId;
-  label: string;
-  description: string;
-  icon: typeof Camera;
-}
-
-const SERVICE_SLOTS: ServiceSlot[] = [
-  {
-    id: "snap",
-    label: "스냅",
-    description: "촬영 스타일과 컷 구성을 고릅니다.",
-    icon: Camera,
-  },
-  {
-    id: "dress",
-    label: "드레스",
-    description: "촬영 장소에 어울리는 의상을 고릅니다.",
-    icon: Heart,
-  },
-  {
-    id: "makeup",
-    label: "메이크업",
-    description: "헤어와 메이크업 일정을 맞춥니다.",
-    icon: Sparkles,
-  },
-];
+const SERVICE_SLOT_ICONS: Record<ServiceSlotId, typeof Camera> = {
+  snap: Camera,
+  dress: Heart,
+  makeup: Sparkles,
+};
 
 export function PlannerSelectionSection() {
   const [selectedDate, setSelectedDate] = useState("");
@@ -49,7 +32,7 @@ export function PlannerSelectionSection() {
   const activeServiceSlot =
     SERVICE_SLOTS.find((slot) => slot.id === activeServiceSlotId) ??
     SERVICE_SLOTS[0];
-  const selectedDateLabel = formatDateLabel(selectedDate);
+  const selectedDateLabel = formatPlannerDateLabel(selectedDate);
   const completedCount = selectedDate ? 1 : 0;
 
   return (
@@ -189,7 +172,7 @@ interface ServiceSlotCardProps {
 }
 
 function ServiceSlotCard({ slot, isActive, onSelect }: ServiceSlotCardProps) {
-  const Icon = slot.icon;
+  const Icon = SERVICE_SLOT_ICONS[slot.id];
 
   return (
     <button
@@ -229,22 +212,4 @@ function ServiceSlotCard({ slot, isActive, onSelect }: ServiceSlotCardProps) {
       </span>
     </button>
   );
-}
-
-function formatDateLabel(dateValue: string): string {
-  if (!dateValue) {
-    return "날짜 미정";
-  }
-
-  const date = new Date(`${dateValue}T00:00:00`);
-
-  if (Number.isNaN(date.getTime())) {
-    return "날짜 미정";
-  }
-
-  return new Intl.DateTimeFormat("ko-KR", {
-    month: "long",
-    day: "numeric",
-    weekday: "short",
-  }).format(date);
 }
