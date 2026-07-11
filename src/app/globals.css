@@ -50,6 +50,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Previous palette (olive green / gold, pre-2026-07-11). Kept for reference — see docs/design.md.
 :root {
   --background: #f3eee4;
   --foreground: #2e2a24;
@@ -84,7 +85,45 @@
   --sidebar-border: #ece7dd;
   --sidebar-ring: #5e8693;
 }
+*/
 
+/* Theme borrowed from LikeLion Design System (designsystem.likelion.net) — see docs/design.md */
+:root {
+  --background: #ffffff;
+  --foreground: #222222;
+  --card: #ffffff;
+  --card-foreground: #222222;
+  --popover: #ffffff;
+  --popover-foreground: #222222;
+  --primary: #ff6000;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #333d4b;
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #fff8e4;
+  --accent-foreground: #222222;
+  --destructive: #f64c4c;
+  --border: #d1d6dc;
+  --input: #d1d6dc;
+  --ring: #ff6000;
+  --chart-1: #ff6000;
+  --chart-2: #0da796;
+  --chart-3: #ffb700;
+  --chart-4: #333d4b;
+  --chart-5: #f64c4c;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #222222;
+  --sidebar-primary: #ff6000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #333d4b;
+  --sidebar-border: #d1d6dc;
+  --sidebar-ring: #ff6000;
+}
+
+/* Previous dark palette (shadcn default grayscale, pre-2026-07-11). Kept for reference.
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -117,6 +156,42 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+*/
+
+/* Dark variant extrapolated from the LikeLion neutral ladder (LikeLion itself defines no dark theme) */
+.dark {
+  --background: #191f28;
+  --foreground: #f9fafb;
+  --card: #212831;
+  --card-foreground: #f9fafb;
+  --popover: #212831;
+  --popover-foreground: #f9fafb;
+  --primary: #ff6000;
+  --primary-foreground: #ffffff;
+  --secondary: #2a323d;
+  --secondary-foreground: #f9fafb;
+  --muted: #2a323d;
+  --muted-foreground: #a3a3a3;
+  --accent: #33261a;
+  --accent-foreground: #ffb700;
+  --destructive: #f64c4c;
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: #ff6000;
+  --chart-1: #ff6000;
+  --chart-2: #0da796;
+  --chart-3: #ffb700;
+  --chart-4: #8a95a0;
+  --chart-5: #f64c4c;
+  --sidebar: #14181f;
+  --sidebar-foreground: #f9fafb;
+  --sidebar-primary: #ff6000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #2a323d;
+  --sidebar-accent-foreground: #f9fafb;
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: #ff6000;
 }
 
 @layer base {

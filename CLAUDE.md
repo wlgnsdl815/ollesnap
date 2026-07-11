@@ -49,6 +49,7 @@ Business logic should be placed in a feature's domain layer, not directly inside
 
 Styling
 
+- Follow docs/design.md for all color, typography, spacing, radius, and component styling decisions. Its tokens are mirrored in src/app/globals.css as CSS variables (`--primary`, `--background`, etc.) — use those variables (via Tailwind's `bg-primary`, `text-foreground`, etc.) rather than hardcoding hex values.
 - Use Tailwind CSS.
 - Prefer template literals for conditional Tailwind classes.
 - Do not use class name join helpers unless necessary.
@@ -76,5 +77,6 @@ pnpm lint
 
 Reference Docs
 
+- docs/design.md: 디자인 시스템 문서 (컬러/타이포/컴포넌트 스펙, 보이스&톤, 브랜드 원칙). 컬러/타이포/스페이싱/라운드/컴포넌트 스타일은 LikeLion Design System에서 차용했고, voice&tone·브랜드 서사·원칙은 ollesnap 고유 내용. UI 관련 작업 시 반드시 참고할 것.
 - docs/reference: 참고용 PDF 등 문서를 두는 폴더. 여기에 있는 파일은 관련 작업 시 참고할 것.
 - docs/reference/api-manual: API 명세/매뉴얼 문서를 두는 폴더 (PDF, CSV, MD 등). API 연동 작업 시 참고할 것. xlsx/docx는 csv/md/txt로 변환 후 넣을 것.
