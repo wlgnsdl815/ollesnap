@@ -34,6 +34,40 @@ export interface ToggleTravelPlanItemResult extends ActionResult {
   isSaved?: boolean;
 }
 
+export async function updateProfileNameAction(
+  profileName: string,
+): Promise<ActionResult> {
+  const normalizedName = profileName.trim();
+
+  if (!normalizedName) {
+    return { ok: false, message: "이름을 입력해주세요." };
+  }
+
+  if (normalizedName.length > 30) {
+    return { ok: false, message: "이름은 30자 이내로 입력해주세요." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, message: "로그인이 필요해요." };
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    data: { full_name: normalizedName },
+  });
+
+  if (error) {
+    return { ok: false, message: "프로필을 수정하지 못했어요." };
+  }
+
+  revalidatePath("/profile");
+  return { ok: true, message: "프로필 이름을 저장했어요." };
+}
+
 export async function toggleSavedArtistAction(
   artistId: string,
 ): Promise<ToggleSavedArtistResult> {

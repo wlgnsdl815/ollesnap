@@ -6,11 +6,11 @@ import {
   Map,
   UserRound,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
+import { ProfileNameEditor } from "@/features/account/presentation/components/profile-name-editor";
 import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
 import {
   formatPriceFrom,
@@ -56,26 +56,32 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-7 pb-4">
-      <section className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4">
-        <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary">
-          {avatarUrl ? (
-            <Image
-              src={avatarUrl}
-              alt=""
-              fill
-              sizes="56px"
-              className="object-cover"
-            />
-          ) : (
-            <UserRound className="size-7" />
-          )}
-        </span>
-        <div className="flex min-w-0 flex-col gap-1">
-          <p className="truncate text-lg font-semibold">{displayName}</p>
-          {user.email ? (
-            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-          ) : null}
+      <section className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4">
+        <div className="flex items-center gap-4">
+          <span className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary">
+            {avatarUrl ? (
+              // OAuth 공급자가 반환하는 CDN 주소는 고정되지 않아 Next 이미지 최적화를 거치지 않아요.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={avatarUrl}
+                alt=""
+                referrerPolicy="no-referrer"
+                className="absolute inset-0 size-full object-cover"
+              />
+            ) : (
+              <UserRound className="size-7" />
+            )}
+          </span>
+          <div className="flex min-w-0 flex-col gap-1">
+            <p className="truncate text-lg font-semibold">{displayName}</p>
+            {user.email ? (
+              <p className="truncate text-xs text-muted-foreground">
+                {user.email}
+              </p>
+            ) : null}
+          </div>
         </div>
+        <ProfileNameEditor initialName={displayName} />
       </section>
 
       <section className="flex flex-col gap-3">

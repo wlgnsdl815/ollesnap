@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, ClipboardList, House, Sparkles } from "lucide-react";
+import { Camera, ClipboardList, House, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,6 +15,7 @@ const TAB_ITEMS: TabItem[] = [
   { href: "/artists", label: "작가", icon: Camera },
   { href: "/styling", label: "스드메", icon: Sparkles },
   { href: "/planner", label: "내 촬영팀", icon: ClipboardList },
+  { href: "/profile", label: "프로필", icon: UserRound },
 ];
 
 export function BottomTabBar() {
