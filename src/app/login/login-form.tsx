@@ -4,6 +4,7 @@ import { LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 
+import { ensureClientProfileName } from "@/features/account/data/client/ensure-profile-name.client";
 import { Input } from "@/shared/components/ui/input";
 import { createClient } from "@/shared/supabase/client";
 
@@ -48,7 +49,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
     const supabase = createClient();
 
     if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -58,6 +59,10 @@ export function LoginForm({ nextPath }: LoginFormProps) {
       if (error) {
         setErrorMessage(error.message);
         return;
+      }
+
+      if (data.user) {
+        await ensureClientProfileName(data.user);
       }
 
       router.push(nextPath);
@@ -75,6 +80,10 @@ export function LoginForm({ nextPath }: LoginFormProps) {
     }
 
     if (data.session) {
+      if (data.user) {
+        await ensureClientProfileName(data.user);
+      }
+
       router.push(nextPath);
       router.refresh();
       return;

@@ -1,5 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import {
+  generateProfileName,
+  getProfileName,
+} from "@/features/account/domain/usecase/profile-name.usecase";
 import { createClient } from "@/shared/supabase/server";
 
 export async function GET(request: NextRequest) {
@@ -9,9 +13,15 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      if (data.user && !getProfileName(data.user.user_metadata)) {
+        await supabase.auth.updateUser({
+          data: { full_name: generateProfileName() },
+        });
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

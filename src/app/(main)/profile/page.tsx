@@ -10,6 +10,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
+import {
+  generateProfileName,
+  getProfileName,
+} from "@/features/account/domain/usecase/profile-name.usecase";
 import { ProfileNameEditor } from "@/features/account/presentation/components/profile-name-editor";
 import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
 import {
@@ -46,11 +50,19 @@ export default async function ProfilePage() {
         makeupId: savedPlan.makeupId,
       })
     : null;
+  const existingProfileName = getProfileName(user.user_metadata);
+  const generatedProfileName = existingProfileName
+    ? undefined
+    : generateProfileName();
+
+  if (generatedProfileName) {
+    await supabase.auth.updateUser({
+      data: { full_name: generatedProfileName },
+    });
+  }
+
   const displayName =
-    user.user_metadata.full_name ??
-    user.user_metadata.name ??
-    user.email ??
-    "올레스냅 사용자";
+    existingProfileName ?? generatedProfileName ?? user.email ?? "올레스냅 사용자";
   const avatarUrl: string | undefined =
     user.user_metadata.avatar_url ?? user.user_metadata.picture;
 
