@@ -1,8 +1,15 @@
 "use client";
 
-import { Camera, ChevronLeft, SlidersHorizontal, X } from "lucide-react";
+import {
+  Camera,
+  ChevronLeft,
+  LoaderCircle,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { useState } from "react";
 
 import type {
   SnapScene,
@@ -10,12 +17,12 @@ import type {
   WeddingTone,
 } from "../../domain/entity/wedding-catalog.entity";
 import {
-  filterSnapArtists,
   getSceneLabel,
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
 import { ArtistListCard } from "../components/artist-list-card";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
+import { useSnapArtistInfiniteQuery } from "../hooks/use-snap-artist-infinite-query";
 
 interface ArtistsScreenProps {
   catalog: WeddingCatalog;
@@ -34,11 +41,30 @@ export function ArtistsScreen({
   const [selectedTone, setSelectedTone] = useState<WeddingTone | undefined>(
     initialTone,
   );
-  const artists = useMemo(
-    () => filterSnapArtists(catalog.artists, { scene: selectedScene, tone: selectedTone }),
-    [catalog.artists, selectedScene, selectedTone],
-  );
+  const {
+    artists,
+    totalCount,
+    hasNextPage,
+    isError,
+    isFetchingNextPage,
+    isPending,
+    fetchNextPage,
+    refetch,
+  } = useSnapArtistInfiniteQuery({
+    scene: selectedScene,
+    tone: selectedTone,
+  });
+  const { ref: sentinelRef } = useInView({
+    rootMargin: "320px",
+    skip: !hasNextPage || isFetchingNextPage,
+    onChange: (isInView) => {
+      if (isInView) {
+        void fetchNextPage();
+      }
+    },
+  });
   const hasFilter = Boolean(selectedScene || selectedTone);
+  const hasInitialLoadError = isError && artists.length === 0;
 
   function resetFilters() {
     setSelectedScene(undefined);
@@ -133,9 +159,16 @@ export function ArtistsScreen({
           <p className="text-lg font-semibold">
             {hasFilter ? "선택한 취향의 작가" : "제주 스냅 작가"}
           </p>
-          <span className="text-sm text-muted-foreground">{artists.length}명</span>
+          <span className="text-sm text-muted-foreground">
+            {isPending ? "불러오는 중" : `${totalCount}명`}
+          </span>
         </div>
-        {artists.length > 0 ? (
+        {isPending ? (
+          <ArtistListSkeleton />
+        ) : hasInitialLoadError ? (
+          <ArtistLoadError onRetry={() => void refetch()} />
+        ) : artists.length > 0 ? (
+          <>
           <div className="grid gap-3 sm:grid-cols-2">
             {artists.map((artist) => (
               <ArtistListCard
@@ -146,6 +179,52 @@ export function ArtistsScreen({
               />
             ))}
           </div>
+            {hasNextPage ? (
+              <div
+                ref={sentinelRef}
+                className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-muted/40 p-4 text-center"
+              >
+                {isFetchingNextPage ? (
+                  <>
+                    <LoaderCircle className="size-5 animate-spin text-primary" />
+                    <p className="text-sm text-muted-foreground">
+                      다음 작가 10명을 불러오고 있어요.
+                    </p>
+                  </>
+                ) : isError ? (
+                  <>
+                    <p className="text-sm text-muted-foreground">
+                      다음 작가 목록을 불러오지 못했어요.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => void fetchNextPage()}
+                      className="flex min-h-11 items-center justify-center rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground active:bg-muted"
+                    >
+                      다시 시도
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-muted-foreground">
+                      아래로 스크롤하면 다음 작가 10명을 자동으로 보여드려요.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => void fetchNextPage()}
+                      className="flex min-h-11 items-center justify-center rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground active:bg-muted"
+                    >
+                      다음 10명 더 보기
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <p className="py-2 text-center text-sm text-muted-foreground">
+                모든 작가를 둘러봤어요.
+              </p>
+            )}
+          </>
         ) : (
           <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-muted/50 p-6 text-center">
             <span className="flex size-12 items-center justify-center rounded-xl bg-card text-primary">
@@ -169,6 +248,46 @@ export function ArtistsScreen({
       </section>
 
       <CatalogDemoNotice />
+    </div>
+  );
+}
+
+interface ArtistLoadErrorProps {
+  onRetry: () => void;
+}
+
+function ArtistLoadError({ onRetry }: ArtistLoadErrorProps) {
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-muted/50 p-6 text-center">
+      <span className="flex size-12 items-center justify-center rounded-xl bg-card text-primary">
+        <Camera className="size-6" />
+      </span>
+      <div className="flex flex-col gap-1">
+        <p className="text-base font-semibold">작가 목록을 불러오지 못했어요</p>
+        <p className="text-sm leading-6 text-muted-foreground">
+          잠시 후 다시 시도해주세요.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={onRetry}
+        className="flex min-h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground active:bg-primary/90"
+      >
+        다시 시도
+      </button>
+    </div>
+  );
+}
+
+function ArtistListSkeleton() {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2" aria-label="작가 목록 불러오는 중">
+      {Array.from({ length: 3 }, (_, index) => (
+        <div
+          key={index}
+          className="h-40 animate-pulse rounded-2xl border border-border bg-muted/60"
+        />
+      ))}
     </div>
   );
 }

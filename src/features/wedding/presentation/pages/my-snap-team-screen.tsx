@@ -27,8 +27,8 @@ export function MySnapTeamScreen({
   initialSavedPlan,
   isAuthenticated,
 }: MySnapTeamScreenProps) {
-  const stylingHref = `/styling?artist=${team.artist.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
-  const plannerHref = `/planner?artist=${team.artist.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
+  const stylingHref = `/styling?artist=${team.artist.id}&package=${team.snapPackage.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
+  const plannerHref = `/planner?artist=${team.artist.id}&package=${team.snapPackage.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -47,14 +47,15 @@ export function MySnapTeamScreen({
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <p className="text-sm text-white/70">촬영팀 준비 상태</p>
-            <p className="text-xl font-semibold">3가지 구성을 골랐어요</p>
+            <p className="text-xl font-semibold">4가지 구성을 골랐어요</p>
           </div>
           <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium">
             목 데이터 예시
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-4 gap-2">
           <ProgressItem label="작가" />
+          <ProgressItem label="상품" />
           <ProgressItem label="드레스" />
           <ProgressItem label="메이크업" />
         </div>
@@ -66,10 +67,19 @@ export function MySnapTeamScreen({
           icon={Camera}
           label="스냅 작가"
           name={team.artist.studioName}
-          description={`${team.artist.artistName} 작가 · ${team.artist.packageSummary}`}
-          price={formatPriceFrom(team.artist.priceFrom)}
+          description={`${team.artist.artistName} 작가 · ${team.artist.keywords.join(" · ")}`}
+          price="선택됨"
           href="/artists"
           actionLabel="작가 바꾸기"
+        />
+        <TeamMemberCard
+          icon={Camera}
+          label="촬영 상품"
+          name={team.snapPackage.name}
+          description={`${team.snapPackage.durationHours}시간 · 의상 ${team.snapPackage.outfitCountMinimum}~${team.snapPackage.outfitCountMaximum}벌 · 촬영 씬 ${team.snapPackage.sceneCount}개`}
+          price={formatPriceFrom(team.snapPackage.price)}
+          href={`/artists/${team.artist.id}`}
+          actionLabel="상품 바꾸기"
         />
         <TeamMemberCard
           icon={Shirt}
@@ -102,14 +112,15 @@ export function MySnapTeamScreen({
           <CalendarDays className="size-6 text-primary" />
         </div>
         <p className="text-sm leading-6 text-muted-foreground">
-          이동비, 헬퍼 비용, 추가 보정 등은 실제 상담에서 일정과 촬영 범위에
-          따라 확인해야 해요.
+          선택 옵션(드론·영상 등), 이동비, 헬퍼 비용, 추가 보정은 실제 상담에서
+          일정과 촬영 범위에 따라 확인해야 해요.
         </p>
       </section>
 
       <SaveSnapPlanCard
         plan={{
           artistId: team.artist.id,
+          packageId: team.snapPackage.id,
           dressId: team.dress.id,
           makeupId: team.makeup.id,
           shootingDate: null,

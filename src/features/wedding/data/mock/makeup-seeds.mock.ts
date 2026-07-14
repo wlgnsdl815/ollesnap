@@ -1,0 +1,186 @@
+import type { StylingSeed } from "./mock-seed.entity";
+
+// 제휴 전 공모전 데모용 메이크업 숍 데이터입니다.
+export const makeupSeeds: StylingSeed[] = [
+  {
+    id: "mood-on-makeup",
+    name: "무드온 메이크업",
+    introduction: "햇살 아래에서도 맑게 남는 피부 표현을 우선해요.",
+    keywords: ["물광", "내추럴", "헤어 변형 1회"],
+  },
+  {
+    id: "ongyeol-makeup",
+    name: "온결 메이크업",
+    introduction: "피부의 결을 살리고 사진에서 또렷한 포인트를 더해요.",
+    keywords: ["세미 매트", "음영", "헤어 변형 1회"],
+  },
+  {
+    id: "soft-grain-makeup",
+    name: "부드러운 결",
+    introduction: "클래식한 드레스와 균형을 이루는 섬세한 메이크업이에요.",
+    keywords: ["세미 매트", "클래식", "잔머리 연출"],
+  },
+  {
+    id: "dew-dawn-makeup",
+    name: "듀 던",
+    introduction: "이른 촬영에도 투명하게 남는 맑은 피부 표현을 제안해요.",
+    keywords: ["투명 피부", "아침 촬영", "로우 번"],
+  },
+  {
+    id: "frame-makeup",
+    name: "프레임 메이크업",
+    introduction: "사진 속 눈매와 윤곽의 균형을 차분하게 잡아드립니다.",
+    keywords: ["정교한 음영", "사진 메이크업", "업스타일"],
+  },
+  {
+    id: "peach-hour",
+    name: "피치 아워",
+    introduction: "따뜻한 햇살과 어울리는 피치 톤 포인트가 특징이에요.",
+    keywords: ["피치 톤", "글로우", "웨이브"],
+  },
+  {
+    id: "nude-note",
+    name: "누드 노트",
+    introduction: "꾸민 듯 안 꾸민 듯한 내추럴 웨딩 메이크업을 완성해요.",
+    keywords: ["누드 메이크업", "내추럴", "로우 포니"],
+  },
+  {
+    id: "hush-makeup",
+    name: "허쉬 메이크업",
+    introduction: "차분한 색조와 고급스러운 결을 오래 유지합니다.",
+    keywords: ["뮤트 톤", "세미 매트", "정갈한 헤어"],
+  },
+  {
+    id: "flower-face",
+    name: "플라워 페이스",
+    introduction: "사랑스럽고 화사한 포인트를 자연스럽게 더해요.",
+    keywords: ["코랄", "화사함", "반묶음"],
+  },
+  {
+    id: "calm-stroke",
+    name: "캄 스트로크",
+    introduction: "피부 본연의 톤을 해치지 않는 섬세한 보정을 추구해요.",
+    keywords: ["피부 표현", "차분함", "잔머리"],
+  },
+  {
+    id: "one-scene",
+    name: "원 씬",
+    introduction: "촬영 씬 변화에 맞춘 빠른 헤어 변형을 준비합니다.",
+    keywords: ["헤어 변형 2회", "야외", "수정 키트"],
+  },
+  {
+    id: "mellow-makeup",
+    name: "멜로우 메이크업",
+    introduction: "필름 사진에 어울리는 부드러운 색조를 제안해요.",
+    keywords: ["필름 무드", "소프트 브라운", "웨이브"],
+  },
+  {
+    id: "breeze-hair",
+    name: "브리즈 헤어",
+    introduction: "바람이 부는 제주에서도 흐트러짐이 예쁜 헤어를 만들어요.",
+    keywords: ["바람 대응", "내추럴 헤어", "고정력"],
+  },
+  {
+    id: "muse-face",
+    name: "뮤즈 페이스",
+    introduction: "드레스의 질감에 맞춰 색조를 세심하게 조율합니다.",
+    keywords: ["드레스 매칭", "음영", "업스타일"],
+  },
+  {
+    id: "lumen-makeup",
+    name: "루멘 메이크업",
+    introduction: "빛이 강한 시간에도 맑고 또렷한 인상을 남겨요.",
+    keywords: ["광채 피부", "자연광", "수정 키트"],
+  },
+  {
+    id: "taupe-studio",
+    name: "토프 스튜디오",
+    introduction: "절제된 토프 계열로 고급스러운 클래식 룩을 완성합니다.",
+    keywords: ["토프", "클래식", "로우 번"],
+  },
+  {
+    id: "june-makeup",
+    name: "준 메이크업",
+    introduction: "초여름 제주의 싱그러움을 살리는 가벼운 표현이에요.",
+    keywords: ["프레시", "코랄", "반묶음"],
+  },
+  {
+    id: "scene-on",
+    name: "씬온",
+    introduction: "노을과 야간 촬영까지 색감이 무너지지 않게 준비해요.",
+    keywords: ["노을", "야간", "지속력"],
+  },
+  {
+    id: "paper-makeup",
+    name: "페이퍼 메이크업",
+    introduction: "깨끗한 캔버스처럼 정돈된 피부 표현을 우선합니다.",
+    keywords: ["깨끗한 피부", "미니멀", "정갈함"],
+  },
+  {
+    id: "olive-stroke",
+    name: "올리브 스트로크",
+    introduction: "초록 풍경에 자연스럽게 어우러지는 뉴트럴 색조를 써요.",
+    keywords: ["뉴트럴", "숲길", "내추럴"],
+  },
+  {
+    id: "fine-line-makeup",
+    name: "파인 라인",
+    introduction: "선명한 이목구비를 과하지 않게 정리해드립니다.",
+    keywords: ["또렷한 눈매", "세미 매트", "업스타일"],
+  },
+  {
+    id: "satin-makeup",
+    name: "새틴 메이크업",
+    introduction: "은은하게 빛나는 새틴 피부 표현과 헤어를 제안해요.",
+    keywords: ["새틴 광", "실크 드레스", "웨이브"],
+  },
+  {
+    id: "lilac-room",
+    name: "라일락 룸",
+    introduction: "맑고 사랑스러운 색조로 밝은 촬영에 포인트를 더합니다.",
+    keywords: ["라일락", "맑은 색조", "하프업"],
+  },
+  {
+    id: "afterglow-makeup",
+    name: "애프터글로우",
+    introduction: "해가 진 뒤에도 입체감이 남는 메이크업을 완성해요.",
+    keywords: ["야간", "입체감", "지속력"],
+  },
+  {
+    id: "sand-makeup",
+    name: "샌드 메이크업",
+    introduction: "해변의 따뜻한 반사광과 어울리는 베이지 톤을 사용해요.",
+    keywords: ["베이지", "해변", "글로우"],
+  },
+  {
+    id: "petit-hair",
+    name: "쁘띠 헤어",
+    introduction: "잔머리와 작은 디테일이 예쁜 사랑스러운 헤어를 만들어요.",
+    keywords: ["잔머리", "러블리", "헤어 변형"],
+  },
+  {
+    id: "morrow-makeup",
+    name: "모로우 메이크업",
+    introduction: "긴 촬영일에도 편안하게 유지되는 실용적인 구성이에요.",
+    keywords: ["지속력", "수정 키트", "실용적"],
+  },
+  {
+    id: "pure-scene",
+    name: "퓨어 씬",
+    introduction: "인물의 장점을 또렷하게 살리는 깨끗한 웨딩 메이크업이에요.",
+    keywords: ["클린", "자연스러운 음영", "로우 번"],
+  },
+  {
+    id: "falling-light",
+    name: "폴링 라이트",
+    introduction: "노을빛 아래 깊이가 생기는 로맨틱한 색조를 제안합니다.",
+    keywords: ["로맨틱", "노을", "웨이브"],
+  },
+  {
+    id: "mild-makeup",
+    name: "마일드 메이크업",
+    introduction: "편안한 상담과 부드러운 표현을 원하는 커플에게 맞아요.",
+    keywords: ["부드러운 표현", "내추럴", "편안한 상담"],
+  },
+];
+

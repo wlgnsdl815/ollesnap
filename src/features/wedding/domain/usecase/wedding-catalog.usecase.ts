@@ -1,5 +1,6 @@
 import type {
   SnapArtist,
+  SnapPackage,
   SnapScene,
   SnapTeam,
   StylingKind,
@@ -15,6 +16,7 @@ export interface ArtistFilter {
 
 export interface SnapTeamSelectionInput {
   artistId?: string;
+  packageId?: string;
   dressId?: string;
   makeupId?: string;
 }
@@ -48,6 +50,16 @@ export function getStylingPartners(
   return catalog.stylingPartners.filter((partner) => partner.kind === kind);
 }
 
+export function findSnapPackage(
+  artist: SnapArtist,
+  packageId: string | undefined,
+): SnapPackage {
+  return (
+    artist.packages.find((snapPackage) => snapPackage.id === packageId) ??
+    artist.packages[0]
+  );
+}
+
 export function getSceneLabel(
   catalog: WeddingCatalog,
   scene: SnapScene,
@@ -77,6 +89,7 @@ export function resolveSnapTeam(
   selection: SnapTeamSelectionInput,
 ): SnapTeam {
   const artist = findSnapArtist(catalog, selection.artistId);
+  const snapPackage = findSnapPackage(artist, selection.packageId);
   const compatibleDresses = getCompatiblePartners(catalog, artist, "dress");
   const compatibleMakeup = getCompatiblePartners(catalog, artist, "makeup");
   const dress =
@@ -88,12 +101,17 @@ export function resolveSnapTeam(
 
   return {
     artist,
+    snapPackage,
     dress,
     makeup,
-    totalPriceFrom: artist.priceFrom + dress.priceFrom + makeup.priceFrom,
+    totalPriceFrom: snapPackage.price + dress.priceFrom + makeup.priceFrom,
   };
 }
 
 export function formatPriceFrom(price: number): string {
-  return `${new Intl.NumberFormat("ko-KR").format(price / 10_000)}만원부터`;
+  return `${formatPrice(price)}부터`;
+}
+
+export function formatPrice(price: number): string {
+  return `${new Intl.NumberFormat("ko-KR").format(price / 10_000)}만원`;
 }

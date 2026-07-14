@@ -1,6 +1,7 @@
 export interface SavedSnapPlan {
   id: string;
   artistId: string | null;
+  packageId: string | null;
   dressId: string | null;
   makeupId: string | null;
   shootingDate: string | null;

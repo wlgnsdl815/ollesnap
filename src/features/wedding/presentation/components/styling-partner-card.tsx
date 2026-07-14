@@ -10,6 +10,7 @@ import { formatPriceFrom } from "../../domain/usecase/wedding-catalog.usecase";
 interface StylingPartnerCardProps {
   artist: SnapArtist;
   partner: StylingPartner;
+  selectedPackageId?: string;
   selectedDressId?: string;
   selectedMakeupId?: string;
 }
@@ -17,11 +18,16 @@ interface StylingPartnerCardProps {
 export function StylingPartnerCard({
   artist,
   partner,
+  selectedPackageId,
   selectedDressId,
   selectedMakeupId,
 }: StylingPartnerCardProps) {
   const Icon = partner.kind === "dress" ? Shirt : Sparkles;
   const searchParams = new URLSearchParams({ artist: artist.id });
+
+  if (selectedPackageId) {
+    searchParams.set("package", selectedPackageId);
+  }
 
   if (selectedDressId) {
     searchParams.set("dress", selectedDressId);

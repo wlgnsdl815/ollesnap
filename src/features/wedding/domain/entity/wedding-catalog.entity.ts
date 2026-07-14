@@ -22,6 +22,31 @@ export interface WeddingToneOption {
   description: string;
 }
 
+export interface SnapPackageAddOn {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  notice?: string;
+}
+
+export interface SnapPackage {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  durationHours: number;
+  outfitCountMinimum: number;
+  outfitCountMaximum: number;
+  sceneCount: number;
+  colorCorrectedCount: number;
+  basicRetouchedCount: number;
+  selectedRetouchedCount: number;
+  includedServices: string[];
+  recommendedFor: string[];
+  addOns: SnapPackageAddOn[];
+}
+
 export interface SnapArtist {
   id: string;
   studioName: string;
@@ -35,7 +60,15 @@ export interface SnapArtist {
   durationHours: number;
   deliveryDays: number;
   reservationLeadDays: number;
+  packages: SnapPackage[];
   compatiblePartnerIds: string[];
+}
+
+export interface SnapArtistPage {
+  artists: SnapArtist[];
+  totalCount: number;
+  hasMore: boolean;
+  nextPage: number | null;
 }
 
 export interface StylingPartner {
@@ -58,6 +91,7 @@ export interface WeddingCatalog {
 
 export interface SnapTeam {
   artist: SnapArtist;
+  snapPackage: SnapPackage;
   dress: StylingPartner;
   makeup: StylingPartner;
   totalPriceFrom: number;

@@ -10,6 +10,7 @@ import { createClient } from "@/shared/supabase/server";
 interface SnapPlanRow {
   id: string;
   artist_id: string | null;
+  package_id: string | null;
   dress_id: string | null;
   makeup_id: string | null;
   shooting_date: string | null;
@@ -44,7 +45,7 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
     supabase
       .from("snap_plans")
       .select(
-        "id, artist_id, dress_id, makeup_id, shooting_date, stay_start_date, stay_end_date",
+        "id, artist_id, package_id, dress_id, makeup_id, shooting_date, stay_start_date, stay_end_date",
       )
       .eq("user_id", user.id)
       .maybeSingle(),
@@ -92,6 +93,7 @@ function mapSnapPlan(row: SnapPlanRow): SavedSnapPlan {
   return {
     id: row.id,
     artistId: row.artist_id,
+    packageId: row.package_id,
     dressId: row.dress_id,
     makeupId: row.makeup_id,
     shootingDate: row.shooting_date,

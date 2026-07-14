@@ -36,9 +36,12 @@ export default async function ProfilePage() {
   );
   const savedPlan = userWeddingState.snapPlan;
   const savedTeam =
-    savedPlan?.artistId && savedPlan.dressId && savedPlan.makeupId
+    savedPlan?.artistId &&
+    savedPlan.dressId &&
+    savedPlan.makeupId
     ? resolveSnapTeam(weddingCatalogMock, {
         artistId: savedPlan.artistId,
+        packageId: savedPlan.packageId ?? undefined,
         dressId: savedPlan.dressId,
         makeupId: savedPlan.makeupId,
       })
@@ -89,7 +92,7 @@ export default async function ProfilePage() {
               <div className="flex flex-col gap-1">
                 <p className="text-base font-semibold">{savedTeam.artist.studioName}</p>
                 <p className="text-sm leading-5 text-muted-foreground">
-                  {savedTeam.dress.name} · {savedTeam.makeup.name}
+                  {savedTeam.snapPackage.name} · {savedTeam.dress.name} · {savedTeam.makeup.name}
                 </p>
               </div>
               <ChevronRight className="size-5 text-muted-foreground" />

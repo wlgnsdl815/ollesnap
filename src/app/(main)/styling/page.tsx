@@ -3,7 +3,12 @@ import { findSnapArtist } from "@/features/wedding/domain/usecase/wedding-catalo
 import { StylingScreen } from "@/features/wedding/presentation/pages/styling-screen";
 
 interface StylingPageProps {
-  searchParams: Promise<{ artist?: string; dress?: string; makeup?: string }>;
+  searchParams: Promise<{
+    artist?: string;
+    package?: string;
+    dress?: string;
+    makeup?: string;
+  }>;
 }
 
 export default async function StylingPage({ searchParams }: StylingPageProps) {
@@ -14,6 +19,7 @@ export default async function StylingPage({ searchParams }: StylingPageProps) {
     <StylingScreen
       artist={artist}
       catalog={weddingCatalogMock}
+      selectedPackageId={query.package}
       selectedDressId={query.dress}
       selectedMakeupId={query.makeup}
     />

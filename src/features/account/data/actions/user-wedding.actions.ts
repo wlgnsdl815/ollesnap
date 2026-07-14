@@ -15,6 +15,7 @@ export interface ToggleSavedArtistResult extends ActionResult {
 
 export interface SaveSnapPlanInput {
   artistId: string;
+  packageId: string;
   dressId: string;
   makeupId: string;
   shootingDate: string | null;
@@ -112,6 +113,7 @@ export async function saveSnapPlanAction(
     {
       user_id: user.id,
       artist_id: input.artistId,
+      package_id: input.packageId,
       dress_id: input.dressId,
       makeup_id: input.makeupId,
       shooting_date: input.shootingDate,

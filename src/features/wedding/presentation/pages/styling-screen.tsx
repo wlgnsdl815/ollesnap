@@ -5,13 +5,17 @@ import type {
   SnapArtist,
   WeddingCatalog,
 } from "../../domain/entity/wedding-catalog.entity";
-import { getCompatiblePartners } from "../../domain/usecase/wedding-catalog.usecase";
+import {
+  findSnapPackage,
+  getCompatiblePartners,
+} from "../../domain/usecase/wedding-catalog.usecase";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import { StylingPartnerCard } from "../components/styling-partner-card";
 
 interface StylingScreenProps {
   artist: SnapArtist;
   catalog: WeddingCatalog;
+  selectedPackageId?: string;
   selectedDressId?: string;
   selectedMakeupId?: string;
 }
@@ -19,11 +23,13 @@ interface StylingScreenProps {
 export function StylingScreen({
   artist,
   catalog,
+  selectedPackageId,
   selectedDressId,
   selectedMakeupId,
 }: StylingScreenProps) {
   const dresses = getCompatiblePartners(catalog, artist, "dress");
   const makeupArtists = getCompatiblePartners(catalog, artist, "makeup");
+  const snapPackage = findSnapPackage(artist, selectedPackageId);
 
   return (
     <div className="flex flex-col gap-8 pb-4">
@@ -56,12 +62,12 @@ export function StylingScreen({
             <p className="text-sm font-semibold">선택한 스냅 작가</p>
             <p className="text-lg font-semibold">{artist.studioName}</p>
             <p className="text-xs text-muted-foreground">
-              {artist.artistName} 작가 · {artist.keywords.join(" · ")}
+              {artist.artistName} 작가 · {snapPackage.name} · {snapPackage.durationHours}시간 촬영
             </p>
           </div>
         </div>
         <Link
-          href={`/planner?artist=${artist.id}`}
+          href={`/planner?artist=${artist.id}${selectedPackageId ? `&package=${selectedPackageId}` : ""}`}
           className="flex min-h-11 items-center justify-center gap-1 text-sm font-semibold text-primary"
         >
           스드메 없이 팀 브리프 먼저 보기
@@ -85,6 +91,7 @@ export function StylingScreen({
               key={partner.id}
               artist={artist}
               partner={partner}
+              selectedPackageId={selectedPackageId}
               selectedDressId={selectedDressId}
               selectedMakeupId={selectedMakeupId}
             />
@@ -108,6 +115,7 @@ export function StylingScreen({
               key={partner.id}
               artist={artist}
               partner={partner}
+              selectedPackageId={selectedPackageId}
               selectedDressId={selectedDressId}
               selectedMakeupId={selectedMakeupId}
             />

@@ -4,7 +4,12 @@ import { MySnapTeamScreen } from "@/features/wedding/presentation/pages/my-snap-
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 
 interface MySnapTeamPageProps {
-  searchParams: Promise<{ artist?: string; dress?: string; makeup?: string }>;
+  searchParams: Promise<{
+    artist?: string;
+    package?: string;
+    dress?: string;
+    makeup?: string;
+  }>;
 }
 
 export default async function MySnapTeamPage({
@@ -15,6 +20,7 @@ export default async function MySnapTeamPage({
   const savedPlan = userWeddingState.snapPlan;
   const team = resolveSnapTeam(weddingCatalogMock, {
     artistId: selection.artist ?? savedPlan?.artistId ?? undefined,
+    packageId: selection.package ?? savedPlan?.packageId ?? undefined,
     dressId: selection.dress ?? savedPlan?.dressId ?? undefined,
     makeupId: selection.makeup ?? savedPlan?.makeupId ?? undefined,
   });
