@@ -78,13 +78,22 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
                 톤으로 촬영팀을 찾아드려요.
               </p>
             </div>
-            <Link
-              href="/artists"
-              className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
-            >
-              내 취향의 작가 찾기
-              <ArrowRight className="size-4" />
-            </Link>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/artists"
+                className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
+              >
+                내 취향의 작가 찾기
+                <ArrowRight className="size-4" />
+              </Link>
+              <Link
+                href="/start"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-md bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur active:bg-white/20"
+              >
+                아직 아무것도 못 골랐어요
+                <Sparkles className="size-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
