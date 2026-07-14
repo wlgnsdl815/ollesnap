@@ -161,7 +161,7 @@ interface SnapPackageCardProps {
 }
 
 function SnapPackageCard({ artist, snapPackage }: SnapPackageCardProps) {
-  const stylingHref = `/styling?artist=${artist.id}&package=${snapPackage.id}`;
+  const stylingHref = `/artists?tab=styling&artist=${artist.id}&package=${snapPackage.id}`;
 
   return (
     <article className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-5">

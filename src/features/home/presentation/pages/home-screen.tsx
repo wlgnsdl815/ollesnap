@@ -195,7 +195,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
             </p>
           </div>
           <Link
-            href="/styling"
+            href="/artists?tab=styling"
             className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-base font-semibold text-card active:bg-foreground/90"
           >
             드레스·메이크업 보기

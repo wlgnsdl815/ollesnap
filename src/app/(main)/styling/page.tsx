@@ -1,5 +1,4 @@
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
-import { StylingScreen } from "@/features/wedding/presentation/pages/styling-screen";
+import { redirect } from "next/navigation";
 
 interface StylingPageProps {
   searchParams: Promise<{
@@ -10,15 +9,15 @@ interface StylingPageProps {
 
 export default async function StylingPage({ searchParams }: StylingPageProps) {
   const query = await searchParams;
-  const selectedArtist = weddingCatalogMock.artists.find(
-    (artist) => artist.id === query.artist,
-  );
+  const redirectParams = new URLSearchParams({ tab: "styling" });
 
-  return (
-    <StylingScreen
-      artist={selectedArtist}
-      catalog={weddingCatalogMock}
-      selectedPackageId={query.package}
-    />
-  );
+  if (query.artist) {
+    redirectParams.set("artist", query.artist);
+  }
+
+  if (query.package) {
+    redirectParams.set("package", query.package);
+  }
+
+  redirect(`/artists?${redirectParams.toString()}`);
 }

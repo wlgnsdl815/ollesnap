@@ -39,8 +39,8 @@ export function StylingShopDetailScreen({
   const products = shop.products.filter((product) => product.kind === selectedKind);
   const isPartner = artist ? isPartnerStylingShop(shop, artist) : false;
   const backHref = artist
-    ? `/styling?artist=${artist.id}${selectedSnapPackageId ? `&package=${selectedSnapPackageId}` : ""}`
-    : "/styling";
+    ? `/artists?tab=styling&artist=${artist.id}${selectedSnapPackageId ? `&package=${selectedSnapPackageId}` : ""}`
+    : "/artists?tab=styling";
 
   return (
     <div className="flex flex-col gap-7 pb-4">

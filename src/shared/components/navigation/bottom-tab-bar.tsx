@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, ClipboardList, House, Sparkles, UserRound } from "lucide-react";
+import { Camera, ClipboardList, House, UserRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,12 +8,17 @@ interface TabItem {
   href: string;
   label: string;
   icon: typeof House;
+  activePaths?: string[];
 }
 
 const TAB_ITEMS: TabItem[] = [
   { href: "/", label: "홈", icon: House },
-  { href: "/artists", label: "작가", icon: Camera },
-  { href: "/styling", label: "스드메", icon: Sparkles },
+  {
+    href: "/artists",
+    label: "촬영 준비",
+    icon: Camera,
+    activePaths: ["/artists", "/styling"],
+  },
   { href: "/planner", label: "내 촬영팀", icon: ClipboardList },
   { href: "/profile", label: "프로필", icon: UserRound },
 ];
@@ -28,8 +33,11 @@ export function BottomTabBar() {
     >
       <ul className="mx-auto flex w-full max-w-md items-stretch justify-around px-2 sm:max-w-2xl lg:max-w-4xl">
         {TAB_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+          const isActive = item.activePaths
+            ? item.activePaths.some((path) => pathname.startsWith(path))
+            : item.href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(item.href);
 
           return (
             <li key={item.href} className="flex-1">

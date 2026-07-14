@@ -101,7 +101,7 @@ export function ArtistsScreen({
             </button>
           ) : null}
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <FilterChip
             isActive={!selectedScene}
             label="전체"
@@ -124,7 +124,7 @@ export function ArtistsScreen({
 
       <section className="flex flex-col gap-3">
         <p className="text-sm font-semibold">사진 톤</p>
-        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <FilterChip
             isActive={!selectedTone}
             label="전체"

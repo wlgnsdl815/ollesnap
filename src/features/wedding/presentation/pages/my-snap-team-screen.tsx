@@ -29,7 +29,7 @@ export function MySnapTeamScreen({
   initialSavedPlan,
   isAuthenticated,
 }: MySnapTeamScreenProps) {
-  const stylingHref = `/styling?artist=${team.artist.id}&package=${team.snapPackage.id}`;
+  const stylingHref = `/artists?tab=styling&artist=${team.artist.id}&package=${team.snapPackage.id}`;
   const stylingOptions = team.stylingAddOns.map((addOn) => addOn.id).join(",");
   const plannerSearchParams = new URLSearchParams({
     artist: team.artist.id,

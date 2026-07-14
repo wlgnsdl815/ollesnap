@@ -1,8 +1,14 @@
 import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
-import { ArtistsScreen } from "@/features/wedding/presentation/pages/artists-screen";
+import { WeddingCatalogScreen } from "@/features/wedding/presentation/pages/wedding-catalog-screen";
 
 interface ArtistsPageProps {
-  searchParams: Promise<{ scene?: string; tone?: string }>;
+  searchParams: Promise<{
+    artist?: string;
+    package?: string;
+    scene?: string;
+    tab?: string;
+    tone?: string;
+  }>;
 }
 
 export default async function ArtistsPage({ searchParams }: ArtistsPageProps) {
@@ -13,12 +19,19 @@ export default async function ArtistsPage({ searchParams }: ArtistsPageProps) {
   const initialTone = weddingCatalogMock.tones.find(
     (tone) => tone.id === query.tone,
   )?.id;
+  const initialArtist = weddingCatalogMock.artists.find(
+    (artist) => artist.id === query.artist,
+  );
+  const initialTab = query.tab === "styling" ? "styling" : "artists";
 
   return (
-    <ArtistsScreen
+    <WeddingCatalogScreen
       catalog={weddingCatalogMock}
+      initialArtist={initialArtist}
       initialScene={initialScene}
+      initialTab={initialTab}
       initialTone={initialTone}
+      selectedPackageId={query.package}
     />
   );
 }
