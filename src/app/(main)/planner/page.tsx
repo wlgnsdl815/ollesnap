@@ -7,8 +7,9 @@ interface MySnapTeamPageProps {
   searchParams: Promise<{
     artist?: string;
     package?: string;
-    dress?: string;
-    makeup?: string;
+    stylingShop?: string;
+    stylingProduct?: string;
+    stylingOptions?: string;
   }>;
 }
 
@@ -21,8 +22,12 @@ export default async function MySnapTeamPage({
   const team = resolveSnapTeam(weddingCatalogMock, {
     artistId: selection.artist ?? savedPlan?.artistId ?? undefined,
     packageId: selection.package ?? savedPlan?.packageId ?? undefined,
-    dressId: selection.dress ?? savedPlan?.dressId ?? undefined,
-    makeupId: selection.makeup ?? savedPlan?.makeupId ?? undefined,
+    stylingShopId: selection.stylingShop ?? savedPlan?.stylingShopId ?? undefined,
+    stylingProductId:
+      selection.stylingProduct ?? savedPlan?.stylingProductId ?? undefined,
+    stylingOptionIds: selection.stylingOptions
+      ? selection.stylingOptions.split(",").filter(Boolean)
+      : savedPlan?.stylingOptionIds,
   });
 
   return (

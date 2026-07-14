@@ -2,6 +2,7 @@ import { ArrowUpRight, Camera } from "lucide-react";
 import Link from "next/link";
 
 import type { SnapArtist } from "../../domain/entity/wedding-catalog.entity";
+import { formatPriceFrom } from "../../domain/usecase/wedding-catalog.usecase";
 
 interface ArtistListCardProps {
   artist: SnapArtist;
@@ -41,7 +42,7 @@ export function ArtistListCard({
           </span>
         </div>
         <p className="text-sm font-semibold text-primary">
-          {artist.priceFrom / 10_000}만원부터
+          {formatPriceFrom(artist.priceFrom)}
         </p>
       </div>
     </Link>

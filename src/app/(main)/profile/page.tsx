@@ -39,15 +39,13 @@ export default async function ProfilePage() {
     userWeddingState.savedArtistIds.includes(artist.id),
   );
   const savedPlan = userWeddingState.snapPlan;
-  const savedTeam =
-    savedPlan?.artistId &&
-    savedPlan.dressId &&
-    savedPlan.makeupId
+  const savedTeam = savedPlan?.artistId
     ? resolveSnapTeam(weddingCatalogMock, {
         artistId: savedPlan.artistId,
         packageId: savedPlan.packageId ?? undefined,
-        dressId: savedPlan.dressId,
-        makeupId: savedPlan.makeupId,
+        stylingShopId: savedPlan.stylingShopId ?? undefined,
+        stylingProductId: savedPlan.stylingProductId ?? undefined,
+        stylingOptionIds: savedPlan.stylingOptionIds,
       })
     : null;
   const existingProfileName = getProfileName(user.user_metadata);
@@ -110,7 +108,7 @@ export default async function ProfilePage() {
               <div className="flex flex-col gap-1">
                 <p className="text-base font-semibold">{savedTeam.artist.studioName}</p>
                 <p className="text-sm leading-5 text-muted-foreground">
-                  {savedTeam.snapPackage.name} · {savedTeam.dress.name} · {savedTeam.makeup.name}
+                  {savedTeam.snapPackage.name} · {savedTeam.stylingShop.name} · {savedTeam.stylingProduct.name}
                 </p>
               </div>
               <ChevronRight className="size-5 text-muted-foreground" />

@@ -2,7 +2,8 @@ import type {
   SnapArtist,
   SnapPackage,
   SnapPackageAddOn,
-  StylingPartner,
+  StylingProduct,
+  StylingShop,
   WeddingCatalog,
 } from "../../domain/entity/wedding-catalog.entity";
 
@@ -13,8 +14,7 @@ import type { ArtistSeed, StylingSeed } from "./mock-seed.entity";
 
 // 제휴 전 공모전 데모용 카탈로그입니다. 실제 입점/승인 데이터로 각 데이터 파일만 교체합니다.
 
-const DRESS_IDS = dressSeeds.map((seed) => seed.id);
-const MAKEUP_IDS = makeupSeeds.map((seed) => seed.id);
+const STYLING_SHOP_IDS = dressSeeds.map((seed) => `shop-${seed.id}`);
 
 const artists = artistSeeds.map((seed, index): SnapArtist => {
   const packages = createSnapPackages(seed, index);
@@ -28,14 +28,13 @@ const artists = artistSeeds.map((seed, index): SnapArtist => {
     deliveryDays: 18 + (index % 5) * 3,
     reservationLeadDays: 30 + (index % 4) * 15,
     packages,
-    compatiblePartnerIds: getCompatiblePartnerIds(index),
+    partnerStylingShopIds: getPartnerStylingShopIds(index),
   };
 });
 
-const stylingPartners: StylingPartner[] = [
-  ...dressSeeds.map((seed, index) => createDressPartner(seed, index)),
-  ...makeupSeeds.map((seed, index) => createMakeupPartner(seed, index)),
-];
+const stylingShops: StylingShop[] = dressSeeds.map((dressSeed, index) =>
+  createStylingShop(dressSeed, makeupSeeds[index], index),
+);
 
 export const weddingCatalogMock: WeddingCatalog = {
   scenes: [
@@ -73,44 +72,178 @@ export const weddingCatalogMock: WeddingCatalog = {
     { id: "film", label: "필름 무드", description: "조금 더 선명한 취향" },
   ],
   artists,
-  stylingPartners,
+  stylingShops,
 };
 
-function getCompatiblePartnerIds(index: number): string[] {
+function getPartnerStylingShopIds(index: number): string[] {
   return [
-    DRESS_IDS[index % DRESS_IDS.length],
-    DRESS_IDS[(index + 7) % DRESS_IDS.length],
-    DRESS_IDS[(index + 14) % DRESS_IDS.length],
-    DRESS_IDS[(index + 21) % DRESS_IDS.length],
-    MAKEUP_IDS[index % MAKEUP_IDS.length],
-    MAKEUP_IDS[(index + 9) % MAKEUP_IDS.length],
-    MAKEUP_IDS[(index + 18) % MAKEUP_IDS.length],
-    MAKEUP_IDS[(index + 27) % MAKEUP_IDS.length],
+    STYLING_SHOP_IDS[index % STYLING_SHOP_IDS.length],
+    STYLING_SHOP_IDS[(index + 7) % STYLING_SHOP_IDS.length],
+    STYLING_SHOP_IDS[(index + 14) % STYLING_SHOP_IDS.length],
+    STYLING_SHOP_IDS[(index + 21) % STYLING_SHOP_IDS.length],
   ];
 }
 
-function createDressPartner(seed: StylingSeed, index: number): StylingPartner {
+function createStylingShop(
+  dressSeed: StylingSeed,
+  makeupSeed: StylingSeed,
+  index: number,
+): StylingShop {
+  const partnerArtistIds = [
+    artistSeeds[index % artistSeeds.length].id,
+    artistSeeds[(index + 9) % artistSeeds.length].id,
+    artistSeeds[(index + 16) % artistSeeds.length].id,
+    artistSeeds[(index + 23) % artistSeeds.length].id,
+  ];
+
   return {
-    ...seed,
-    kind: "dress",
-    priceFrom: 380_000 + (index % 6) * 35_000 + Math.floor(index / 6) * 20_000,
-    preparationMinutes: 80 + (index % 4) * 10,
-    includedService: `드레스 ${index % 3 === 0 ? "3" : "2"}벌 · ${
-      index % 2 === 0 ? "베일" : "구두"
-    } · 기본 액세서리`,
+    id: STYLING_SHOP_IDS[index],
+    name: dressSeed.name,
+    introduction: `${dressSeed.introduction} ${makeupSeed.introduction}`,
+    keywords: [...dressSeed.keywords.slice(0, 2), makeupSeed.keywords[0]],
+    inventoryDescription:
+      index === 0
+        ? "드레스는 종류와 사이즈별로 약 600벌을 보유하고, 턱시도는 95·100·105 사이즈를 기본으로 준비해요."
+        : `야외 촬영용 드레스와 신랑 예복, ${makeupSeed.name}의 헤어·메이크업을 한곳에서 준비할 수 있어요.`,
+    partnerArtistIds,
+    products: createStylingProducts(index),
   };
 }
 
-function createMakeupPartner(seed: StylingSeed, index: number): StylingPartner {
+function createStylingProducts(index: number): StylingProduct[] {
+  const packagePriceOffset = index * 10_000;
+  const isFirstShop = index === 0;
+  const partnerDiscount = isFirstShop ? 110_000 : 90_000 + (index % 3) * 10_000;
+  const packageProducts = [
+    createStylingPackage("A", 700_000 + packagePriceOffset, partnerDiscount, [
+      "신랑·신부 헤어 메이크업",
+      "메인 롱드레스 1벌",
+      "턱시도 1벌",
+    ]),
+    createStylingPackage("B", 750_000 + packagePriceOffset, partnerDiscount, [
+      "신랑·신부 헤어 메이크업",
+      "메인 롱드레스 1벌",
+      "빈티지 드레스 1벌",
+      "턱시도 1벌",
+    ]),
+    createStylingPackage("C", 860_000 + packagePriceOffset, partnerDiscount, [
+      "신랑·신부 헤어 메이크업",
+      "메인 롱드레스 2벌",
+      "빈티지 드레스 1벌",
+      "턱시도 1벌",
+    ]),
+    createStylingPackage("Special", 1_320_000 + packagePriceOffset, partnerDiscount, [
+      "신랑·신부 헤어 메이크업",
+      "메인 롱드레스 3벌 · 턱시도 2벌",
+      "생화 부케 세트 · 셔츠 · 구두 · 베일 · 이어링",
+    ]),
+  ];
+
+  return [
+    ...packageProducts,
+    {
+      id: `single-dress-${index}`,
+      kind: "single",
+      name: "드레스 대여",
+      description: "드레스 한 벌을 취향과 촬영 씬에 맞춰 골라요.",
+      regularPrice: {
+        total: 150_000,
+        maximumTotal: 400_000,
+        vatAmount: 0,
+        taxIncluded: false,
+      },
+      includedServices: ["드레스 1벌", "기본 피팅", "사이즈 상담"],
+      addOns: createStylingAddOns(index, false),
+      notice: "드레스 디자인과 등급에 따라 금액이 달라지고 VAT는 별도예요.",
+    },
+    {
+      id: `single-tuxedo-${index}`,
+      kind: "single",
+      name: "턱시도 대여",
+      description: "신랑 예복 상·하의 한 벌을 준비해요.",
+      regularPrice: { total: 110_000, vatAmount: 0, taxIncluded: false },
+      includedServices: ["턱시도 상·하의 세트", "95·100·105 사이즈 피팅"],
+      addOns: [
+        {
+          id: `shirt-${index}`,
+          name: "셔츠 대여",
+          price: 10_000,
+          description: "턱시도와 어울리는 기본 셔츠를 함께 대여해요.",
+        },
+      ],
+      notice: "110 사이즈는 일부 기본 색상으로 상담 후 준비할 수 있어요.",
+    },
+    {
+      id: `single-hair-makeup-${index}`,
+      kind: "single",
+      name: "신랑·신부 헤어 메이크업",
+      description: "두 분 기준의 촬영용 헤어·메이크업 구성입니다.",
+      regularPrice: { total: 390_000, vatAmount: 40_000, taxIncluded: true },
+      partnerPrice: { total: 330_000, vatAmount: 30_000, taxIncluded: true },
+      includedServices: ["신부 메이크업 · 헤어", "신랑 메이크업 · 헤어", "수정 키트"],
+      addOns: createStylingAddOns(index, true),
+      notice: "신부님만 진행해도 기본 비용은 동일할 수 있어 상담에서 확인해요.",
+    },
+  ];
+}
+
+function createStylingPackage(
+  name: string,
+  total: number,
+  partnerDiscount: number,
+  includedServices: string[],
+): StylingProduct {
+  const vatAmount = Math.round(total / 100_000) * 10_000;
+  const partnerTotal = total - partnerDiscount;
+  const partnerVatAmount = Math.round(partnerTotal / 100_000) * 10_000;
+
   return {
-    ...seed,
-    kind: "makeup",
-    priceFrom: 280_000 + (index % 6) * 25_000 + Math.floor(index / 6) * 15_000,
-    preparationMinutes: 110 + (index % 4) * 10,
-    includedService: `신부 메이크업 · 헤어 · ${
-      index % 3 === 0 ? "헤어 변형 2회" : "수정 키트"
-    }`,
+    id: `package-${name.toLowerCase()}`,
+    kind: "package",
+    name: `패키지 ${name}`,
+    description: "드레스와 예복, 헤어·메이크업을 한 번에 준비하는 구성입니다.",
+    regularPrice: { total, vatAmount, taxIncluded: true },
+    partnerPrice: {
+      total: partnerTotal,
+      vatAmount: partnerVatAmount,
+      taxIncluded: true,
+    },
+    includedServices,
+    addOns: [
+      {
+        id: `studio-${name.toLowerCase()}`,
+        name: "스튜디오 촬영 옵션",
+        price: name === "Special" ? 180_000 : 150_000,
+        description: "날씨 변수에 대비한 실내 스튜디오 촬영을 추가해요.",
+      },
+    ],
+    notice: "턱시도와 빈티지 드레스는 구성에 따라 교차 변경할 수 있어요.",
   };
+}
+
+function createStylingAddOns(
+  index: number,
+  includesHair: boolean,
+) {
+  const addOns = [
+    {
+      id: `hanbok-${index}`,
+      name: "신랑·신부 한복 세트",
+      price: 330_000,
+      description: "두 분 한복과 기본 소품을 함께 준비해요.",
+    },
+  ];
+
+  if (includesHair) {
+    addOns.push({
+      id: `flower-hair-${index}`,
+      name: "생화 헤어장식",
+      price: 30_000,
+      description: "촬영 톤에 맞춘 생화 장식을 더해요.",
+    });
+  }
+
+  return addOns;
 }
 
 function createSnapPackages(seed: ArtistSeed, index: number): SnapPackage[] {

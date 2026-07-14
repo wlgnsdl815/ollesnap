@@ -3,8 +3,10 @@ import type {
   SnapPackage,
   SnapScene,
   SnapTeam,
-  StylingKind,
-  StylingPartner,
+  StylingProduct,
+  StylingProductAddOn,
+  StylingProductPrice,
+  StylingShop,
   WeddingCatalog,
   WeddingTone,
 } from "../entity/wedding-catalog.entity";
@@ -17,8 +19,9 @@ export interface ArtistFilter {
 export interface SnapTeamSelectionInput {
   artistId?: string;
   packageId?: string;
-  dressId?: string;
-  makeupId?: string;
+  stylingShopId?: string;
+  stylingProductId?: string;
+  stylingOptionIds?: string[];
 }
 
 export function filterSnapArtists(
@@ -43,11 +46,20 @@ export function findSnapArtist(
   );
 }
 
-export function getStylingPartners(
+export function findStylingShop(
   catalog: WeddingCatalog,
-  kind: StylingKind,
-): StylingPartner[] {
-  return catalog.stylingPartners.filter((partner) => partner.kind === kind);
+  stylingShopId: string | undefined,
+  artist?: SnapArtist,
+): StylingShop {
+  const shops = artist
+    ? getStylingShopsForArtist(catalog, artist)
+    : catalog.stylingShops;
+
+  return (
+    shops.find((shop) => shop.id === stylingShopId) ??
+    shops[0] ??
+    catalog.stylingShops[0]
+  );
 }
 
 export function findSnapPackage(
@@ -57,6 +69,16 @@ export function findSnapPackage(
   return (
     artist.packages.find((snapPackage) => snapPackage.id === packageId) ??
     artist.packages[0]
+  );
+}
+
+export function findStylingProduct(
+  shop: StylingShop,
+  stylingProductId: string | undefined,
+): StylingProduct {
+  return (
+    shop.products.find((product) => product.id === stylingProductId) ??
+    shop.products[0]
   );
 }
 
@@ -74,14 +96,48 @@ export function getToneLabel(
   return catalog.tones.find((item) => item.id === tone)?.label ?? "내추럴";
 }
 
-export function getCompatiblePartners(
+export function isPartnerStylingShop(
+  shop: StylingShop,
+  artist: SnapArtist,
+): boolean {
+  return shop.partnerArtistIds.includes(artist.id);
+}
+
+export function getStylingShopsForArtist(
   catalog: WeddingCatalog,
   artist: SnapArtist,
-  kind: StylingKind,
-): StylingPartner[] {
-  return getStylingPartners(catalog, kind).filter((partner) =>
-    artist.compatiblePartnerIds.includes(partner.id),
+): StylingShop[] {
+  const partnerShops = catalog.stylingShops.filter((shop) =>
+    isPartnerStylingShop(shop, artist),
   );
+  const otherShops = catalog.stylingShops.filter(
+    (shop) => !isPartnerStylingShop(shop, artist),
+  );
+
+  return [...partnerShops, ...otherShops];
+}
+
+export function getStylingProductPrice(
+  shop: StylingShop,
+  product: StylingProduct,
+  artist: SnapArtist | undefined,
+): StylingProductPrice {
+  if (artist && product.partnerPrice && isPartnerStylingShop(shop, artist)) {
+    return product.partnerPrice;
+  }
+
+  return product.regularPrice;
+}
+
+export function getStylingProductAddOns(
+  product: StylingProduct,
+  selectedOptionIds: string[] | undefined,
+): StylingProductAddOn[] {
+  if (!selectedOptionIds) {
+    return [];
+  }
+
+  return product.addOns.filter((addOn) => selectedOptionIds.includes(addOn.id));
 }
 
 export function resolveSnapTeam(
@@ -90,21 +146,31 @@ export function resolveSnapTeam(
 ): SnapTeam {
   const artist = findSnapArtist(catalog, selection.artistId);
   const snapPackage = findSnapPackage(artist, selection.packageId);
-  const compatibleDresses = getCompatiblePartners(catalog, artist, "dress");
-  const compatibleMakeup = getCompatiblePartners(catalog, artist, "makeup");
-  const dress =
-    compatibleDresses.find((partner) => partner.id === selection.dressId) ??
-    compatibleDresses[0];
-  const makeup =
-    compatibleMakeup.find((partner) => partner.id === selection.makeupId) ??
-    compatibleMakeup[0];
+  const stylingShop = findStylingShop(catalog, selection.stylingShopId, artist);
+  const stylingProduct = findStylingProduct(
+    stylingShop,
+    selection.stylingProductId,
+  );
+  const stylingPrice = getStylingProductPrice(stylingShop, stylingProduct, artist);
+  const stylingAddOns = getStylingProductAddOns(
+    stylingProduct,
+    selection.stylingOptionIds,
+  );
+  const hasPartnerStylingPrice =
+    Boolean(stylingProduct.partnerPrice) && isPartnerStylingShop(stylingShop, artist);
 
   return {
     artist,
     snapPackage,
-    dress,
-    makeup,
-    totalPriceFrom: snapPackage.price + dress.priceFrom + makeup.priceFrom,
+    stylingShop,
+    stylingProduct,
+    stylingPrice,
+    stylingAddOns,
+    hasPartnerStylingPrice,
+    totalPriceFrom:
+      snapPackage.price +
+      stylingPrice.total +
+      stylingAddOns.reduce((total, addOn) => total + addOn.price, 0),
   };
 }
 
@@ -113,5 +179,7 @@ export function formatPriceFrom(price: number): string {
 }
 
 export function formatPrice(price: number): string {
-  return `${new Intl.NumberFormat("ko-KR").format(price / 10_000)}만원`;
+  const roundedPrice = Math.round(price / 10_000) * 10_000;
+
+  return `${new Intl.NumberFormat("ko-KR").format(roundedPrice / 10_000)}만원`;
 }

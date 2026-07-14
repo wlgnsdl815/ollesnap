@@ -2,12 +2,10 @@
 
 import {
   Camera,
-  ChevronLeft,
   LoaderCircle,
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
 
@@ -73,14 +71,7 @@ export function ArtistsScreen({
 
   return (
     <div className="flex flex-col gap-7 pb-4">
-      <header className="flex flex-col gap-4">
-        <Link
-          href="/"
-          className="flex min-h-11 w-fit items-center gap-1 text-sm font-semibold text-muted-foreground active:text-foreground"
-        >
-          <ChevronLeft className="size-5" />
-          홈
-        </Link>
+      <header className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <p className="text-sm font-semibold text-primary">제주 스냅 작가</p>
           <h1 className="text-3xl font-semibold leading-tight tracking-tight text-balance">

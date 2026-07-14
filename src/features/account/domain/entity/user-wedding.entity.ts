@@ -2,8 +2,9 @@ export interface SavedSnapPlan {
   id: string;
   artistId: string | null;
   packageId: string | null;
-  dressId: string | null;
-  makeupId: string | null;
+  stylingShopId: string | null;
+  stylingProductId: string | null;
+  stylingOptionIds: string[];
   shootingDate: string | null;
   stayStartDate: string | null;
   stayEndDate: string | null;

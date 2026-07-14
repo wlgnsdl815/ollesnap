@@ -8,7 +8,7 @@ export type SnapScene =
 
 export type WeddingTone = "natural" | "warm" | "classic" | "film";
 
-export type StylingKind = "dress" | "makeup";
+export type StylingProductKind = "single" | "package";
 
 export interface SnapSceneOption {
   id: SnapScene;
@@ -61,7 +61,7 @@ export interface SnapArtist {
   deliveryDays: number;
   reservationLeadDays: number;
   packages: SnapPackage[];
-  compatiblePartnerIds: string[];
+  partnerStylingShopIds: string[];
 }
 
 export interface SnapArtistPage {
@@ -71,28 +71,56 @@ export interface SnapArtistPage {
   nextPage: number | null;
 }
 
-export interface StylingPartner {
+export interface StylingProductPrice {
+  total: number;
+  vatAmount: number;
+  maximumTotal?: number;
+  taxIncluded: boolean;
+}
+
+export interface StylingProductAddOn {
   id: string;
-  kind: StylingKind;
+  name: string;
+  price: number;
+  description: string;
+}
+
+export interface StylingProduct {
+  id: string;
+  kind: StylingProductKind;
+  name: string;
+  description: string;
+  regularPrice: StylingProductPrice;
+  partnerPrice?: StylingProductPrice;
+  includedServices: string[];
+  addOns: StylingProductAddOn[];
+  notice?: string;
+}
+
+export interface StylingShop {
+  id: string;
   name: string;
   introduction: string;
   keywords: string[];
-  priceFrom: number;
-  preparationMinutes: number;
-  includedService: string;
+  inventoryDescription: string;
+  partnerArtistIds: string[];
+  products: StylingProduct[];
 }
 
 export interface WeddingCatalog {
   scenes: SnapSceneOption[];
   tones: WeddingToneOption[];
   artists: SnapArtist[];
-  stylingPartners: StylingPartner[];
+  stylingShops: StylingShop[];
 }
 
 export interface SnapTeam {
   artist: SnapArtist;
   snapPackage: SnapPackage;
-  dress: StylingPartner;
-  makeup: StylingPartner;
+  stylingShop: StylingShop;
+  stylingProduct: StylingProduct;
+  stylingPrice: StylingProductPrice;
+  stylingAddOns: StylingProductAddOn[];
+  hasPartnerStylingPrice: boolean;
   totalPriceFrom: number;
 }

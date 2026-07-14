@@ -5,13 +5,15 @@ import {
   Check,
   ChevronRight,
   Map,
-  Shirt,
-  Sparkles,
+  PackageCheck,
 } from "lucide-react";
 import Link from "next/link";
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
-import { formatPriceFrom } from "../../domain/usecase/wedding-catalog.usecase";
+import {
+  formatPrice,
+  formatPriceFrom,
+} from "../../domain/usecase/wedding-catalog.usecase";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import type { SavedSnapPlan } from "@/features/account/domain/entity/user-wedding.entity";
 import { SaveSnapPlanCard } from "@/features/account/presentation/components/save-snap-plan-card";
@@ -27,8 +29,20 @@ export function MySnapTeamScreen({
   initialSavedPlan,
   isAuthenticated,
 }: MySnapTeamScreenProps) {
-  const stylingHref = `/styling?artist=${team.artist.id}&package=${team.snapPackage.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
-  const plannerHref = `/planner?artist=${team.artist.id}&package=${team.snapPackage.id}&dress=${team.dress.id}&makeup=${team.makeup.id}`;
+  const stylingHref = `/styling?artist=${team.artist.id}&package=${team.snapPackage.id}`;
+  const stylingOptions = team.stylingAddOns.map((addOn) => addOn.id).join(",");
+  const plannerSearchParams = new URLSearchParams({
+    artist: team.artist.id,
+    package: team.snapPackage.id,
+    stylingShop: team.stylingShop.id,
+    stylingProduct: team.stylingProduct.id,
+  });
+
+  if (stylingOptions) {
+    plannerSearchParams.set("stylingOptions", stylingOptions);
+  }
+
+  const plannerHref = `/planner?${plannerSearchParams.toString()}`;
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -47,17 +61,16 @@ export function MySnapTeamScreen({
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
             <p className="text-sm text-white/70">촬영팀 준비 상태</p>
-            <p className="text-xl font-semibold">4가지 구성을 골랐어요</p>
+            <p className="text-xl font-semibold">3가지 구성을 골랐어요</p>
           </div>
           <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium">
             목 데이터 예시
           </span>
         </div>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <ProgressItem label="작가" />
           <ProgressItem label="상품" />
-          <ProgressItem label="드레스" />
-          <ProgressItem label="메이크업" />
+          <ProgressItem label="스드메" />
         </div>
       </section>
 
@@ -82,23 +95,19 @@ export function MySnapTeamScreen({
           actionLabel="상품 바꾸기"
         />
         <TeamMemberCard
-          icon={Shirt}
-          label="드레스"
-          name={team.dress.name}
-          description={team.dress.includedService}
-          price={formatPriceFrom(team.dress.priceFrom)}
+          icon={PackageCheck}
+          label={team.hasPartnerStylingPrice ? "제휴 스드메 패키지" : "스드메 상품"}
+          name={`${team.stylingShop.name} · ${team.stylingProduct.name}`}
+          description={team.stylingProduct.includedServices.join(" · ")}
+          price={formatPrice(team.stylingPrice.total)}
           href={stylingHref}
-          actionLabel="드레스 바꾸기"
+          actionLabel="스드메 상품 바꾸기"
         />
-        <TeamMemberCard
-          icon={Sparkles}
-          label="메이크업"
-          name={team.makeup.name}
-          description={team.makeup.includedService}
-          price={formatPriceFrom(team.makeup.priceFrom)}
-          href={stylingHref}
-          actionLabel="메이크업 바꾸기"
-        />
+        {team.stylingAddOns.length > 0 ? (
+          <div className="rounded-xl bg-muted/60 px-4 py-3 text-sm text-muted-foreground">
+            선택 옵션: {team.stylingAddOns.map((addOn) => addOn.name).join(" · ")}
+          </div>
+        ) : null}
       </section>
 
       <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
@@ -112,8 +121,8 @@ export function MySnapTeamScreen({
           <CalendarDays className="size-6 text-primary" />
         </div>
         <p className="text-sm leading-6 text-muted-foreground">
-          선택 옵션(드론·영상 등), 이동비, 헬퍼 비용, 추가 보정은 실제 상담에서
-          일정과 촬영 범위에 따라 확인해야 해요.
+          스드메 옵션, 이동비, 헬퍼 비용, 추가 보정은 실제 상담에서 일정과 촬영
+          범위에 따라 확인해야 해요.
         </p>
       </section>
 
@@ -121,8 +130,9 @@ export function MySnapTeamScreen({
         plan={{
           artistId: team.artist.id,
           packageId: team.snapPackage.id,
-          dressId: team.dress.id,
-          makeupId: team.makeup.id,
+          stylingShopId: team.stylingShop.id,
+          stylingProductId: team.stylingProduct.id,
+          stylingOptionIds: team.stylingAddOns.map((addOn) => addOn.id),
           shootingDate: null,
           stayStartDate: null,
           stayEndDate: null,

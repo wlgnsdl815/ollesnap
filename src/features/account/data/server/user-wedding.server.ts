@@ -11,8 +11,9 @@ interface SnapPlanRow {
   id: string;
   artist_id: string | null;
   package_id: string | null;
-  dress_id: string | null;
-  makeup_id: string | null;
+  styling_shop_id: string | null;
+  styling_product_id: string | null;
+  styling_option_ids: string[] | null;
   shooting_date: string | null;
   stay_start_date: string | null;
   stay_end_date: string | null;
@@ -45,7 +46,7 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
     supabase
       .from("snap_plans")
       .select(
-        "id, artist_id, package_id, dress_id, makeup_id, shooting_date, stay_start_date, stay_end_date",
+        "id, artist_id, package_id, styling_shop_id, styling_product_id, styling_option_ids, shooting_date, stay_start_date, stay_end_date",
       )
       .eq("user_id", user.id)
       .maybeSingle(),
@@ -94,8 +95,9 @@ function mapSnapPlan(row: SnapPlanRow): SavedSnapPlan {
     id: row.id,
     artistId: row.artist_id,
     packageId: row.package_id,
-    dressId: row.dress_id,
-    makeupId: row.makeup_id,
+    stylingShopId: row.styling_shop_id,
+    stylingProductId: row.styling_product_id,
+    stylingOptionIds: row.styling_option_ids ?? [],
     shootingDate: row.shooting_date,
     stayStartDate: row.stay_start_date,
     stayEndDate: row.stay_end_date,

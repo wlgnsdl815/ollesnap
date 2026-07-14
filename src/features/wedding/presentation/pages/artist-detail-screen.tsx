@@ -19,8 +19,8 @@ import type {
 import {
   formatPrice,
   formatPriceFrom,
-  getCompatiblePartners,
   getSceneLabel,
+  getStylingShopsForArtist,
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
@@ -38,8 +38,9 @@ export function ArtistDetailScreen({
   isArtistSaved,
   isAuthenticated,
 }: ArtistDetailScreenProps) {
-  const compatibleDresses = getCompatiblePartners(catalog, artist, "dress");
-  const compatibleMakeup = getCompatiblePartners(catalog, artist, "makeup");
+  const linkedStylingShops = getStylingShopsForArtist(catalog, artist).filter(
+    (shop) => shop.partnerArtistIds.includes(artist.id),
+  );
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -122,30 +123,29 @@ export function ArtistDetailScreen({
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <Sparkles className="size-5 text-primary" />
-          <h2 className="text-xl font-semibold">이 작가와 잘 맞는 스드메</h2>
+          <h2 className="text-xl font-semibold">이 작가와 연계된 스드메 샵</h2>
         </div>
         <p className="text-sm leading-6 text-muted-foreground">
-          목 데이터 기준으로 사진 톤과 준비 동선이 잘 맞는 후보예요.
+          제휴 작가로 진행하면 샵별 패키지와 일부 단품에 제휴가가 적용돼요.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
-          {[...compatibleDresses, ...compatibleMakeup].map((partner) => (
-            <div
-              key={partner.id}
+          {linkedStylingShops.map((shop) => (
+            <Link
+              key={shop.id}
+              href={`/styling/${shop.id}?artist=${artist.id}`}
               className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
             >
               <div className="flex min-w-0 flex-col gap-1">
-                <p className="text-xs font-medium text-primary">
-                  {partner.kind === "dress" ? "드레스" : "메이크업"}
-                </p>
-                <p className="truncate text-sm font-semibold">{partner.name}</p>
+                <p className="text-xs font-medium text-primary">제휴 스드메 샵</p>
+                <p className="truncate text-sm font-semibold">{shop.name}</p>
                 <p className="truncate text-xs text-muted-foreground">
-                  {partner.keywords.join(" · ")}
+                  {shop.keywords.join(" · ")}
                 </p>
               </div>
               <p className="shrink-0 text-xs font-semibold text-primary">
-                {formatPriceFrom(partner.priceFrom)}
+                패키지 {shop.products.filter((product) => product.kind === "package").length}개
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
