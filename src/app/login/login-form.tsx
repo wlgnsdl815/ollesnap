@@ -1,5 +1,6 @@
 "use client";
 
+import { LockKeyhole, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 
@@ -20,6 +21,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const isLogin = mode === "login";
 
   async function handleOAuthLogin(provider: "google" | "kakao") {
     setErrorMessage(null);
@@ -45,7 +47,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
     const supabase = createClient();
 
-    if (mode === "login") {
+    if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -89,19 +91,30 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
   return (
     <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-1">
+        <p className="text-2xl font-semibold tracking-tight">
+          {isLogin ? "다시 만나 반가워요" : "올레스냅 시작하기"}
+        </p>
+        <p className="text-sm leading-6 text-muted-foreground">
+          {isLogin
+            ? "로그인하고 저장한 촬영 준비를 이어가세요."
+            : "30초면 제주 스냅 준비를 저장할 수 있어요."}
+        </p>
+      </div>
+
       <div className="flex flex-col gap-3">
         <button
           type="button"
           onClick={() => handleOAuthLogin("google")}
-          className="flex min-h-12 items-center justify-center gap-3 rounded-2xl border border-border bg-card text-sm font-bold text-foreground shadow-sm active:bg-muted"
+          className="flex min-h-12 items-center justify-center gap-3 rounded-md border border-border bg-card px-4 text-base font-semibold text-foreground active:bg-muted"
         >
           <GoogleIcon className="size-5" />
-          구글로 계속하기
+          Google로 계속하기
         </button>
         <button
           type="button"
           onClick={() => handleOAuthLogin("kakao")}
-          className="flex min-h-12 items-center justify-center gap-3 rounded-2xl bg-[#FEE500] text-sm font-bold text-black active:bg-[#FEE500]/80"
+          className="flex min-h-12 items-center justify-center gap-3 rounded-md bg-[#FEE500] px-4 text-base font-semibold text-black active:bg-[#FEE500]/80"
         >
           <KakaoIcon className="size-5" />
           카카오로 계속하기
@@ -110,61 +123,86 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
       <div className="flex items-center gap-3">
         <span className="h-px flex-1 bg-border" />
-        <span className="text-xs font-medium text-muted-foreground">또는</span>
+        <span className="text-xs text-muted-foreground">또는 이메일로</span>
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
-        <Input
-          type="email"
-          required
-          placeholder="이메일"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="min-h-12 rounded-2xl px-4"
-        />
-        <Input
-          type="password"
-          required
-          minLength={6}
-          placeholder="비밀번호"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className="min-h-12 rounded-2xl px-4"
-        />
+      <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-secondary-foreground">이메일</span>
+          <span className="relative">
+            <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="email"
+              required
+              autoComplete="email"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              className="min-h-12 rounded-md py-3 pr-3 pl-10 text-base"
+            />
+          </span>
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-sm font-medium text-secondary-foreground">비밀번호</span>
+          <span className="relative">
+            <LockKeyhole className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="password"
+              required
+              minLength={6}
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              placeholder="6자 이상 입력해주세요"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="min-h-12 rounded-md py-3 pr-3 pl-10 text-base"
+            />
+          </span>
+        </label>
 
-        {errorMessage && (
-          <p className="text-xs font-medium text-destructive">
+        {errorMessage ? (
+          <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm leading-5 text-destructive">
             {errorMessage}
           </p>
-        )}
-        {infoMessage && (
-          <p className="text-xs font-medium text-primary">{infoMessage}</p>
-        )}
+        ) : null}
+        {infoMessage ? (
+          <p className="rounded-md bg-primary/10 px-3 py-2 text-sm leading-5 text-primary">
+            {infoMessage}
+          </p>
+        ) : null}
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex min-h-12 items-center justify-center rounded-2xl bg-primary text-sm font-black text-primary-foreground active:bg-primary/90 disabled:opacity-50"
+          className="flex min-h-12 items-center justify-center rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
         >
-          {mode === "login" ? "이메일로 로그인" : "이메일로 회원가입"}
+          {isSubmitting
+            ? "잠시만요"
+            : isLogin
+              ? "이메일로 로그인"
+              : "이메일로 회원가입"}
         </button>
       </form>
 
-      <button
-        type="button"
-        onClick={toggleMode}
-        className="min-h-11 text-center text-xs font-semibold text-muted-foreground"
-      >
-        {mode === "login"
-          ? "계정이 없으신가요? 회원가입"
-          : "이미 계정이 있으신가요? 로그인"}
-      </button>
+      <p className="text-center text-sm text-muted-foreground">
+        {isLogin ? "처음 오셨나요?" : "이미 계정이 있나요?"}{" "}
+        <button
+          type="button"
+          onClick={toggleMode}
+          className="min-h-11 font-semibold text-primary underline-offset-4 active:underline"
+        >
+          {isLogin ? "회원가입" : "로그인"}
+        </button>
+      </p>
     </div>
   );
 }
 
-function GoogleIcon({ className }: { className?: string }) {
+interface ProviderIconProps {
+  className?: string;
+}
+
+function GoogleIcon({ className }: ProviderIconProps) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
       <path
@@ -187,7 +225,7 @@ function GoogleIcon({ className }: { className?: string }) {
   );
 }
 
-function KakaoIcon({ className }: { className?: string }) {
+function KakaoIcon({ className }: ProviderIconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
       <path
