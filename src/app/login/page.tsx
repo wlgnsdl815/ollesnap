@@ -4,15 +4,22 @@ import { createClient } from "@/shared/supabase/server";
 
 import { LoginForm } from "./login-form";
 
-export default async function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{ next?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const query = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/");
+    redirect(getSafeNextPath(query.next));
   }
+
+  const nextPath = getSafeNextPath(query.next);
 
   return (
     <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-center gap-10 px-6 py-12 sm:max-w-2xl lg:max-w-4xl">
@@ -25,7 +32,15 @@ export default async function LoginPage() {
         </p>
       </div>
 
-      <LoginForm />
+      <LoginForm nextPath={nextPath} />
     </div>
   );
+}
+
+function getSafeNextPath(nextPath: string | undefined) {
+  if (nextPath?.startsWith("/") && !nextPath.startsWith("//")) {
+    return nextPath;
+  }
+
+  return "/";
 }

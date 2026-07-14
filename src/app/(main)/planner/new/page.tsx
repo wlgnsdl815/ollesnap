@@ -1,5 +1,5 @@
-import { NewPlannerFlow } from "@/features/planner/presentation/pages/new-planner-flow";
+import { redirect } from "next/navigation";
 
 export default function NewPlannerPage() {
-  return <NewPlannerFlow />;
+  redirect("/artists");
 }

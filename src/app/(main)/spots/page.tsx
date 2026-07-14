@@ -26,7 +26,8 @@ export default async function JejuSnapSpotsPage() {
             제주 이곳저곳
           </h1>
           <p className="text-sm leading-6 text-muted-foreground">
-            관광공모전 수상작으로 만나는 제주 곳곳의 장소예요.
+            스냅 촬영 다음 날, 관광공모전 수상작으로 제주 여행 아이디어를
+            둘러보세요.
           </p>
         </div>
       </header>

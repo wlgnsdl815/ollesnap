@@ -1,5 +1,5 @@
-import { SnapPhotographersScreen } from "@/features/planner/presentation/pages/snap-photographers-screen";
+import { redirect } from "next/navigation";
 
 export default function SnapPhotographersPage() {
-  return <SnapPhotographersScreen />;
+  redirect("/artists");
 }

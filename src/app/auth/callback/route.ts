@@ -5,7 +5,7 @@ import { createClient } from "@/shared/supabase/server";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const next = getSafeNextPath(searchParams.get("next"));
 
   if (code) {
     const supabase = await createClient();
@@ -17,4 +17,12 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.redirect(`${origin}/login?error=auth`);
+}
+
+function getSafeNextPath(nextPath: string | null) {
+  if (nextPath?.startsWith("/") && !nextPath.startsWith("//")) {
+    return nextPath;
+  }
+
+  return "/";
 }

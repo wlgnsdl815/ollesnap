@@ -13,6 +13,8 @@ import Link from "next/link";
 import { createAttractionRepository } from "@/features/photo-spot/data/repository/attraction.repository.impl";
 import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
 import { getJejuSnapSpotDetail } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spot-detail";
+import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
+import { TravelPlanItemButton } from "@/features/account/presentation/components/travel-plan-item-button";
 
 const photoSpotRepository = createPhotoSpotRepository();
 const attractionRepository = createAttractionRepository();
@@ -25,11 +27,10 @@ export default async function SnapSpotDetailPage({
   params,
 }: SnapSpotDetailPageProps) {
   const { id } = await params;
-  const spot = await getJejuSnapSpotDetail(
-    photoSpotRepository,
-    attractionRepository,
-    id,
-  );
+  const [spot, userWeddingState] = await Promise.all([
+    getJejuSnapSpotDetail(photoSpotRepository, attractionRepository, id),
+    getUserWeddingState(),
+  ]);
   const attraction = spot?.attraction;
   const mapLink =
     attraction?.mapx && attraction?.mapy
@@ -170,6 +171,18 @@ export default async function SnapSpotDetailPage({
             )}
           </div>
         )}
+
+        <TravelPlanItemButton
+          spotId={spot.id}
+          title={spot.title}
+          location={spot.location}
+          imageUrl={spot.fullImageUrl}
+          initialIsSaved={userWeddingState.travelPlanItems.some(
+            (item) => item.spotId === spot.id,
+          )}
+          isAuthenticated={userWeddingState.isAuthenticated}
+          returnPath={`/spots/${spot.id}`}
+        />
 
         <p className="text-xs text-muted-foreground">
           사진 제공: 한국관광공사 관광공모전 수상작

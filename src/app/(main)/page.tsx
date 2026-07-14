@@ -1,11 +1,14 @@
-import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
-import { getJejuSnapSpots } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spots";
+import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
 import { HomeScreen } from "@/features/home/presentation/pages/home-screen";
-
-const photoSpotRepository = createPhotoSpotRepository();
+import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 
 export default async function HomePage() {
-  const jejuSnapSpots = await getJejuSnapSpots(photoSpotRepository);
+  const userWeddingState = await getUserWeddingState();
 
-  return <HomeScreen jejuSnapSpots={jejuSnapSpots} />;
+  return (
+    <HomeScreen
+      catalog={weddingCatalogMock}
+      isAuthenticated={userWeddingState.isAuthenticated}
+    />
+  );
 }

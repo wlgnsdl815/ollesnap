@@ -8,7 +8,11 @@ import { createClient } from "@/shared/supabase/client";
 
 type AuthMode = "login" | "signup";
 
-export function LoginForm() {
+interface LoginFormProps {
+  nextPath: string;
+}
+
+export function LoginForm({ nextPath }: LoginFormProps) {
   const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
@@ -20,9 +24,12 @@ export function LoginForm() {
   async function handleOAuthLogin(provider: "google" | "kakao") {
     setErrorMessage(null);
     const supabase = createClient();
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+
+    callbackUrl.searchParams.set("next", nextPath);
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: callbackUrl.toString() },
     });
 
     if (error) {
@@ -51,7 +58,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push("/");
+      router.push(nextPath);
       router.refresh();
       return;
     }
@@ -66,7 +73,7 @@ export function LoginForm() {
     }
 
     if (data.session) {
-      router.push("/");
+      router.push(nextPath);
       router.refresh();
       return;
     }
