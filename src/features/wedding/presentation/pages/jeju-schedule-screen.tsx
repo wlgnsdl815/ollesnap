@@ -6,6 +6,9 @@ import type {
   SavedTravelPlanItem,
 } from "@/features/account/domain/entity/user-wedding.entity";
 import { SaveSnapPlanCard } from "@/features/account/presentation/components/save-snap-plan-card";
+import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
+import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
+import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/congestion-visuals";
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
 import {
@@ -19,6 +22,7 @@ interface JejuScheduleScreenProps {
   initialSavedPlan: SavedSnapPlan | null;
   isAuthenticated: boolean;
   travelPlanItems: SavedTravelPlanItem[];
+  congestionLevelByItemId: Record<string, CongestionLevel>;
 }
 
 export function JejuScheduleScreen({
@@ -26,6 +30,7 @@ export function JejuScheduleScreen({
   initialSavedPlan,
   isAuthenticated,
   travelPlanItems,
+  congestionLevelByItemId,
 }: JejuScheduleScreenProps) {
   const stylingHref = `/artists?tab=styling&artist=${team.artist.id}&package=${team.snapPackage.id}`;
   const stylingOptions = team.stylingAddOns.map((addOn) => addOn.id).join(",");
@@ -110,27 +115,40 @@ export function JejuScheduleScreen({
         </div>
         {travelPlanItems.length > 0 ? (
           <div className="flex flex-col rounded-2xl border border-border bg-card px-5">
-            {travelPlanItems.map((item) => (
-              <Link
-                key={item.id}
-                href={`/spots/${item.spotId}`}
-                className="flex min-h-16 items-center justify-between gap-3 border-b border-border py-3 last:border-b-0"
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-semibold">
-                      {item.title}
-                    </span>
-                    <span className="mt-0.5 block truncate text-xs text-muted-foreground">
-                      {item.plannedDate
-                        ? formatKoreanDate(item.plannedDate)
-                        : item.location ?? "날짜는 나중에 정해도 괜찮아요"}
+            {travelPlanItems.map((item) => {
+              const congestionLevel = congestionLevelByItemId[item.id];
+
+              return (
+                <Link
+                  key={item.id}
+                  href={`/spots/${item.spotId}`}
+                  className="flex min-h-16 items-center justify-between gap-3 border-b border-border py-3 last:border-b-0"
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-semibold">
+                        {item.title}
+                      </span>
+                      <span className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                        <span className="truncate">
+                          {item.plannedDate
+                            ? formatKoreanDate(item.plannedDate)
+                            : item.location ?? "날짜는 나중에 정해도 괜찮아요"}
+                        </span>
+                        {congestionLevel && (
+                          <span
+                            className={`shrink-0 font-semibold ${CONGESTION_TEXT_CLASS[congestionLevel]}`}
+                          >
+                            · {getCongestionLevelLabel(congestionLevel)}
+                          </span>
+                        )}
+                      </span>
                     </span>
                   </span>
-                </span>
-                <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-              </Link>
-            ))}
+                  <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+                </Link>
+              );
+            })}
           </div>
         ) : (
           <div className="flex flex-col gap-2 rounded-2xl border border-border bg-muted/50 p-5">

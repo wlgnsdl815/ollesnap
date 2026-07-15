@@ -83,7 +83,7 @@ export function StylingScreen({
       </section>
 
       <section className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl font-semibold">스드메 샵</h2>
           <p className="text-sm text-muted-foreground">{shops.length}개 샵</p>
         </div>

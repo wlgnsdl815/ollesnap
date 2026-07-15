@@ -27,14 +27,16 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
         <Link href="/" className="text-2xl font-black text-primary">
           ollesnap
         </Link>
-        <Link
-          href={isAuthenticated ? "/profile" : "/login?next=/"}
-          aria-label={isAuthenticated ? "내 프로필" : "로그인"}
-          className="flex min-h-11 items-center gap-2 rounded-full bg-secondary px-3 text-xs font-medium text-secondary-foreground active:bg-muted"
-        >
-          <CircleUserRound className="size-4" />
-          {isAuthenticated ? "내 저장" : "로그인"}
-        </Link>
+        {isAuthenticated ? null : (
+          <Link
+            href="/login?next=/"
+            aria-label="로그인"
+            className="flex min-h-11 items-center gap-2 rounded-full bg-secondary px-3 text-xs font-medium text-secondary-foreground active:bg-muted"
+          >
+            <CircleUserRound className="size-4" />
+            로그인
+          </Link>
+        )}
       </header>
 
       <section className="relative min-h-[28rem] overflow-hidden rounded-3xl bg-foreground text-white">
@@ -155,7 +157,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
       </section>
 
       <FullBleedBand className="bg-muted py-10">
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <h2 className="text-2xl font-semibold tracking-tight">
             이런 작가를 찾을 수 있어요
           </h2>

@@ -10,13 +10,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { createAttractionRepository } from "@/features/photo-spot/data/repository/attraction.repository.impl";
+import { createCongestionRepository } from "@/features/photo-spot/data/repository/congestion.repository.impl";
 import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
+import { extractPlaceName } from "@/features/photo-spot/domain/extract-place-name";
+import { findSpotCongestionForecast } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import { getJejuSnapSpotDetail } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spot-detail";
+import { CongestionForecastCalendar } from "@/features/photo-spot/presentation/components/congestion-forecast-calendar";
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import { TravelPlanItemButton } from "@/features/account/presentation/components/travel-plan-item-button";
 
 const photoSpotRepository = createPhotoSpotRepository();
 const attractionRepository = createAttractionRepository();
+const congestionRepository = createCongestionRepository();
 
 interface SnapSpotDetailPageProps {
   params: Promise<{ id: string }>;
@@ -26,11 +31,15 @@ export default async function SnapSpotDetailPage({
   params,
 }: SnapSpotDetailPageProps) {
   const { id } = await params;
-  const [spot, userWeddingState] = await Promise.all([
+  const [spot, userWeddingState, congestionPool] = await Promise.all([
     getJejuSnapSpotDetail(photoSpotRepository, attractionRepository, id),
     getUserWeddingState(),
+    congestionRepository.getForecastPool(),
   ]);
   const attraction = spot?.attraction;
+  const congestionForecast = spot
+    ? findSpotCongestionForecast(congestionPool, extractPlaceName(spot.location))
+    : null;
   const mapLink =
     attraction?.mapx && attraction?.mapy
       ? `https://map.kakao.com/link/map/${encodeURIComponent(spot?.title ?? "")},${attraction.mapy},${attraction.mapx}`
@@ -166,6 +175,10 @@ export default async function SnapSpotDetailPage({
               </a>
             )}
           </div>
+        )}
+
+        {congestionForecast && (
+          <CongestionForecastCalendar forecast={congestionForecast} />
         )}
 
         <TravelPlanItemButton

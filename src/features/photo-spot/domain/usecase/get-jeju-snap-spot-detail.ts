@@ -1,4 +1,5 @@
 import type { PhotoSpot } from "../entity/photo-spot.entity";
+import { extractPlaceName } from "../extract-place-name";
 import type { AttractionRepository } from "../repository/attraction.repository";
 import type { PhotoSpotRepository } from "../repository/photo-spot.repository";
 
@@ -22,10 +23,4 @@ export async function getJejuSnapSpotDetail(
   const attraction = await attractionRepository.findByPlaceName(placeName);
 
   return attraction ? { ...spot, attraction } : spot;
-}
-
-function extractPlaceName(location: string): string {
-  const segments = location.split(",").map((segment) => segment.trim());
-
-  return segments[segments.length - 1] ?? "";
 }
