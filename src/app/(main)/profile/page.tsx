@@ -14,10 +14,6 @@ import {
   formatPriceFrom,
   resolveSnapTeam,
 } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
-import {
-  SCENE_IMAGES,
-  TONE_PHOTO_FILTERS,
-} from "@/features/wedding/presentation/lib/scene-tone-visuals";
 import { createClient } from "@/shared/supabase/server";
 
 import { SignOutButton } from "./sign-out-button";
@@ -100,13 +96,26 @@ export default async function ProfilePage() {
             className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 active:bg-muted"
           >
             <div className="flex items-start justify-between gap-3">
-              <div className="flex flex-col gap-1">
-                <p className="text-base font-semibold">{savedTeam.artist.studioName}</p>
-                <p className="text-sm leading-5 text-muted-foreground">
-                  {savedTeam.snapPackage.name} · {savedTeam.stylingShop.name} · {savedTeam.stylingProduct.name}
-                </p>
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
+                  <Image
+                    src={savedTeam.artist.profileImageUrl}
+                    alt={`${savedTeam.artist.artistName} 작가`}
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-base font-semibold">
+                    {savedTeam.artist.studioName}
+                  </p>
+                  <p className="truncate text-sm leading-5 text-muted-foreground">
+                    {savedTeam.snapPackage.name} · {savedTeam.stylingShop.name} · {savedTeam.stylingProduct.name}
+                  </p>
+                </div>
               </div>
-              <ChevronRight className="size-5 text-muted-foreground" />
+              <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
             </div>
             <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
               {savedPlan?.shootingDate ? (
@@ -142,14 +151,13 @@ export default async function ProfilePage() {
                 className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 active:bg-muted"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="relative size-11 shrink-0 overflow-hidden rounded-xl">
+                  <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
                     <Image
-                      src={SCENE_IMAGES[artist.scenes[0]]}
-                      alt=""
+                      src={artist.profileImageUrl}
+                      alt={`${artist.artistName} 작가`}
                       fill
                       sizes="44px"
                       className="object-cover"
-                      style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
                     />
                   </span>
                   <div className="min-w-0">

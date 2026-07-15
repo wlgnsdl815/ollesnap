@@ -22,6 +22,7 @@ const artists = artistSeeds.map((seed, index): SnapArtist => {
 
   return {
     ...seed,
+    profileImageUrl: getArtistProfileImageUrl(index),
     packageSummary: `${representativePackage.durationHours}시간 촬영 · 색감 보정본 ${representativePackage.colorCorrectedCount}장 · 인물 보정 ${representativePackage.basicRetouchedCount + representativePackage.selectedRetouchedCount}장`,
     priceFrom: representativePackage.price,
     durationHours: representativePackage.durationHours,
@@ -74,6 +75,13 @@ export const weddingCatalogMock: WeddingCatalog = {
   artists,
   stylingShops,
 };
+
+// 제휴 전 데모 단계의 작가 프로필 사진입니다. 실제 입점 데이터로 교체 시
+// DB에 저장된 작가별 URL로 대체합니다 (artistSeeds 순서와 1:1 대응, 01~30).
+function getArtistProfileImageUrl(index: number): string {
+  const fileNumber = String(index + 1).padStart(2, "0");
+  return `/images/profile/${fileNumber}.png`;
+}
 
 function getPartnerStylingShopIds(index: number): string[] {
   return [

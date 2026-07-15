@@ -40,14 +40,25 @@ export function ArtistListCard({
           {sceneLabel} · {toneLabel}
         </span>
       </div>
-      <div className="flex flex-col gap-0.5 p-4">
-        <p className="text-base font-semibold">{artist.studioName}</p>
-        <p className="text-xs text-muted-foreground">
-          {artist.artistName} 작가 · {artist.durationHours}시간 촬영
-        </p>
-        <p className="pt-1.5 text-sm font-semibold">
-          {formatPriceFrom(artist.priceFrom)}
-        </p>
+      <div className="flex items-start gap-3 p-4">
+        <span className="relative -mt-8 size-14 shrink-0 overflow-hidden rounded-full ring-4 ring-card">
+          <Image
+            src={artist.profileImageUrl}
+            alt={`${artist.artistName} 작가`}
+            fill
+            sizes="56px"
+            className="object-cover"
+          />
+        </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-1">
+          <p className="text-base font-semibold">{artist.studioName}</p>
+          <p className="text-xs text-muted-foreground">
+            {artist.artistName} 작가 · {artist.durationHours}시간 촬영
+          </p>
+          <p className="pt-1.5 text-sm font-semibold">
+            {formatPriceFrom(artist.priceFrom)}
+          </p>
+        </div>
       </div>
     </Link>
   );

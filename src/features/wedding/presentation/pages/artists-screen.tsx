@@ -93,7 +93,7 @@ export function ArtistsScreen({
             </button>
           ) : null}
         </div>
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden">
           <FilterChip
             isActive={!selectedScene}
             label="전체"
@@ -116,7 +116,7 @@ export function ArtistsScreen({
 
       <section className="flex flex-col gap-3">
         <p className="text-sm font-semibold">사진 톤</p>
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden">
           <FilterChip
             isActive={!selectedTone}
             label="전체"
@@ -152,16 +152,16 @@ export function ArtistsScreen({
           <ArtistLoadError onRetry={() => void refetch()} />
         ) : artists.length > 0 ? (
           <>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {artists.map((artist) => (
-              <ArtistListCard
-                key={artist.id}
-                artist={artist}
-                sceneLabel={getSceneLabel(catalog, artist.scenes[0])}
-                toneLabel={getToneLabel(catalog, artist.tones[0])}
-              />
-            ))}
-          </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {artists.map((artist) => (
+                <ArtistListCard
+                  key={artist.id}
+                  artist={artist}
+                  sceneLabel={getSceneLabel(catalog, artist.scenes[0])}
+                  toneLabel={getToneLabel(catalog, artist.tones[0])}
+                />
+              ))}
+            </div>
             {hasNextPage ? (
               <div
                 ref={sentinelRef}
@@ -258,7 +258,10 @@ function ArtistLoadError({ onRetry }: ArtistLoadErrorProps) {
 
 function ArtistListSkeleton() {
   return (
-    <div className="grid gap-3 sm:grid-cols-2" aria-label="작가 목록 불러오는 중">
+    <div
+      className="grid gap-3 sm:grid-cols-2"
+      aria-label="작가 목록 불러오는 중"
+    >
       {Array.from({ length: 3 }, (_, index) => (
         <div
           key={index}

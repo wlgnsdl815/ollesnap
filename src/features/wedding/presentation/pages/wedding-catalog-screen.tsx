@@ -54,17 +54,17 @@ export function WeddingCatalogScreen({
       <TabsList
         variant="line"
         aria-label="촬영 준비 카테고리"
-        className="sticky top-0 z-20 flex !h-14 w-full justify-start gap-0 rounded-none bg-background p-0"
+        className="sticky top-0 z-20 flex h-14! w-full justify-start gap-0 rounded-none bg-background p-0"
       >
         <TabsTrigger
           value="artists"
-          className="rounded-none px-4 text-base font-semibold text-muted-foreground data-active:text-primary after:!bottom-0 after:bg-primary"
+          className="rounded-none px-4 text-base font-semibold text-muted-foreground data-active:text-primary after:bottom-0! after:bg-primary"
         >
           작가
         </TabsTrigger>
         <TabsTrigger
           value="styling"
-          className="rounded-none px-4 text-base font-semibold text-muted-foreground data-active:text-primary after:!bottom-0 after:bg-primary"
+          className="rounded-none px-4 text-base font-semibold text-muted-foreground data-active:text-primary after:bottom-0! after:bg-primary"
         >
           샵 · 패키지
         </TabsTrigger>

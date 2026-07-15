@@ -60,9 +60,17 @@ export function ArtistDetailScreen({
             style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/15" />
-          <div className="relative flex flex-col gap-6 p-6 pt-24">
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-white/80">제주 웨딩 스냅</p>
+          <div className="relative flex flex-col gap-6 p-6 pt-20">
+            <div className="flex flex-col gap-3">
+              <span className="relative size-14 shrink-0 overflow-hidden rounded-full ring-2 ring-white/50">
+                <Image
+                  src={artist.profileImageUrl}
+                  alt={`${artist.artistName} 작가`}
+                  fill
+                  sizes="56px"
+                  className="object-cover"
+                />
+              </span>
               <h1 className="text-3xl font-semibold leading-tight text-balance">
                 {artist.studioName}
               </h1>

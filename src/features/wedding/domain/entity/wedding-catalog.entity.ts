@@ -52,6 +52,7 @@ export interface SnapArtist {
   studioName: string;
   artistName: string;
   introduction: string;
+  profileImageUrl: string;
   scenes: SnapScene[];
   tones: WeddingTone[];
   keywords: string[];
