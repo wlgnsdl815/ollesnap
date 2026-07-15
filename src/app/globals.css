@@ -7,6 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
   --font-sans: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -103,6 +104,7 @@
   --muted-foreground: #737373;
   --accent: #fff8e4;
   --accent-foreground: #222222;
+  --cream: #fcf4ee;
   --destructive: #f64c4c;
   --border: #d1d6dc;
   --input: #d1d6dc;
@@ -175,6 +177,7 @@
   --muted-foreground: #a3a3a3;
   --accent: #33261a;
   --accent-foreground: #ffb700;
+  --cream: #241f1a;
   --destructive: #f64c4c;
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);

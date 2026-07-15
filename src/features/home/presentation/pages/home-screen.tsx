@@ -1,6 +1,7 @@
 import { ArrowRight, ChevronRight, CircleUserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import type { WeddingCatalog } from "@/features/wedding/domain/entity/wedding-catalog.entity";
 import {
@@ -79,7 +80,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <FullBleedBand className="bg-cream py-10">
         <div className="flex flex-col gap-1">
           <h2 className="text-2xl font-semibold tracking-tight">
             원하는 씬부터 골라보세요
@@ -114,7 +115,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
             </Link>
           ))}
         </div>
-      </section>
+      </FullBleedBand>
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
@@ -153,7 +154,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
         </div>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <FullBleedBand className="bg-muted py-10">
         <div className="flex items-end justify-between gap-3">
           <h2 className="text-2xl font-semibold tracking-tight">
             이런 작가를 찾을 수 있어요
@@ -177,7 +178,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
             </div>
           ))}
         </div>
-      </section>
+      </FullBleedBand>
 
       <section className="rounded-2xl bg-accent p-5">
         <div className="flex flex-col gap-4">
@@ -228,5 +229,22 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
 
       <CatalogDemoNotice />
     </div>
+  );
+}
+
+interface FullBleedBandProps {
+  className?: string;
+  children: ReactNode;
+}
+
+// 레이아웃의 max-w 컨테이너를 벗어나 화면 전체 폭으로 배경을 까는 섹션 밴드.
+// 내부 컨테이너 폭은 (main)/layout.tsx의 main 컨테이너와 동일하게 유지해야 한다.
+function FullBleedBand({ className = "", children }: FullBleedBandProps) {
+  return (
+    <section className={`mx-[calc(50%-50vw)] ${className}`}>
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4 px-4 sm:max-w-2xl lg:max-w-4xl">
+        {children}
+      </div>
+    </section>
   );
 }
