@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight, CircleUserRound } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -17,35 +17,11 @@ import {
 
 interface HomeScreenProps {
   catalog: WeddingCatalog;
-  isAuthenticated: boolean;
 }
 
-export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
+export function HomeScreen({ catalog }: HomeScreenProps) {
   return (
     <div className="flex flex-col gap-10 pb-4">
-      <header className="flex min-h-11 items-center justify-between gap-3">
-        <Link href="/" className="flex min-h-11 items-center">
-          <Image
-            src="/wordmark.svg"
-            alt="올레스냅"
-            width={105}
-            height={28}
-            priority
-            unoptimized
-          />
-        </Link>
-        {isAuthenticated ? null : (
-          <Link
-            href="/login?next=/"
-            aria-label="로그인"
-            className="flex min-h-11 items-center gap-2 rounded-full bg-secondary px-3 text-xs font-medium text-secondary-foreground active:bg-muted"
-          >
-            <CircleUserRound className="size-4" />
-            로그인
-          </Link>
-        )}
-      </header>
-
       <section className="relative min-h-[28rem] overflow-hidden rounded-3xl bg-foreground text-white">
         <Image
           src="/images/jeju-snap-hero.png"

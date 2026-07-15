@@ -1,4 +1,4 @@
-import { ArrowRight, Check, ChevronDown, ChevronLeft } from "lucide-react";
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,13 +42,6 @@ export function ArtistDetailScreen({
   return (
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-4">
-        <Link
-          href="/artists"
-          className="flex min-h-11 w-fit items-center gap-1 text-sm font-semibold text-muted-foreground active:text-foreground"
-        >
-          <ChevronLeft className="size-5" />
-          작가 목록
-        </Link>
         <section className="relative overflow-hidden rounded-3xl text-white">
           <Image
             src={SCENE_IMAGES[artist.scenes[0]]}

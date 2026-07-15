@@ -68,7 +68,6 @@ export function ArtistsScreen({
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold text-primary">제주 스냅 작가</p>
           <h1 className="text-3xl font-semibold leading-tight tracking-tight text-balance">
             풍경이 아니라, 사진의 결로 고르세요
           </h1>

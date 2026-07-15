@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Check,
   ChevronDown,
-  ChevronLeft,
   Handshake,
   Plus,
 } from "lucide-react";
@@ -38,20 +37,10 @@ export function StylingShopDetailScreen({
   const [selectedKind, setSelectedKind] = useState<StylingProductKind>("package");
   const products = shop.products.filter((product) => product.kind === selectedKind);
   const isPartner = artist ? isPartnerStylingShop(shop, artist) : false;
-  const backHref = artist
-    ? `/artists?tab=styling&artist=${artist.id}${selectedSnapPackageId ? `&package=${selectedSnapPackageId}` : ""}`
-    : "/artists?tab=styling";
 
   return (
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-4">
-        <Link
-          href={backHref}
-          className="flex min-h-11 w-fit items-center gap-1 text-sm font-semibold text-muted-foreground active:text-foreground"
-        >
-          <ChevronLeft className="size-5" />
-          스드메 샵
-        </Link>
         <div className="flex flex-col gap-2">
           {isPartner ? (
             <p className="flex items-center gap-1 text-sm font-semibold text-primary">

@@ -1,19 +1,10 @@
-import { ChevronLeft, UserRound } from "lucide-react";
-import Link from "next/link";
+import { UserRound } from "lucide-react";
 
 export function SnapPhotographersScreen() {
   return (
     <div className="flex min-h-[calc(100dvh-8rem)] flex-col gap-7 pb-4">
       <header className="flex flex-col gap-4">
-        <Link
-          href="/planner/new"
-          className="flex min-h-11 w-fit items-center gap-1 rounded-full pr-3 text-sm font-bold text-muted-foreground active:bg-muted"
-        >
-          <ChevronLeft className="size-5" />
-          새 일정
-        </Link>
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-bold text-primary">스냅작가</p>
           <h1 className="text-2xl font-black leading-tight text-balance">
             스냅작가를 모아볼 페이지예요
           </h1>

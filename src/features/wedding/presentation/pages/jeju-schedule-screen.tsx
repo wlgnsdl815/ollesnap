@@ -57,7 +57,6 @@ export function JejuScheduleScreen({
   return (
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-2">
-        <p className="text-sm font-semibold text-primary">제주 일정</p>
         <h1 className="text-3xl font-semibold leading-tight tracking-tight text-balance">
           촬영일과 머무는 날을 한 흐름으로
         </h1>

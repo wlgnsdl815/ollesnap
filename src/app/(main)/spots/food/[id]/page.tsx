@@ -1,6 +1,5 @@
-import { ChevronLeft, Globe, MapPin, Phone } from "lucide-react";
+import { Globe, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import { TravelPlanItemButton } from "@/features/account/presentation/components/travel-plan-item-button";
@@ -24,7 +23,6 @@ export default async function FoodSpotDetailPage({
   if (!spot) {
     return (
       <div className="flex flex-col gap-6 pb-4">
-        <BackLink />
         <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-8 text-center shadow-sm">
           <p className="text-sm font-bold">이 장소를 찾을 수 없어요</p>
           <p className="text-xs leading-6 text-muted-foreground">
@@ -42,8 +40,6 @@ export default async function FoodSpotDetailPage({
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <BackLink />
-
       <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl bg-muted shadow-sm">
         <Image
           src={spot.imageUrl}
@@ -121,17 +117,5 @@ export default async function FoodSpotDetailPage({
         </p>
       </div>
     </div>
-  );
-}
-
-function BackLink() {
-  return (
-    <Link
-      href="/spots"
-      className="flex min-h-11 w-fit items-center gap-1 rounded-full pr-3 text-sm font-bold text-muted-foreground active:bg-muted"
-    >
-      <ChevronLeft className="size-5" />
-      제주 이곳저곳
-    </Link>
   );
 }

@@ -1,7 +1,5 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 import {
@@ -20,16 +18,8 @@ export function NewPlannerFlow() {
   return (
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-4">
-        <Link
-          href="/planner"
-          className="flex min-h-11 w-fit items-center gap-1 rounded-full pr-3 text-sm font-bold text-muted-foreground active:bg-muted"
-        >
-          <ChevronLeft className="size-5" />
-          플래너
-        </Link>
         <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-sm font-bold text-primary">새 일정 만들기</p>
+          <div className="flex items-center justify-end gap-4">
             <span className="shrink-0 text-xs font-bold text-muted-foreground">
               {currentStep} / {TOTAL_PLANNER_STEPS}
             </span>

@@ -39,9 +39,6 @@ export function StylingScreen({
           </button>
         ) : null}
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold text-primary">
-            드레스 · 메이크업
-          </p>
           <h1 className="text-3xl font-semibold leading-tight tracking-tight text-balance">
             {artist
               ? `${artist.studioName}과 연계된 스드메`
