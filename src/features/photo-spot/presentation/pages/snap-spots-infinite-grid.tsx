@@ -1,11 +1,10 @@
 "use client";
 
-import { Loader2, MapPin } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
 
 import type { PhotoSpot } from "@/features/photo-spot/domain/entity/photo-spot.entity";
 
+import { PlaceGridCard } from "../components/place-grid-card";
 import { useSnapSpotsInfiniteScroll } from "../hooks/use-snap-spots-infinite-scroll";
 
 interface SnapSpotsInfiniteGridProps {
@@ -35,7 +34,13 @@ export function SnapSpotsInfiniteGrid({
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {spots.map((spot) => (
-          <SnapSpotGridCard key={spot.id} spot={spot} />
+          <PlaceGridCard
+            key={spot.id}
+            href={`/spots/${spot.id}`}
+            imageUrl={spot.imageUrl}
+            title={spot.title}
+            subtitle={spot.location}
+          />
         ))}
       </div>
 
@@ -51,34 +56,5 @@ export function SnapSpotsInfiniteGrid({
         </p>
       )}
     </div>
-  );
-}
-
-interface SnapSpotGridCardProps {
-  spot: PhotoSpot;
-}
-
-function SnapSpotGridCard({ spot }: SnapSpotGridCardProps) {
-  return (
-    <Link href={`/spots/${spot.id}`} className="flex flex-col gap-2">
-      <div className="relative aspect-4/5 w-full overflow-hidden rounded-2xl bg-muted">
-        <Image
-          src={spot.imageUrl}
-          alt={spot.title}
-          fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-          className="object-cover"
-        />
-        <div className="absolute top-2 right-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-muted-foreground">
-          <MapPin className="size-4" />
-        </div>
-      </div>
-      <div className="flex flex-col gap-0.5 px-0.5">
-        <p className="truncate text-sm font-bold">{spot.title}</p>
-        <p className="truncate text-xs text-muted-foreground">
-          {spot.location}
-        </p>
-      </div>
-    </Link>
   );
 }

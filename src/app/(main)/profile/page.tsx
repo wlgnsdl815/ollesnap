@@ -203,7 +203,11 @@ export default async function ProfilePage() {
               {userWeddingState.travelPlanItems.map((item) => (
                 <Link
                   key={item.id}
-                  href={`/spots/${item.spotId}`}
+                  href={
+                    item.kind === "food"
+                      ? `/spots/food/${item.spotId}`
+                      : `/spots/${item.spotId}`
+                  }
                   className="flex min-h-12 items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
                 >
                   <div className="min-w-0">

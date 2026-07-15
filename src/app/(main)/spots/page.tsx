@@ -3,13 +3,12 @@ import Link from "next/link";
 
 import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
 import { getJejuSnapSpotsPage } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spots-page";
-
-import { SnapSpotsInfiniteGrid } from "@/features/photo-spot/presentation/pages/snap-spots-infinite-grid";
+import { JejuExploreScreen } from "@/features/photo-spot/presentation/pages/jeju-explore-screen";
 
 const photoSpotRepository = createPhotoSpotRepository();
 
 export default async function JejuSnapSpotsPage() {
-  const firstPage = await getJejuSnapSpotsPage(photoSpotRepository, 1);
+  const spotsPage = await getJejuSnapSpotsPage(photoSpotRepository, 1);
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -26,15 +25,14 @@ export default async function JejuSnapSpotsPage() {
             제주 이곳저곳
           </h1>
           <p className="text-sm leading-6 text-muted-foreground">
-            스냅 촬영 다음 날, 관광공모전 수상작으로 제주 여행 아이디어를
-            둘러보세요.
+            스냅 촬영 앞뒤로 남는 시간, 갈 곳과 먹을 곳을 함께 살펴보세요.
           </p>
         </div>
       </header>
 
-      <SnapSpotsInfiniteGrid
-        initialSpots={firstPage.spots}
-        initialHasMore={firstPage.hasMore}
+      <JejuExploreScreen
+        initialSpots={spotsPage.spots}
+        initialSpotsHasMore={spotsPage.hasMore}
       />
     </div>
   );

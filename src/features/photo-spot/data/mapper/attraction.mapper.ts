@@ -18,7 +18,7 @@ export function toAttraction(
   return Object.values(attraction).some(Boolean) ? attraction : null;
 }
 
-function stripHtml(value?: string): string | undefined {
+export function stripHtml(value?: string): string | undefined {
   if (!value) {
     return undefined;
   }

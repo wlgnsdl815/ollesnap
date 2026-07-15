@@ -183,11 +183,12 @@ export default async function SnapSpotDetailPage({
 
         <TravelPlanItemButton
           spotId={spot.id}
+          kind="sight"
           title={spot.title}
           location={spot.location}
           imageUrl={spot.fullImageUrl}
           initialIsSaved={userWeddingState.travelPlanItems.some(
-            (item) => item.spotId === spot.id,
+            (item) => item.spotId === spot.id && item.kind === "sight",
           )}
           isAuthenticated={userWeddingState.isAuthenticated}
           returnPath={`/spots/${spot.id}`}

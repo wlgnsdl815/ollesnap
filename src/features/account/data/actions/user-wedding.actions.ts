@@ -26,6 +26,7 @@ export interface SaveSnapPlanInput {
 
 export interface ToggleTravelPlanItemInput {
   spotId: string;
+  kind: "sight" | "food";
   title: string;
   location: string;
   imageUrl: string;
@@ -197,6 +198,7 @@ export async function toggleTravelPlanItemAction(
     .select("id")
     .eq("plan_id", plan.id)
     .eq("spot_id", input.spotId)
+    .eq("spot_kind", input.kind)
     .maybeSingle();
 
   if (findError) {
@@ -213,13 +215,14 @@ export async function toggleTravelPlanItemAction(
       return { ok: false, message: "여행 목록에서 빼지 못했어요." };
     }
 
-    revalidateTravelPaths(input.spotId);
+    revalidateTravelPaths(input.spotId, input.kind);
     return { ok: true, isSaved: false };
   }
 
   const { error } = await supabase.from("travel_plan_items").insert({
     plan_id: plan.id,
     spot_id: input.spotId,
+    spot_kind: input.kind,
     spot_title: input.title,
     spot_location: input.location,
     spot_image_url: input.imageUrl,
@@ -229,13 +232,15 @@ export async function toggleTravelPlanItemAction(
     return { ok: false, message: "여행 목록에 담지 못했어요." };
   }
 
-  revalidateTravelPaths(input.spotId);
+  revalidateTravelPaths(input.spotId, input.kind);
   return { ok: true, isSaved: true };
 }
 
-function revalidateTravelPaths(spotId: string) {
+function revalidateTravelPaths(spotId: string, kind: "sight" | "food") {
   revalidatePath("/spots");
-  revalidatePath(`/spots/${spotId}`);
+  revalidatePath(
+    kind === "food" ? `/spots/food/${spotId}` : `/spots/${spotId}`,
+  );
   revalidatePath("/planner");
   revalidatePath("/profile");
 }

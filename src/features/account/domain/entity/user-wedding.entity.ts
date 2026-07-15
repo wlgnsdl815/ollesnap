@@ -10,9 +10,12 @@ export interface SavedSnapPlan {
   stayEndDate: string | null;
 }
 
+export type SavedTravelPlanItemKind = "sight" | "food";
+
 export interface SavedTravelPlanItem {
   id: string;
   spotId: string;
+  kind: SavedTravelPlanItemKind;
   title: string;
   location: string | null;
   imageUrl: string | null;

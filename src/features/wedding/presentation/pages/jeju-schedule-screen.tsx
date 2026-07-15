@@ -121,7 +121,11 @@ export function JejuScheduleScreen({
               return (
                 <Link
                   key={item.id}
-                  href={`/spots/${item.spotId}`}
+                  href={
+                    item.kind === "food"
+                      ? `/spots/food/${item.spotId}`
+                      : `/spots/${item.spotId}`
+                  }
                   className="flex min-h-16 items-center justify-between gap-3 border-b border-border py-3 last:border-b-0"
                 >
                   <span className="flex min-w-0 items-center gap-3">

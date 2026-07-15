@@ -22,6 +22,7 @@ interface SnapPlanRow {
 interface TravelPlanItemRow {
   id: string;
   spot_id: string;
+  spot_kind: string;
   spot_title: string;
   spot_location: string | null;
   spot_image_url: string | null;
@@ -67,7 +68,9 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
 
   const { data: travelPlanItems } = await supabase
     .from("travel_plan_items")
-    .select("id, spot_id, spot_title, spot_location, spot_image_url, planned_date")
+    .select(
+      "id, spot_id, spot_kind, spot_title, spot_location, spot_image_url, planned_date",
+    )
     .eq("plan_id", mappedSnapPlan.id)
     .order("created_at", { ascending: false });
 
@@ -108,6 +111,7 @@ function mapTravelPlanItem(row: TravelPlanItemRow): SavedTravelPlanItem {
   return {
     id: row.id,
     spotId: row.spot_id,
+    kind: row.spot_kind === "food" ? "food" : "sight",
     title: row.spot_title,
     location: row.spot_location,
     imageUrl: row.spot_image_url,

@@ -8,6 +8,7 @@ import { toggleTravelPlanItemAction } from "../../data/actions/user-wedding.acti
 
 interface TravelPlanItemButtonProps {
   spotId: string;
+  kind: "sight" | "food";
   title: string;
   location: string;
   imageUrl: string;
@@ -18,6 +19,7 @@ interface TravelPlanItemButtonProps {
 
 export function TravelPlanItemButton({
   spotId,
+  kind,
   title,
   location,
   imageUrl,
@@ -38,6 +40,7 @@ export function TravelPlanItemButton({
     startTransition(async () => {
       const result = await toggleTravelPlanItemAction({
         spotId,
+        kind,
         title,
         location,
         imageUrl,
