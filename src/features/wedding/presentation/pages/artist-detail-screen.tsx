@@ -1,12 +1,5 @@
-import {
-  ArrowRight,
-  Check,
-  ChevronDown,
-  ChevronLeft,
-  ImageIcon,
-  Layers3,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { FavoriteArtistButton } from "@/features/account/presentation/components/favorite-artist-button";
@@ -24,6 +17,10 @@ import {
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
+import {
+  SCENE_IMAGES,
+  TONE_PHOTO_FILTERS,
+} from "../lib/scene-tone-visuals";
 
 interface ArtistDetailScreenProps {
   artist: SnapArtist;
@@ -52,17 +49,24 @@ export function ArtistDetailScreen({
           <ChevronLeft className="size-5" />
           작가 목록
         </Link>
-        <section className="rounded-3xl bg-foreground p-6 text-primary-foreground">
-          <div className="flex flex-col gap-6">
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-white/10 text-white">
-              <ImageIcon className="size-6" />
-            </div>
+        <section className="relative overflow-hidden rounded-3xl text-white">
+          <Image
+            src={SCENE_IMAGES[artist.scenes[0]]}
+            alt={`${artist.studioName}의 대표 씬 — ${getSceneLabel(catalog, artist.scenes[0])}`}
+            fill
+            priority
+            sizes="(min-width: 1024px) 896px, (min-width: 640px) 672px, 100vw"
+            className="object-cover"
+            style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/15" />
+          <div className="relative flex flex-col gap-6 p-6 pt-24">
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-white/70">제주 웨딩 스냅</p>
+              <p className="text-sm font-medium text-white/80">제주 웨딩 스냅</p>
               <h1 className="text-3xl font-semibold leading-tight text-balance">
                 {artist.studioName}
               </h1>
-              <p className="text-sm leading-6 text-white/80">
+              <p className="text-sm leading-6 text-white/85">
                 {artist.artistName} 작가 · {artist.introduction}
               </p>
             </div>
@@ -70,7 +74,7 @@ export function ArtistDetailScreen({
               {artist.scenes.map((scene) => (
                 <span
                   key={scene}
-                  className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium"
+                  className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
                 >
                   {getSceneLabel(catalog, scene)}
                 </span>
@@ -78,7 +82,7 @@ export function ArtistDetailScreen({
               {artist.tones.map((tone) => (
                 <span
                   key={tone}
-                  className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium"
+                  className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
                 >
                   {getToneLabel(catalog, tone)}
                 </span>
@@ -101,10 +105,7 @@ export function ArtistDetailScreen({
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Layers3 className="size-5 text-primary" />
-          <h2 className="text-xl font-semibold">촬영 상품</h2>
-        </div>
+        <h2 className="text-xl font-semibold">촬영 상품</h2>
         <p className="text-sm leading-6 text-muted-foreground">
           촬영 시간, 의상 수, 사진 제공 방식과 추가 옵션은 상품마다 달라요.
           마음에 드는 상품을 먼저 고른 뒤 스드메를 조합해보세요.
@@ -121,10 +122,7 @@ export function ArtistDetailScreen({
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Sparkles className="size-5 text-primary" />
-          <h2 className="text-xl font-semibold">이 작가와 연계된 스드메 샵</h2>
-        </div>
+        <h2 className="text-xl font-semibold">이 작가와 연계된 스드메 샵</h2>
         <p className="text-sm leading-6 text-muted-foreground">
           제휴 작가로 진행하면 샵별 패키지와 일부 단품에 제휴가가 적용돼요.
         </p>

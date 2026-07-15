@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, MapPin, Sparkles } from "lucide-react";
+import { Loader2, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,9 +23,6 @@ export function SnapSpotsInfiniteGrid({
   if (spots.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-8 text-center shadow-sm">
-        <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-          <Sparkles className="size-7" />
-        </span>
         <p className="text-sm font-bold">아직 표시할 장소가 없어요</p>
         <p className="text-xs leading-6 text-muted-foreground">
           관광 데이터 연결 후 제주 곳곳의 장소가 채워집니다.

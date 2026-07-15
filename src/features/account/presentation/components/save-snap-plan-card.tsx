@@ -49,7 +49,7 @@ export function SaveSnapPlanCard({
 
       setMessage(
         result.ok
-          ? "촬영팀과 제주 체류 일정을 계정에 저장했어요."
+          ? "제주 일정과 촬영 구성을 계정에 저장했어요."
           : (result.message ?? "저장하지 못했어요."),
       );
     });
@@ -59,9 +59,9 @@ export function SaveSnapPlanCard({
     return (
       <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
         <div className="flex flex-col gap-1">
-          <p className="text-lg font-semibold">이 촬영팀을 저장할까요?</p>
+          <p className="text-lg font-semibold">이 제주 일정을 저장할까요?</p>
           <p className="text-sm leading-6 text-muted-foreground">
-            로그인하면 찜한 작가와 제주 체류 일정을 다음에도 이어서 볼 수 있어요.
+            로그인하면 촬영 구성과 제주 체류 일정을 다음에도 이어서 볼 수 있어요.
           </p>
         </div>
         <Link

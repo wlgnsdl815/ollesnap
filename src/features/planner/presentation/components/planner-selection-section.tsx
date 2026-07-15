@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  CalendarDays,
-  Camera,
-  Check,
-  ChevronRight,
-  Heart,
-  Search,
-  Sparkles,
-  UserRound,
-} from "lucide-react";
+import { CalendarDays, Check, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -18,12 +9,6 @@ import {
   type ServiceSlotId,
 } from "@/features/planner/domain/entity/service-slot.entity";
 import { formatPlannerDateLabel } from "@/features/planner/domain/planner-date-formatter";
-
-const SERVICE_SLOT_ICONS: Record<ServiceSlotId, typeof Camera> = {
-  snap: Camera,
-  dress: Heart,
-  makeup: Sparkles,
-};
 
 export function PlannerSelectionSection() {
   const [selectedDate, setSelectedDate] = useState("");
@@ -61,9 +46,7 @@ export function PlannerSelectionSection() {
       <section className="flex flex-col gap-3">
         <SectionHeading eyebrow="01" title="날짜 선택" />
         <label className="flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card px-4 shadow-sm">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <CalendarDays className="size-5" />
-          </span>
+          <CalendarDays className="size-5 shrink-0 text-muted-foreground" />
           <span className="flex min-w-0 flex-1 flex-col gap-1">
             <span className="text-xs font-semibold text-muted-foreground">
               촬영 예정일
@@ -82,11 +65,8 @@ export function PlannerSelectionSection() {
         <SectionHeading eyebrow="02" title="스냅 작가 선택" />
         <button
           type="button"
-          className="flex min-h-28 w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm active:bg-muted"
+          className="flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm active:bg-muted"
         >
-          <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary">
-            <UserRound className="size-8" />
-          </span>
           <span className="flex min-w-0 flex-1 flex-col gap-1">
             <span className="text-base font-black">스냅 작가를 선택하세요</span>
             <span className="text-sm leading-5 text-muted-foreground">
@@ -112,9 +92,6 @@ export function PlannerSelectionSection() {
           </div>
         </div>
         <div className="flex min-h-24 items-center gap-3 rounded-2xl border border-dashed border-primary/35 bg-primary/5 p-4">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Search className="size-5" />
-          </span>
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <p className="text-sm font-black">
               {activeServiceSlot.label} 후보를 불러올 준비가 됐어요
@@ -172,30 +149,19 @@ interface ServiceSlotCardProps {
 }
 
 function ServiceSlotCard({ slot, isActive, onSelect }: ServiceSlotCardProps) {
-  const Icon = SERVICE_SLOT_ICONS[slot.id];
-
   return (
     <button
       type="button"
       onClick={onSelect}
-      className={`flex h-40 w-[15.5rem] shrink-0 snap-start flex-col justify-between rounded-2xl border p-4 text-left shadow-sm ${
+      className={`flex h-28 w-[15.5rem] shrink-0 snap-start flex-col justify-between rounded-2xl border p-4 text-left shadow-sm ${
         isActive
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-card text-foreground"
       }`}
     >
-      <span className="flex items-start justify-between gap-3">
-        <span
-          className={`flex size-12 items-center justify-center rounded-2xl ${
-            isActive
-              ? "bg-white/20 text-primary-foreground"
-              : "bg-primary/10 text-primary"
-          }`}
-        >
-          <Icon className="size-6" />
-        </span>
+      <span className="flex items-start justify-end">
         {isActive ? (
-          <span className="flex size-8 items-center justify-center rounded-full bg-white/20">
+          <span className="flex size-6 items-center justify-center rounded-full bg-white/20">
             <Check className="size-4" />
           </span>
         ) : null}

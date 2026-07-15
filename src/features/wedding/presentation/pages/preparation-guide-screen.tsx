@@ -2,19 +2,12 @@
 
 import {
   ArrowRight,
-  CalendarDays,
+  Check,
   ChevronLeft,
   CircleHelp,
-  Clock3,
-  MapPinned,
-  Mountain,
-  Palette,
   RefreshCcw,
-  Shirt,
-  Sparkles,
-  Wallet,
-  Waves,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { type ReactNode, useState } from "react";
 
@@ -30,6 +23,10 @@ import type {
   WeddingTone,
 } from "../../domain/entity/wedding-catalog.entity";
 import { createPreparationGuideResult } from "../../domain/usecase/create-preparation-guide-result";
+import {
+  SCENE_IMAGES,
+  TONE_PHOTO_FILTERS,
+} from "../lib/scene-tone-visuals";
 
 interface PreparationGuideScreenProps {
   catalog: WeddingCatalog;
@@ -41,7 +38,6 @@ interface ChoiceOption {
   id: string;
   label: string;
   description: string;
-  icon: typeof Mountain;
 }
 
 const TOTAL_STEPS = 4;
@@ -195,15 +191,6 @@ function SceneStep({
   onSkip,
   onContinue,
 }: SceneStepProps) {
-  const sceneIcons: Record<SnapScene, typeof Mountain> = {
-    oreum: Mountain,
-    sea: Waves,
-    ranch: MapPinned,
-    "stone-wall": MapPinned,
-    forest: Sparkles,
-    sunset: Sparkles,
-  };
-
   return (
     <GuideStepLayout
       eyebrow="첫 번째 단서"
@@ -213,14 +200,39 @@ function SceneStep({
     >
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {catalog.scenes.map((scene) => (
-          <ChoiceCard
+          <button
             key={scene.id}
-            icon={sceneIcons[scene.id]}
-            label={scene.label}
-            description={scene.description}
-            isActive={selectedScene === scene.id}
+            type="button"
+            aria-pressed={selectedScene === scene.id}
             onClick={() => onSelect(scene.id)}
-          />
+            className={`relative aspect-4/5 overflow-hidden rounded-2xl text-left transition-shadow ${
+              selectedScene === scene.id
+                ? "ring-3 ring-primary ring-offset-2 ring-offset-background"
+                : ""
+            }`}
+          >
+            <Image
+              src={SCENE_IMAGES[scene.id]}
+              alt={scene.label}
+              fill
+              sizes="(min-width: 640px) 220px, 45vw"
+              className="object-cover"
+            />
+            <span className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
+            {selectedScene === scene.id ? (
+              <span className="absolute top-2.5 right-2.5 flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                <Check className="size-4" />
+              </span>
+            ) : null}
+            <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-3.5">
+              <span className="text-base font-semibold text-white">
+                {scene.label}
+              </span>
+              <span className="text-xs leading-4 text-white/80">
+                {scene.description}
+              </span>
+            </span>
+          </button>
         ))}
       </div>
       <SkipChoice isActive={!selectedScene} onClick={onSkip} />
@@ -250,16 +262,43 @@ function ToneStep({
       description="잘 모르겠다면 포트폴리오를 보며 나중에 정해도 괜찮아요."
       onContinue={onContinue}
     >
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-3">
         {catalog.tones.map((tone) => (
-          <ChoiceCard
+          <button
             key={tone.id}
-            icon={Palette}
-            label={tone.label}
-            description={tone.description}
-            isActive={selectedTone === tone.id}
+            type="button"
+            aria-pressed={selectedTone === tone.id}
             onClick={() => onSelect(tone.id)}
-          />
+            className="flex flex-col gap-2 text-left"
+          >
+            <span
+              className={`relative aspect-4/3 overflow-hidden rounded-xl transition-shadow ${
+                selectedTone === tone.id
+                  ? "ring-3 ring-primary ring-offset-2 ring-offset-background"
+                  : ""
+              }`}
+            >
+              <Image
+                src={SCENE_IMAGES.sea}
+                alt={`협재 바다 — ${tone.label} 톤`}
+                fill
+                sizes="(min-width: 640px) 320px, 45vw"
+                className="object-cover"
+                style={{ filter: TONE_PHOTO_FILTERS[tone.id] }}
+              />
+              {selectedTone === tone.id ? (
+                <span className="absolute top-2 right-2 flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <Check className="size-4" />
+                </span>
+              ) : null}
+            </span>
+            <span className="flex flex-col">
+              <span className="text-sm font-semibold">{tone.label}</span>
+              <span className="text-xs leading-4 text-muted-foreground">
+                {tone.description}
+              </span>
+            </span>
+          </button>
         ))}
       </div>
       <SkipChoice isActive={!selectedTone} onClick={onSkip} />
@@ -285,25 +324,21 @@ function PriorityStep({
       id: "artist",
       label: "작가의 사진 스타일",
       description: "포즈와 결과물의 분위기가 가장 중요해요",
-      icon: Sparkles,
     },
     {
       id: "styling",
       label: "드레스와 메이크업",
       description: "입고 싶은 모습부터 떠올라요",
-      icon: Shirt,
     },
     {
       id: "budget",
       label: "예산과 구성",
       description: "합리적인 시작가와 포함 항목이 궁금해요",
-      icon: Wallet,
     },
     {
       id: "schedule",
       label: "촬영 가능한 일정",
       description: "결혼식이나 제주 여행 일정이 먼저예요",
-      icon: CalendarDays,
     },
   ];
 
@@ -318,7 +353,6 @@ function PriorityStep({
         {options.map((option) => (
           <ChoiceCard
             key={option.id}
-            icon={option.icon}
             label={option.label}
             description={option.description}
             isActive={selectedPriority === option.id}
@@ -444,47 +478,31 @@ function GuideStepLayout({
 }
 
 interface ChoiceCardProps {
-  icon: typeof Mountain;
   label: string;
   description: string;
   isActive: boolean;
   onClick: () => void;
 }
 
-function ChoiceCard({
-  icon: Icon,
-  label,
-  description,
-  isActive,
-  onClick,
-}: ChoiceCardProps) {
+function ChoiceCard({ label, description, isActive, onClick }: ChoiceCardProps) {
   return (
     <button
       type="button"
       aria-pressed={isActive}
       onClick={onClick}
-      className={`flex min-h-32 flex-col justify-between rounded-2xl border p-4 text-left transition-colors ${
+      className={`flex min-h-20 flex-col justify-center gap-1 rounded-2xl border p-4 text-left transition-colors ${
         isActive
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-card text-foreground active:bg-muted"
       }`}
     >
+      <span className="text-sm font-semibold">{label}</span>
       <span
-        className={`flex size-10 items-center justify-center rounded-xl ${
-          isActive ? "bg-white/15" : "bg-secondary text-primary"
+        className={`text-xs leading-4 ${
+          isActive ? "text-primary-foreground/75" : "text-muted-foreground"
         }`}
       >
-        <Icon className="size-5" />
-      </span>
-      <span className="flex flex-col gap-1">
-        <span className="text-sm font-semibold">{label}</span>
-        <span
-          className={`text-xs leading-4 ${
-            isActive ? "text-primary-foreground/75" : "text-muted-foreground"
-          }`}
-        >
-          {description}
-        </span>
+        {description}
       </span>
     </button>
   );
@@ -532,7 +550,7 @@ function SelectableRow({ label, isActive, onClick }: SelectableRowProps) {
       }`}
     >
       {label}
-      {isActive ? <Sparkles className="size-4" /> : null}
+      {isActive ? <Check className="size-4" /> : null}
     </button>
   );
 }
@@ -547,27 +565,17 @@ function GuideResult({ artistHref, result, onReset }: GuideResultProps) {
   return (
     <section className="flex flex-1 flex-col gap-6">
       <div className="rounded-3xl bg-foreground p-6 text-primary-foreground">
-        <div className="flex flex-col gap-5">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-white/10">
-            <Clock3 className="size-5" />
-          </span>
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-white/70">{result.stageLabel}</p>
-            <h1 className="text-3xl font-semibold leading-tight text-balance">
-              {result.title}
-            </h1>
-            <p className="text-sm leading-6 text-white/80">{result.description}</p>
-          </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-medium text-white/70">{result.stageLabel}</p>
+          <h1 className="text-3xl font-semibold leading-tight text-balance">
+            {result.title}
+          </h1>
+          <p className="text-sm leading-6 text-white/80">{result.description}</p>
         </div>
       </div>
 
+      <ResultList title="지금 정해도 좋은 것" items={result.decideNow} />
       <ResultList
-        icon={Sparkles}
-        title="지금 정해도 좋은 것"
-        items={result.decideNow}
-      />
-      <ResultList
-        icon={MapPinned}
         title="작가와 함께 정하면 되는 것"
         items={result.decideWithPhotographer}
       />
@@ -592,18 +600,14 @@ function GuideResult({ artistHref, result, onReset }: GuideResultProps) {
 }
 
 interface ResultListProps {
-  icon: typeof Sparkles;
   title: string;
   items: string[];
 }
 
-function ResultList({ icon: Icon, title, items }: ResultListProps) {
+function ResultList({ title, items }: ResultListProps) {
   return (
     <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
-      <div className="flex items-center gap-2">
-        <Icon className="size-5 text-primary" />
-        <h2 className="text-lg font-semibold">{title}</h2>
-      </div>
+      <h2 className="text-lg font-semibold">{title}</h2>
       <ul className="flex flex-col gap-2">
         {items.map((item) => (
           <li key={item} className="flex items-start gap-2 text-sm leading-6 text-muted-foreground">

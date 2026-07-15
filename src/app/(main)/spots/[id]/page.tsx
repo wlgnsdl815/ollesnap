@@ -5,7 +5,6 @@ import {
   Globe,
   MapPin,
   Phone,
-  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,9 +41,6 @@ export default async function SnapSpotDetailPage({
       <div className="flex flex-col gap-6 pb-4">
         <BackLink />
         <div className="flex flex-col items-center gap-3 rounded-3xl border border-border bg-card p-8 text-center shadow-sm">
-          <span className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Sparkles className="size-7" />
-          </span>
           <p className="text-sm font-bold">이 장소를 찾을 수 없어요</p>
           <p className="text-xs leading-6 text-muted-foreground">
             목록에서 다시 선택해 주세요.

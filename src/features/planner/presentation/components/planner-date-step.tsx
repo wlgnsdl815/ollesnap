@@ -86,9 +86,7 @@ export function PlannerDateStep({ onContinue }: PlannerDateStepProps) {
 
       <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
-            <CalendarDays className="size-5" />
-          </span>
+          <CalendarDays className="size-5 shrink-0 text-muted-foreground" />
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <p className="text-xs font-semibold text-muted-foreground">
               선택한 제주 일정

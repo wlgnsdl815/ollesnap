@@ -162,7 +162,7 @@ export async function saveSnapPlanAction(
   );
 
   if (error) {
-    return { ok: false, message: "촬영팀을 저장하지 못했어요." };
+    return { ok: false, message: "제주 일정을 저장하지 못했어요." };
   }
 
   revalidatePath("/planner");

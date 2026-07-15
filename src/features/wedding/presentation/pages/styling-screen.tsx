@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronLeft, Handshake, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronLeft } from "lucide-react";
 
 import type {
   SnapArtist,
@@ -57,9 +57,6 @@ export function StylingScreen({
 
       <section className="flex flex-col gap-3 rounded-2xl bg-accent p-5">
         <div className="flex items-start gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-card text-primary">
-            <Handshake className="size-5" />
-          </span>
           <div className="flex flex-col gap-1">
             <p className="text-lg font-semibold">
               {artist
@@ -86,12 +83,9 @@ export function StylingScreen({
       </section>
 
       <section className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="size-5 text-primary" />
-          <div>
-            <h2 className="text-xl font-semibold">스드메 샵</h2>
-            <p className="text-sm text-muted-foreground">{shops.length}개 샵</p>
-          </div>
+        <div className="flex items-end justify-between gap-3">
+          <h2 className="text-xl font-semibold">스드메 샵</h2>
+          <p className="text-sm text-muted-foreground">{shops.length}개 샵</p>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           {shops.map((shop) => (

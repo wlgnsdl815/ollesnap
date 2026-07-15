@@ -19,7 +19,7 @@ const TAB_ITEMS: TabItem[] = [
     icon: Camera,
     activePaths: ["/artists", "/styling"],
   },
-  { href: "/planner", label: "내 촬영팀", icon: ClipboardList },
+  { href: "/planner", label: "제주 일정", icon: ClipboardList },
   { href: "/profile", label: "프로필", icon: UserRound },
 ];
 

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Camera,
-  LoaderCircle,
-  SlidersHorizontal,
-  X,
-} from "lucide-react";
+import { LoaderCircle, X } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
 
@@ -86,10 +81,7 @@ export function ArtistsScreen({
 
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
-          <p className="flex items-center gap-2 text-sm font-semibold">
-            <SlidersHorizontal className="size-4 text-primary" />
-            촬영 씬
-          </p>
+          <p className="text-sm font-semibold">촬영 씬</p>
           {hasFilter ? (
             <button
               type="button"
@@ -218,9 +210,6 @@ export function ArtistsScreen({
           </>
         ) : (
           <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-muted/50 p-6 text-center">
-            <span className="flex size-12 items-center justify-center rounded-xl bg-card text-primary">
-              <Camera className="size-6" />
-            </span>
             <div className="flex flex-col gap-1">
               <p className="text-base font-semibold">아직 맞는 조합이 없어요</p>
               <p className="text-sm leading-6 text-muted-foreground">
@@ -250,9 +239,6 @@ interface ArtistLoadErrorProps {
 function ArtistLoadError({ onRetry }: ArtistLoadErrorProps) {
   return (
     <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-muted/50 p-6 text-center">
-      <span className="flex size-12 items-center justify-center rounded-xl bg-card text-primary">
-        <Camera className="size-6" />
-      </span>
       <div className="flex flex-col gap-1">
         <p className="text-base font-semibold">작가 목록을 불러오지 못했어요</p>
         <p className="text-sm leading-6 text-muted-foreground">

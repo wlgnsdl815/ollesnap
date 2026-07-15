@@ -1,8 +1,12 @@
-import { ArrowUpRight, Camera } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import type { SnapArtist } from "../../domain/entity/wedding-catalog.entity";
 import { formatPriceFrom } from "../../domain/usecase/wedding-catalog.usecase";
+import {
+  SCENE_IMAGES,
+  TONE_PHOTO_FILTERS,
+} from "../lib/scene-tone-visuals";
 
 interface ArtistListCardProps {
   artist: SnapArtist;
@@ -15,33 +19,33 @@ export function ArtistListCard({
   sceneLabel,
   toneLabel,
 }: ArtistListCardProps) {
+  const primaryScene = artist.scenes[0];
+  const primaryTone = artist.tones[0];
+
   return (
     <Link
       href={`/artists/${artist.id}`}
-      className="flex min-h-44 flex-col justify-between rounded-2xl border border-border bg-card p-4 transition-colors active:bg-muted"
+      className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors active:bg-muted"
     >
-      <div className="flex items-start justify-between gap-4">
-        <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-          <Camera className="size-5" />
+      <div className="relative aspect-4/3 overflow-hidden">
+        <Image
+          src={SCENE_IMAGES[primaryScene]}
+          alt={`${artist.studioName}의 대표 씬 — ${sceneLabel}, ${toneLabel} 톤`}
+          fill
+          sizes="(min-width: 640px) 320px, 85vw"
+          className="object-cover"
+          style={{ filter: TONE_PHOTO_FILTERS[primaryTone] }}
+        />
+        <span className="absolute bottom-2.5 left-2.5 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
+          {sceneLabel} · {toneLabel}
         </span>
-        <ArrowUpRight className="size-5 text-muted-foreground" />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-0.5">
-          <p className="text-base font-semibold">{artist.studioName}</p>
-          <p className="text-xs text-muted-foreground">
-            {artist.artistName} 작가 · {artist.durationHours}시간 촬영
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
-            {sceneLabel}
-          </span>
-          <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
-            {toneLabel}
-          </span>
-        </div>
-        <p className="text-sm font-semibold text-primary">
+      <div className="flex flex-col gap-0.5 p-4">
+        <p className="text-base font-semibold">{artist.studioName}</p>
+        <p className="text-xs text-muted-foreground">
+          {artist.artistName} 작가 · {artist.durationHours}시간 촬영
+        </p>
+        <p className="pt-1.5 text-sm font-semibold">
           {formatPriceFrom(artist.priceFrom)}
         </p>
       </div>

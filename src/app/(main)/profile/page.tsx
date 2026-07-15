@@ -1,11 +1,5 @@
-import {
-  CalendarDays,
-  Camera,
-  ChevronRight,
-  Heart,
-  Map,
-  UserRound,
-} from "lucide-react";
+import { CalendarDays, ChevronRight, UserRound } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -20,6 +14,10 @@ import {
   formatPriceFrom,
   resolveSnapTeam,
 } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
+import {
+  SCENE_IMAGES,
+  TONE_PHOTO_FILTERS,
+} from "@/features/wedding/presentation/lib/scene-tone-visuals";
 import { createClient } from "@/shared/supabase/server";
 
 import { SignOutButton } from "./sign-out-button";
@@ -95,10 +93,7 @@ export default async function ProfilePage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Camera className="size-5 text-primary" />
-          <h1 className="text-xl font-semibold">저장한 촬영팀</h1>
-        </div>
+        <h1 className="text-xl font-semibold">저장한 촬영팀</h1>
         {savedTeam ? (
           <Link
             href="/planner"
@@ -135,10 +130,7 @@ export default async function ProfilePage() {
 
       <section className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Heart className="size-5 text-primary" />
-            <h2 className="text-xl font-semibold">찜한 작가</h2>
-          </div>
+          <h2 className="text-xl font-semibold">찜한 작가</h2>
           <span className="text-sm text-muted-foreground">{savedArtists.length}명</span>
         </div>
         {savedArtists.length > 0 ? (
@@ -150,8 +142,15 @@ export default async function ProfilePage() {
                 className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 active:bg-muted"
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Camera className="size-5" />
+                  <span className="relative size-11 shrink-0 overflow-hidden rounded-xl">
+                    <Image
+                      src={SCENE_IMAGES[artist.scenes[0]]}
+                      alt=""
+                      fill
+                      sizes="44px"
+                      className="object-cover"
+                      style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
+                    />
                   </span>
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold">{artist.studioName}</p>
@@ -174,10 +173,7 @@ export default async function ProfilePage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <Map className="size-5 text-primary" />
-          <h2 className="text-xl font-semibold">제주 체류 일정</h2>
-        </div>
+        <h2 className="text-xl font-semibold">제주 체류 일정</h2>
         <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
           {savedPlan?.stayStartDate || savedPlan?.stayEndDate ? (
             <div className="flex items-center gap-2 text-sm text-secondary-foreground">

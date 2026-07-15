@@ -1,41 +1,23 @@
-import {
-  ArrowRight,
-  Camera,
-  ChevronRight,
-  CircleUserRound,
-  Map,
-  Mountain,
-  Sparkles,
-  Trees,
-  Waves,
-} from "lucide-react";
+import { ArrowRight, ChevronRight, CircleUserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import type {
-  SnapScene,
-  WeddingCatalog,
-} from "@/features/wedding/domain/entity/wedding-catalog.entity";
+import type { WeddingCatalog } from "@/features/wedding/domain/entity/wedding-catalog.entity";
 import {
   getSceneLabel,
   getToneLabel,
 } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 import { ArtistListCard } from "@/features/wedding/presentation/components/artist-list-card";
 import { CatalogDemoNotice } from "@/features/wedding/presentation/components/catalog-demo-notice";
+import {
+  SCENE_IMAGES,
+  TONE_PHOTO_FILTERS,
+} from "@/features/wedding/presentation/lib/scene-tone-visuals";
 
 interface HomeScreenProps {
   catalog: WeddingCatalog;
   isAuthenticated: boolean;
 }
-
-const SCENE_ICONS: Record<SnapScene, typeof Mountain> = {
-  oreum: Mountain,
-  sea: Waves,
-  ranch: Trees,
-  "stone-wall": Map,
-  forest: Trees,
-  sunset: Sparkles,
-};
 
 export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
   return (
@@ -88,10 +70,9 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
               </Link>
               <Link
                 href="/start"
-                className="flex min-h-11 items-center justify-center gap-2 rounded-md bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur active:bg-white/20"
+                className="flex min-h-11 items-center justify-center rounded-md bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur active:bg-white/20"
               >
                 아직 아무것도 못 골랐어요
-                <Sparkles className="size-4" />
               </Link>
             </div>
           </div>
@@ -100,7 +81,6 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-semibold text-primary">01. 촬영 씬</p>
           <h2 className="text-2xl font-semibold tracking-tight">
             원하는 씬부터 골라보세요
           </h2>
@@ -109,54 +89,28 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {catalog.scenes.map((scene) => {
-            const Icon = SCENE_ICONS[scene.id];
-
-            return (
-              <Link
-                key={scene.id}
-                href={`/artists?scene=${scene.id}`}
-                className="flex min-h-32 flex-col justify-between rounded-2xl border border-border bg-card p-4 active:bg-muted"
-              >
-                <span className="flex size-10 items-center justify-center rounded-xl bg-secondary text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <span className="flex flex-col gap-1">
-                  <span className="text-sm font-semibold">{scene.label}</span>
-                  <span className="text-xs leading-4 text-muted-foreground">
-                    {scene.description}
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-3">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-semibold text-primary">02. 사진 톤</p>
-            <h2 className="text-2xl font-semibold tracking-tight">
-              나다운 사진의 결
-            </h2>
-          </div>
-          <Link
-            href="/artists"
-            className="flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
-          >
-            작가 전체보기
-            <ChevronRight className="size-4" />
-          </Link>
-        </div>
-        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {catalog.tones.map((tone) => (
+          {catalog.scenes.map((scene) => (
             <Link
-              key={tone.id}
-              href={`/artists?tone=${tone.id}`}
-              className="flex min-h-11 shrink-0 items-center rounded-full border border-border bg-card px-4 text-sm text-secondary-foreground active:bg-muted"
+              key={scene.id}
+              href={`/artists?scene=${scene.id}`}
+              className="relative aspect-4/5 overflow-hidden rounded-2xl"
             >
-              {tone.label}
+              <Image
+                src={SCENE_IMAGES[scene.id]}
+                alt={scene.label}
+                fill
+                sizes="(min-width: 640px) 220px, 45vw"
+                className="object-cover"
+              />
+              <span className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
+              <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-3.5">
+                <span className="text-base font-semibold text-white">
+                  {scene.label}
+                </span>
+                <span className="text-xs leading-4 text-white/80">
+                  {scene.description}
+                </span>
+              </span>
             </Link>
           ))}
         </div>
@@ -164,10 +118,53 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
 
       <section className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-semibold text-primary">03. 스냅 작가</p>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            나다운 사진의 결
+          </h2>
+          <p className="text-sm leading-6 text-muted-foreground">
+            같은 바다도 작가의 톤에 따라 다르게 남아요.
+          </p>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {catalog.tones.map((tone) => (
+            <Link
+              key={tone.id}
+              href={`/artists?tone=${tone.id}`}
+              className="flex flex-col gap-2"
+            >
+              <span className="relative aspect-4/3 overflow-hidden rounded-xl">
+                <Image
+                  src={SCENE_IMAGES.sea}
+                  alt={`협재 바다 — ${tone.label} 톤`}
+                  fill
+                  sizes="(min-width: 640px) 320px, 45vw"
+                  className="object-cover"
+                  style={{ filter: TONE_PHOTO_FILTERS[tone.id] }}
+                />
+              </span>
+              <span className="flex flex-col">
+                <span className="text-sm font-semibold">{tone.label}</span>
+                <span className="text-xs leading-4 text-muted-foreground">
+                  {tone.description}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <div className="flex items-end justify-between gap-3">
           <h2 className="text-2xl font-semibold tracking-tight">
             이런 작가를 찾을 수 있어요
           </h2>
+          <Link
+            href="/artists"
+            className="flex min-h-11 shrink-0 items-center gap-1 text-sm font-semibold text-primary"
+          >
+            전체보기
+            <ChevronRight className="size-4" />
+          </Link>
         </div>
         <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0">
           {catalog.artists.slice(0, 3).map((artist) => (
@@ -183,10 +180,7 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
       </section>
 
       <section className="rounded-2xl bg-accent p-5">
-        <div className="flex flex-col gap-3">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-card text-primary">
-            <Sparkles className="size-5" />
-          </span>
+        <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-xl font-semibold">스드메, 따로 찾지 마세요</h2>
             <p className="text-sm leading-6 text-muted-foreground">
@@ -196,54 +190,39 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
           </div>
           <Link
             href="/artists?tab=styling"
-            className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-foreground px-4 text-base font-semibold text-card active:bg-foreground/90"
+            className="inline-flex min-h-12 w-fit items-center rounded-md bg-foreground px-5 text-base font-semibold text-card active:bg-foreground/90"
           >
             드레스·메이크업 보기
-            <ArrowRight className="size-4" />
           </Link>
         </div>
       </section>
 
-      <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
-        <div className="flex items-start gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Camera className="size-5" />
-          </span>
-          <div className="flex min-w-0 flex-1 flex-col gap-1">
-            <p className="text-lg font-semibold">내 촬영팀</p>
-            <p className="text-sm leading-6 text-muted-foreground">
-              작가, 드레스, 메이크업을 한 장의 촬영 브리프로 정리해요.
-            </p>
-          </div>
-        </div>
+      <section className="flex flex-col divide-y divide-border rounded-2xl border border-border bg-card">
         <Link
           href="/planner"
-          className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
+          className="flex items-center gap-3 p-5 active:bg-muted"
         >
-          촬영팀 구성하기
-          <ArrowRight className="size-4" />
-        </Link>
-      </section>
-
-      <section className="flex flex-col gap-3 rounded-2xl border border-border bg-muted/50 p-5">
-        <div className="flex items-start gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-card text-primary">
-            <Map className="size-5" />
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="text-base font-semibold">제주 일정</span>
+            <span className="text-sm leading-6 text-muted-foreground">
+              촬영일과 더 머무는 날의 계획을 함께 정리해요.
+            </span>
           </span>
-          <div className="flex flex-col gap-1">
-            <p className="text-lg font-semibold">촬영 뒤, 제주에 더 머무는 날</p>
-            <p className="text-sm leading-6 text-muted-foreground">
-              촬영일은 작가에게 맡기고, 남은 날의 제주 여행은 따로 가볍게
-              둘러보세요.
-            </p>
-          </div>
-        </div>
+          <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+        </Link>
         <Link
           href="/spots"
-          className="flex min-h-11 items-center gap-1 text-sm font-semibold text-primary"
+          className="flex items-center gap-3 p-5 active:bg-muted"
         >
-          제주 여행 아이디어 보기
-          <ChevronRight className="size-4" />
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="text-base font-semibold">
+              촬영 뒤, 제주에 더 머무는 날
+            </span>
+            <span className="text-sm leading-6 text-muted-foreground">
+              남은 날의 제주 여행을 가볍게 둘러보세요.
+            </span>
+          </span>
+          <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
         </Link>
       </section>
 

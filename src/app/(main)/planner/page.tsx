@@ -1,9 +1,9 @@
 import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
 import { resolveSnapTeam } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
-import { MySnapTeamScreen } from "@/features/wedding/presentation/pages/my-snap-team-screen";
+import { JejuScheduleScreen } from "@/features/wedding/presentation/pages/jeju-schedule-screen";
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 
-interface MySnapTeamPageProps {
+interface JejuSchedulePageProps {
   searchParams: Promise<{
     artist?: string;
     package?: string;
@@ -13,9 +13,9 @@ interface MySnapTeamPageProps {
   }>;
 }
 
-export default async function MySnapTeamPage({
+export default async function JejuSchedulePage({
   searchParams,
-}: MySnapTeamPageProps) {
+}: JejuSchedulePageProps) {
   const selection = await searchParams;
   const userWeddingState = await getUserWeddingState();
   const savedPlan = userWeddingState.snapPlan;
@@ -31,10 +31,11 @@ export default async function MySnapTeamPage({
   });
 
   return (
-    <MySnapTeamScreen
+    <JejuScheduleScreen
       team={team}
       initialSavedPlan={savedPlan}
       isAuthenticated={userWeddingState.isAuthenticated}
+      travelPlanItems={userWeddingState.travelPlanItems}
     />
   );
 }

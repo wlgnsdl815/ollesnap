@@ -1,4 +1,4 @@
-import { ArrowUpRight, Handshake, PackageCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
 import type {
@@ -45,16 +45,10 @@ export function StylingShopCard({
   return (
     <Link
       href={href}
-      className="flex min-h-48 flex-col justify-between rounded-2xl border border-border bg-card p-4 active:bg-muted"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 active:bg-muted"
     >
       <div className="flex items-start justify-between gap-3">
-        <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-          {isPartner ? <Handshake className="size-5" /> : <PackageCheck className="size-5" />}
-        </span>
-        <ArrowUpRight className="size-5 text-muted-foreground" />
-      </div>
-      <div className="flex flex-col gap-2">
-        <div>
+        <div className="min-w-0">
           {isPartner ? (
             <p className="mb-1 text-xs font-semibold text-primary">제휴 작가 혜택</p>
           ) : null}
@@ -63,6 +57,9 @@ export function StylingShopCard({
             {shop.introduction}
           </p>
         </div>
+        <ArrowUpRight className="size-5 shrink-0 text-muted-foreground" />
+      </div>
+      <div className="flex flex-col gap-2">
         <div className="flex flex-wrap gap-1.5">
           <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
             패키지 {packageProducts.length}개
