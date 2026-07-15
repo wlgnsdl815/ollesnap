@@ -24,8 +24,15 @@ export function HomeScreen({ catalog, isAuthenticated }: HomeScreenProps) {
   return (
     <div className="flex flex-col gap-10 pb-4">
       <header className="flex min-h-11 items-center justify-between gap-3">
-        <Link href="/" className="text-2xl font-black text-primary">
-          ollesnap
+        <Link href="/" className="flex min-h-11 items-center">
+          <Image
+            src="/wordmark.svg"
+            alt="올레스냅"
+            width={105}
+            height={28}
+            priority
+            unoptimized
+          />
         </Link>
         {isAuthenticated ? null : (
           <Link

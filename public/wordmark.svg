@@ -1,0 +1,23 @@
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 올레스냅 워드마크: 첫 "o"가 파비콘과 같은 제주 감귤 -->
+  <circle cx="20" cy="32" r="15" fill="#ff6000"/>
+  <path d="M20.5 17 C20.2 11.5 24.5 7.8 29.5 8.2 C29.3 13.4 25.6 16.9 20.5 17 Z" fill="#0da796"/>
+  <circle cx="15" cy="27.5" r="3" fill="#ffffff" opacity="0.92"/>
+  <g stroke="#333d4b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- l l -->
+    <path d="M47 10.5 V43.5"/>
+    <path d="M61 10.5 V43.5"/>
+    <!-- e -->
+    <path d="M74 32 H97 A11.5 11.5 0 1 0 92.1 41.4"/>
+    <!-- s -->
+    <path d="M120.48 23.38 A5.75 5.75 0 1 0 115.5 32 A5.75 5.75 0 1 1 110.52 40.63"/>
+    <!-- n -->
+    <path d="M134 43.5 V20.5 M134 32.5 A10.5 10.5 0 0 1 155 32.5 V43.5"/>
+    <!-- a -->
+    <circle cx="179.5" cy="32" r="11.5"/>
+    <path d="M191 20.5 V43.5"/>
+    <!-- p -->
+    <path d="M204 21 V53.5"/>
+    <circle cx="215.5" cy="32" r="11.5"/>
+  </g>
+</svg>

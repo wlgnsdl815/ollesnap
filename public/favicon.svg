@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 올레스냅 파비콘: 뷰파인더 프레임 속 렌즈가 곧 제주 감귤 -->
+  <rect width="64" height="64" rx="14" fill="#fff8e4"/>
+  <g stroke="#333d4b" stroke-width="4.5" stroke-linecap="round" fill="none">
+    <path d="M9 20 V15 Q9 9 15 9 H20"/>
+    <path d="M44 9 H49 Q55 9 55 15 V20"/>
+    <path d="M55 44 V49 Q55 55 49 55 H44"/>
+    <path d="M20 55 H15 Q9 55 9 49 V44"/>
+  </g>
+  <circle cx="32" cy="34" r="12.5" fill="#ff6000"/>
+  <path d="M32.5 22 C32.2 16.5 36.5 12.8 41.5 13.2 C41.3 18.4 37.6 21.9 32.5 22 Z" fill="#0da796"/>
+  <circle cx="27" cy="29.5" r="3.2" fill="#ffffff" opacity="0.92"/>
+</svg>

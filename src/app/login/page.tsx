@@ -1,4 +1,5 @@
 import { CalendarDays, ChevronLeft, Heart, Map } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -34,8 +35,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <ChevronLeft className="size-5" />
           돌아가기
         </Link>
-        <Link href="/" className="text-xl font-black text-primary">
-          ollesnap
+        <Link href="/" className="flex min-h-11 items-center">
+          <Image
+            src="/wordmark.svg"
+            alt="올레스냅"
+            width={90}
+            height={24}
+            unoptimized
+          />
         </Link>
       </header>
 

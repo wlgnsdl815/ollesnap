@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: "올레스냅",
   description: "제주 웨딩 스냅 작가와 스드메를 취향으로 고르는 플랫폼",
   icons: {
-    icon: "/logo_camera.svg",
+    icon: "/favicon.svg",
   },
 };
 
