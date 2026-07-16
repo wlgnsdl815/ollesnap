@@ -35,16 +35,20 @@ export default async function JejuSchedulePage({
     congestionRepository.getForecastPool(),
   ]);
   const savedPlan = userWeddingState.snapPlan;
-  const team = resolveSnapTeam(weddingCatalogMock, {
-    artistId: selection.artist ?? savedPlan?.artistId ?? undefined,
-    packageId: selection.package ?? savedPlan?.packageId ?? undefined,
-    stylingShopId: selection.stylingShop ?? savedPlan?.stylingShopId ?? undefined,
-    stylingProductId:
-      selection.stylingProduct ?? savedPlan?.stylingProductId ?? undefined,
-    stylingOptionIds: selection.stylingOptions
-      ? selection.stylingOptions.split(",").filter(Boolean)
-      : savedPlan?.stylingOptionIds,
-  });
+  const selectedArtistId = selection.artist ?? savedPlan?.artistId ?? undefined;
+  const team = selectedArtistId
+    ? resolveSnapTeam(weddingCatalogMock, {
+        artistId: selectedArtistId,
+        packageId: selection.package ?? savedPlan?.packageId ?? undefined,
+        stylingShopId:
+          selection.stylingShop ?? savedPlan?.stylingShopId ?? undefined,
+        stylingProductId:
+          selection.stylingProduct ?? savedPlan?.stylingProductId ?? undefined,
+        stylingOptionIds: selection.stylingOptions
+          ? selection.stylingOptions.split(",").filter(Boolean)
+          : savedPlan?.stylingOptionIds,
+      })
+    : null;
   const congestionLevelByItemId = getCongestionLevelByItemId(
     userWeddingState.travelPlanItems,
     congestionPool,
