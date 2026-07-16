@@ -1,12 +1,18 @@
 import { ArrowRight, ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 import type {
   SnapArtist,
   WeddingCatalog,
 } from "../../domain/entity/wedding-catalog.entity";
-import { getStylingShopsForArtist } from "../../domain/usecase/wedding-catalog.usecase";
+import {
+  getStylingShopsForArtist,
+  isPartnerStylingShop,
+} from "../../domain/usecase/wedding-catalog.usecase";
 import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import { StylingShopCard } from "../components/styling-shop-card";
+
+type ShopView = "partner" | "all";
 
 interface StylingScreenProps {
   artist?: SnapArtist;
@@ -21,9 +27,16 @@ export function StylingScreen({
   onSelectArtists,
   selectedPackageId,
 }: StylingScreenProps) {
+  const [shopView, setShopView] = useState<ShopView>("partner");
   const shops = artist
     ? getStylingShopsForArtist(catalog, artist)
     : catalog.stylingShops;
+  const partnerShops = artist
+    ? shops.filter((shop) => isPartnerStylingShop(shop, artist))
+    : [];
+  const hasPartnerTabs = Boolean(artist) && partnerShops.length > 0;
+  const visibleShops =
+    hasPartnerTabs && shopView === "partner" ? partnerShops : shops;
 
   return (
     <div className="flex flex-col gap-8 pb-4">
@@ -46,7 +59,7 @@ export function StylingScreen({
           </h1>
           <p className="text-sm leading-6 text-muted-foreground">
             {artist
-              ? "제휴 샵을 먼저 보여드려요. 각 샵의 단품·패키지·옵션과 제휴가를 비교해보세요."
+              ? "제휴가가 적용되는 샵만 먼저 보여드려요. 다른 샵은 전체 샵 탭에서 볼 수 있어요."
               : "샵별 단품과 패키지를 먼저 둘러보세요. 작가를 고르면 제휴 혜택을 바로 확인할 수 있어요."}
           </p>
         </div>
@@ -82,10 +95,26 @@ export function StylingScreen({
       <section className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-xl font-semibold">스드메 샵</h2>
-          <p className="text-sm text-muted-foreground">{shops.length}개 샵</p>
+          <p className="text-sm text-muted-foreground">
+            {visibleShops.length}개 샵
+          </p>
         </div>
+        {hasPartnerTabs ? (
+          <div className="flex gap-2">
+            <ShopViewChip
+              isActive={shopView === "partner"}
+              label={`제휴 샵 ${partnerShops.length}`}
+              onClick={() => setShopView("partner")}
+            />
+            <ShopViewChip
+              isActive={shopView === "all"}
+              label={`전체 샵 ${shops.length}`}
+              onClick={() => setShopView("all")}
+            />
+          </div>
+        ) : null}
         <div className="grid gap-3 sm:grid-cols-2">
-          {shops.map((shop) => (
+          {visibleShops.map((shop) => (
             <StylingShopCard
               key={shop.id}
               shop={shop}
@@ -98,5 +127,27 @@ export function StylingScreen({
 
       <CatalogDemoNotice />
     </div>
+  );
+}
+
+interface ShopViewChipProps {
+  isActive: boolean;
+  label: string;
+  onClick: () => void;
+}
+
+function ShopViewChip({ isActive, label, onClick }: ShopViewChipProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex min-h-11 items-center rounded-full border px-4 text-sm transition-colors ${
+        isActive
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-card text-secondary-foreground active:bg-muted"
+      }`}
+    >
+      {label}
+    </button>
   );
 }

@@ -6,7 +6,9 @@ import type {
   StylingShop,
 } from "../../domain/entity/wedding-catalog.entity";
 import {
+  formatPrice,
   formatPriceFrom,
+  getMaxPartnerDiscount,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
 
@@ -29,6 +31,7 @@ export function StylingShopCard({
     (product) => product.kind === "single",
   );
   const isPartner = artist ? isPartnerStylingShop(shop, artist) : false;
+  const maxPartnerDiscount = isPartner ? getMaxPartnerDiscount(shop) : 0;
 
   if (artist) {
     searchParams.set("artist", artist.id);
@@ -50,7 +53,11 @@ export function StylingShopCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           {isPartner ? (
-            <p className="mb-1 text-xs font-semibold text-primary">제휴 작가 혜택</p>
+            <p className="mb-1 text-xs font-semibold text-primary">
+              {maxPartnerDiscount > 0
+                ? `${artist?.artistName} 작가 제휴 · 최대 ${formatPrice(maxPartnerDiscount)} 할인`
+                : "제휴 작가 혜택"}
+            </p>
           ) : null}
           <p className="text-base font-semibold">{shop.name}</p>
           <p className="mt-1 line-clamp-2 text-sm leading-5 text-muted-foreground">

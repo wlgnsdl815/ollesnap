@@ -135,6 +135,19 @@ export function getStylingShopsForArtist(
   return [...partnerShops, ...otherShops];
 }
 
+export function getMaxPartnerDiscount(shop: StylingShop): number {
+  return shop.products.reduce((maxDiscount, product) => {
+    if (!product.partnerPrice) {
+      return maxDiscount;
+    }
+
+    return Math.max(
+      maxDiscount,
+      product.regularPrice.total - product.partnerPrice.total,
+    );
+  }, 0);
+}
+
 export function getStylingProductPrice(
   shop: StylingShop,
   product: StylingProduct,
