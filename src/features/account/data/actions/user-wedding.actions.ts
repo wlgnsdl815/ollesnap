@@ -11,6 +11,7 @@ export interface ActionResult {
 
 export interface ToggleSavedArtistResult extends ActionResult {
   isSaved?: boolean;
+  savedCount?: number;
 }
 
 export interface SaveSnapPlanInput {
@@ -107,7 +108,7 @@ export async function toggleSavedArtistAction(
     revalidatePath("/artists");
     revalidatePath(`/artists/${artistId}`);
     revalidatePath("/profile");
-    return { ok: true, isSaved: false };
+    return { ok: true, isSaved: false, savedCount: await countSavedArtists(user.id) };
   }
 
   const { error } = await supabase.from("saved_artists").insert({
@@ -122,7 +123,17 @@ export async function toggleSavedArtistAction(
   revalidatePath("/artists");
   revalidatePath(`/artists/${artistId}`);
   revalidatePath("/profile");
-  return { ok: true, isSaved: true };
+  return { ok: true, isSaved: true, savedCount: await countSavedArtists(user.id) };
+}
+
+async function countSavedArtists(userId: string): Promise<number | undefined> {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("saved_artists")
+    .select("artist_id", { count: "exact", head: true })
+    .eq("user_id", userId);
+
+  return error ? undefined : count ?? undefined;
 }
 
 export async function saveSnapPlanAction(

@@ -26,6 +26,7 @@ interface WeddingCatalogScreenProps {
   initialScene?: SnapScene;
   initialTab?: WeddingCatalogTab;
   initialTone?: WeddingTone;
+  savedArtistCount?: number;
   selectedPackageId?: string;
 }
 
@@ -35,6 +36,7 @@ export function WeddingCatalogScreen({
   initialScene,
   initialTab = "artists",
   initialTone,
+  savedArtistCount = 0,
   selectedPackageId,
 }: WeddingCatalogScreenProps) {
   const [activeTab, setActiveTab] = useState<WeddingCatalogTab>(initialTab);
@@ -75,6 +77,7 @@ export function WeddingCatalogScreen({
             catalog={catalog}
             initialScene={initialScene}
             initialTone={initialTone}
+            savedArtistCount={savedArtistCount}
           />
         ) : null}
       </TabsContent>

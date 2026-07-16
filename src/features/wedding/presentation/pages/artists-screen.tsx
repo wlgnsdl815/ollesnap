@@ -1,6 +1,7 @@
 "use client";
 
-import { LoaderCircle, X } from "lucide-react";
+import { ChevronRight, LoaderCircle, X } from "lucide-react";
+import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import { useState } from "react";
 
@@ -22,12 +23,14 @@ interface ArtistsScreenProps {
   catalog: WeddingCatalog;
   initialScene?: SnapScene;
   initialTone?: WeddingTone;
+  savedArtistCount?: number;
 }
 
 export function ArtistsScreen({
   catalog,
   initialScene,
   initialTone,
+  savedArtistCount = 0,
 }: ArtistsScreenProps) {
   const [selectedScene, setSelectedScene] = useState<SnapScene | undefined>(
     initialScene,
@@ -137,9 +140,20 @@ export function ArtistsScreen({
       </section>
 
       <section className="flex flex-col gap-3">
-        <p className="text-lg font-semibold">
-          {hasFilter ? "선택한 취향의 작가" : "제주 스냅 작가"}
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-lg font-semibold">
+            {hasFilter ? "선택한 취향의 작가" : "제주 스냅 작가"}
+          </p>
+          {savedArtistCount >= 2 ? (
+            <Link
+              href="/artists/compare"
+              className="flex min-h-11 shrink-0 items-center gap-0.5 text-sm font-semibold text-primary"
+            >
+              찜한 작가 비교
+              <ChevronRight className="size-4" />
+            </Link>
+          ) : null}
+        </div>
         {isPending ? (
           <ArtistListSkeleton />
         ) : hasInitialLoadError ? (
