@@ -1,8 +1,9 @@
-import { CalendarDays, ChevronLeft, Heart, Map } from "lucide-react";
+import { CalendarDays, Heart, Map } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { BackButton } from "@/shared/components/navigation/back-button";
 import { createClient } from "@/shared/supabase/server";
 
 import { LoginForm } from "./login-form";
@@ -30,13 +31,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="h-[env(safe-area-inset-top)]" />
         <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between px-4 sm:max-w-2xl sm:px-6 lg:max-w-5xl">
-          <Link
-            href={backHref}
-            aria-label="뒤로 가기"
-            className="-ml-2 flex size-11 items-center justify-center rounded-full text-foreground active:bg-muted"
-          >
-            <ChevronLeft className="size-6" />
-          </Link>
+          <BackButton fallbackHref={backHref} />
           <Link
             href="/"
             aria-label="올레스냅 홈"

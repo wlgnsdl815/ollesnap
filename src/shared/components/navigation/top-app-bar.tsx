@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+
+import { BackButton } from "./back-button";
 
 interface ScreenInfo {
   title: string;
@@ -66,10 +67,10 @@ export function TopAppBar() {
   const screen =
     pathname === "/"
       ? null
-      : SCREEN_MATCHERS.find(({ match }) => match(pathname))?.screen ?? null;
+      : (SCREEN_MATCHERS.find(({ match }) => match(pathname))?.screen ?? null);
 
   return (
-    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
       <div className="h-[env(safe-area-inset-top)]" />
       <div className="mx-auto flex h-14 w-full max-w-md items-center gap-1 px-4 sm:max-w-2xl lg:max-w-4xl">
         {screen ? (
@@ -97,26 +98,5 @@ export function TopAppBar() {
         )}
       </div>
     </header>
-  );
-}
-
-function BackButton({ fallbackHref }: { fallbackHref: string }) {
-  const router = useRouter();
-
-  return (
-    <button
-      type="button"
-      aria-label="뒤로 가기"
-      onClick={() => {
-        if (window.history.length > 1) {
-          router.back();
-        } else {
-          router.push(fallbackHref);
-        }
-      }}
-      className="-ml-2 flex size-11 shrink-0 items-center justify-center rounded-full text-foreground active:bg-muted"
-    >
-      <ChevronLeft className="size-6" />
-    </button>
   );
 }
