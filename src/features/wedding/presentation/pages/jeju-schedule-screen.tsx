@@ -38,6 +38,7 @@ export function JejuScheduleScreen({
   const shootingDate = initialSavedPlan?.shootingDate
     ? formatKoreanDate(initialSavedPlan.shootingDate)
     : null;
+  const isFreshStart = !team && travelPlanItems.length === 0;
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -87,6 +88,28 @@ export function JejuScheduleScreen({
         />
       ) : null}
 
+      {isFreshStart ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="text-xl font-semibold">어디부터 준비할까요?</h2>
+          <p className="text-sm leading-6 text-muted-foreground">
+            순서는 정해져 있지 않아요. 지금 마음이 가는 쪽부터 시작하면 돼요.
+          </p>
+          <div className="flex flex-col gap-3">
+            <StartPathCard
+              href="/artists"
+              title="촬영팀부터 고르기"
+              description="마음에 드는 작가를 찜하고, 스드메까지 묶어 예상 비용을 볼 수 있어요."
+            />
+            <StartPathCard
+              href="/spots"
+              title="제주에서 갈 곳 먼저 담기"
+              description="촬영 전후에 가보고 싶은 관광지와 맛집을 일정에 담아둘 수 있어요."
+            />
+          </div>
+        </section>
+      ) : null}
+
+      {!isFreshStart ? (
       <section className="flex flex-col gap-3">
         <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
         {travelPlanItems.length > 0 ? (
@@ -147,6 +170,7 @@ export function JejuScheduleScreen({
           <ChevronRight className="size-4" />
         </Link>
       </section>
+      ) : null}
 
       {team ? (
         <>
@@ -202,7 +226,7 @@ export function JejuScheduleScreen({
             </Link>
           </section>
         </>
-      ) : (
+      ) : !isFreshStart ? (
         <section className="flex flex-col gap-3">
           <h2 className="text-xl font-semibold">촬영일 준비</h2>
           <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
@@ -224,9 +248,32 @@ export function JejuScheduleScreen({
             </Link>
           </div>
         </section>
-      )}
+      ) : null}
 
     </div>
+  );
+}
+
+interface StartPathCardProps {
+  href: string;
+  title: string;
+  description: string;
+}
+
+function StartPathCard({ href, title, description }: StartPathCardProps) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5 active:bg-muted"
+    >
+      <span className="flex min-w-0 flex-col gap-1">
+        <span className="text-base font-semibold">{title}</span>
+        <span className="text-sm leading-6 text-muted-foreground">
+          {description}
+        </span>
+      </span>
+      <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+    </Link>
   );
 }
 
