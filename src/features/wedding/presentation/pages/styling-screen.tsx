@@ -9,6 +9,7 @@ import {
   getStylingShopsForArtist,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
+import { SnapSelectionBar } from "../components/snap-selection-bar";
 import { StylingShopCard } from "../components/styling-shop-card";
 
 type ShopView = "partner" | "all";
@@ -38,9 +39,15 @@ export function StylingScreen({
   const visibleShops =
     hasPartnerTabs && shopView === "partner" ? partnerShops : shops;
   const showNoArtistGate = !artist && !isBrowsingAllShops;
+  const selectedPackage = artist?.packages.find(
+    (snapPackage) => snapPackage.id === selectedPackageId,
+  );
 
   return (
     <div className="flex flex-col gap-8 pb-4">
+      {artist && selectedPackage ? (
+        <SnapSelectionBar artist={artist} snapPackage={selectedPackage} />
+      ) : null}
       <header className="flex flex-col gap-4">
         {artist ? (
           <button

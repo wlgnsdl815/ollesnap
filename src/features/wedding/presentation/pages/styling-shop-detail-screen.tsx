@@ -21,6 +21,7 @@ import {
   getStylingProductPrice,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
+import { SnapSelectionBar } from "../components/snap-selection-bar";
 
 interface StylingShopDetailScreenProps {
   shop: StylingShop;
@@ -36,9 +37,15 @@ export function StylingShopDetailScreen({
   const [selectedKind, setSelectedKind] = useState<StylingProductKind>("package");
   const products = shop.products.filter((product) => product.kind === selectedKind);
   const isPartner = artist ? isPartnerStylingShop(shop, artist) : false;
+  const selectedSnapPackage = artist?.packages.find(
+    (snapPackage) => snapPackage.id === selectedSnapPackageId,
+  );
 
   return (
     <div className="flex flex-col gap-7 pb-4">
+      {artist && selectedSnapPackage ? (
+        <SnapSelectionBar artist={artist} snapPackage={selectedSnapPackage} />
+      ) : null}
       <header className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           {isPartner ? (

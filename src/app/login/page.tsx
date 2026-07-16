@@ -28,7 +28,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <div className="flex min-h-full flex-1 flex-col bg-background">
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="h-[env(safe-area-inset-top)]" />
         <div className="mx-auto flex h-14 w-full max-w-md items-center justify-between px-4 sm:max-w-2xl sm:px-6 lg:max-w-5xl">
           <BackButton fallbackHref={backHref} />
