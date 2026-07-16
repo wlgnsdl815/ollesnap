@@ -1,22 +1,33 @@
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { WeddingCatalog } from "@/features/wedding/domain/entity/wedding-catalog.entity";
-import {
-  getSceneLabel,
-  getToneLabel,
-} from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
-import { ArtistListCard } from "@/features/wedding/presentation/components/artist-list-card";
-import {
-  SCENE_IMAGES,
-  TONE_PHOTO_FILTERS,
-} from "@/features/wedding/presentation/lib/scene-tone-visuals";
+
+import { HomeTastePicker } from "../components/home-taste-picker";
 
 interface HomeScreenProps {
   catalog: WeddingCatalog;
 }
+
+const PREPARATION_STEPS = [
+  {
+    title: "취향으로 작가 찾기",
+    description:
+      "씬과 톤으로 추려 보고, 마음에 드는 작가를 두세 명 찜해 나란히 비교해요.",
+  },
+  {
+    title: "촬영팀 만들기",
+    description:
+      "고른 작가의 상품에 제휴 스드메를 묶으면 예상 총비용까지 한 번에 보여요.",
+  },
+  {
+    title: "제주 일정으로 잇기",
+    description:
+      "촬영일과 머무는 날을 정하고, 촬영 전후에 갈 곳을 일정에 담아요.",
+  },
+];
 
 export function HomeScreen({ catalog }: HomeScreenProps) {
   return (
@@ -67,152 +78,50 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
       <FullBleedBand className="bg-cream py-10">
         <div className="flex flex-col gap-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            원하는 씬부터 골라보세요
+            취향을 먼저 골라볼까요?
           </h2>
           <p className="text-sm leading-6 text-muted-foreground">
-            정확한 스팟은 작가가 날씨와 빛을 보고 안내해요.
+            여기서 고른 씬과 톤 그대로 작가 목록으로 이어져요. 나중에 바꿔도
+            괜찮아요.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {catalog.scenes.map((scene) => (
-            <Link
-              key={scene.id}
-              href={`/artists?scene=${scene.id}`}
-              className="relative aspect-4/5 overflow-hidden rounded-2xl"
-            >
-              <Image
-                src={SCENE_IMAGES[scene.id]}
-                alt={scene.label}
-                fill
-                sizes="(min-width: 640px) 220px, 45vw"
-                className="object-cover"
-              />
-              <span className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
-              <span className="absolute inset-x-0 bottom-0 flex flex-col gap-0.5 p-3.5">
-                <span className="text-base font-semibold text-white">
-                  {scene.label}
-                </span>
-                <span className="text-xs leading-4 text-white/80">
-                  {scene.description}
-                </span>
-              </span>
-            </Link>
-          ))}
-        </div>
+        <HomeTastePicker scenes={catalog.scenes} tones={catalog.tones} />
       </FullBleedBand>
 
-      <section className="flex flex-col gap-4">
+      <section className="flex flex-col gap-5">
         <div className="flex flex-col gap-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            나다운 사진의 결
+            제주 스냅, 이렇게 준비해요
           </h2>
           <p className="text-sm leading-6 text-muted-foreground">
-            같은 바다도 작가의 톤에 따라 다르게 남아요.
+            세 걸음이면 촬영과 여행이 하나의 일정으로 정리돼요.
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          {catalog.tones.map((tone) => (
-            <Link
-              key={tone.id}
-              href={`/artists?tone=${tone.id}`}
-              className="flex flex-col gap-2"
-            >
-              <span className="relative aspect-4/3 overflow-hidden rounded-xl">
-                <Image
-                  src={SCENE_IMAGES.sea}
-                  alt={`협재 바다 — ${tone.label} 톤`}
-                  fill
-                  sizes="(min-width: 640px) 320px, 45vw"
-                  className="object-cover"
-                  style={{ filter: TONE_PHOTO_FILTERS[tone.id] }}
-                />
-              </span>
-              <span className="flex flex-col">
-                <span className="text-sm font-semibold">{tone.label}</span>
-                <span className="text-xs leading-4 text-muted-foreground">
-                  {tone.description}
+        <ol className="flex flex-col">
+          {PREPARATION_STEPS.map((step, index) => (
+            <li key={step.title} className="flex gap-4">
+              <div className="flex flex-col items-center">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  {index + 1}
                 </span>
-              </span>
-            </Link>
+                {index < PREPARATION_STEPS.length - 1 ? (
+                  <span className="w-px flex-1 bg-border" />
+                ) : null}
+              </div>
+              <div
+                className={`flex flex-col gap-1 ${
+                  index < PREPARATION_STEPS.length - 1 ? "pb-7" : ""
+                }`}
+              >
+                <p className="text-base font-semibold leading-7">{step.title}</p>
+                <p className="text-sm leading-6 text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
-
-      <FullBleedBand className="bg-muted py-10">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            이런 작가를 찾을 수 있어요
-          </h2>
-          <Link
-            href="/artists"
-            className="flex min-h-11 shrink-0 items-center gap-1 text-sm font-semibold text-primary"
-          >
-            전체보기
-            <ChevronRight className="size-4" />
-          </Link>
-        </div>
-        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0">
-          {catalog.artists.slice(0, 3).map((artist) => (
-            <div key={artist.id} className="w-72 shrink-0 sm:w-auto">
-              <ArtistListCard
-                artist={artist}
-                scene={artist.scenes[0]}
-                tone={artist.tones[0]}
-                sceneLabel={getSceneLabel(catalog, artist.scenes[0])}
-                toneLabel={getToneLabel(catalog, artist.tones[0])}
-              />
-            </div>
-          ))}
-        </div>
-      </FullBleedBand>
-
-      <section className="rounded-2xl bg-accent p-5">
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-semibold">스드메, 따로 찾지 마세요</h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              작가의 사진 톤과 잘 맞는 드레스·메이크업 후보를 함께 비교할 수
-              있어요.
-            </p>
-          </div>
-          <Link
-            href="/artists?tab=styling"
-            className="inline-flex min-h-12 w-fit items-center rounded-md bg-foreground px-5 text-base font-semibold text-card active:bg-foreground/90"
-          >
-            드레스·메이크업 보기
-          </Link>
-        </div>
-      </section>
-
-      <section className="flex flex-col divide-y divide-border rounded-2xl border border-border bg-card">
-        <Link
-          href="/planner"
-          className="flex items-center gap-3 p-5 active:bg-muted"
-        >
-          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <span className="text-base font-semibold">제주 일정</span>
-            <span className="text-sm leading-6 text-muted-foreground">
-              촬영일과 더 머무는 날의 계획을 함께 정리해요.
-            </span>
-          </span>
-          <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-        </Link>
-        <Link
-          href="/spots"
-          className="flex items-center gap-3 p-5 active:bg-muted"
-        >
-          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <span className="text-base font-semibold">
-              촬영 뒤, 제주에 더 머무는 날
-            </span>
-            <span className="text-sm leading-6 text-muted-foreground">
-              남은 날의 제주 여행을 가볍게 둘러보세요.
-            </span>
-          </span>
-          <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-        </Link>
-      </section>
-
     </div>
   );
 }
