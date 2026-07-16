@@ -84,7 +84,7 @@ export default async function SnapSpotDetailPage({
           <div className="flex min-w-28 flex-1 items-center gap-2">
             <CalendarDays className="size-4 shrink-0 text-primary" />
             <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">촬영 시기</span>
+              <span className="text-xs text-muted-foreground">이 사진의 촬영 시기</span>
               <span className="text-sm font-bold">{spot.filmedAt}</span>
             </div>
           </div>

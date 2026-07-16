@@ -138,10 +138,7 @@ export default async function ProfilePage() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold">찜한 작가</h2>
-          <span className="text-sm text-muted-foreground">{savedArtists.length}명</span>
-        </div>
+        <h2 className="text-xl font-semibold">찜한 작가</h2>
         {savedArtists.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {savedArtists.map((artist) => (

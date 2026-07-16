@@ -38,7 +38,6 @@ export function ArtistsScreen({
   );
   const {
     artists,
-    totalCount,
     hasNextPage,
     isError,
     isFetchingNextPage,
@@ -139,14 +138,9 @@ export function ArtistsScreen({
       </section>
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-lg font-semibold">
-            {hasFilter ? "선택한 취향의 작가" : "제주 스냅 작가"}
-          </p>
-          <span className="text-sm text-muted-foreground">
-            {isPending ? "불러오는 중" : `${totalCount}명`}
-          </span>
-        </div>
+        <p className="text-lg font-semibold">
+          {hasFilter ? "선택한 취향의 작가" : "제주 스냅 작가"}
+        </p>
         {isPending ? (
           <ArtistListSkeleton />
         ) : hasInitialLoadError ? (

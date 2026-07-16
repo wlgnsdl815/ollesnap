@@ -93,22 +93,17 @@ export function StylingScreen({
       </section>
 
       <section className="flex flex-col gap-4">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold">스드메 샵</h2>
-          <p className="text-sm text-muted-foreground">
-            {visibleShops.length}개 샵
-          </p>
-        </div>
+        <h2 className="text-xl font-semibold">스드메 샵</h2>
         {hasPartnerTabs ? (
           <div className="flex gap-2">
             <ShopViewChip
               isActive={shopView === "partner"}
-              label={`제휴 샵 ${partnerShops.length}`}
+              label="제휴 샵"
               onClick={() => setShopView("partner")}
             />
             <ShopViewChip
               isActive={shopView === "all"}
-              label={`전체 샵 ${shops.length}`}
+              label="전체 샵"
               onClick={() => setShopView("all")}
             />
           </div>

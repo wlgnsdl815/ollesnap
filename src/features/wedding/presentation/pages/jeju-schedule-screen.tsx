@@ -52,16 +52,11 @@ export function JejuScheduleScreen({
       </header>
 
       <section className="flex flex-col gap-4 rounded-2xl bg-foreground p-5 text-primary-foreground">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
-            <p className="text-sm text-white/70">나의 제주 체류 계획</p>
-            <p className="text-xl font-semibold">
-              {stayDateRange ?? "아직 체류일을 정하는 중이에요"}
-            </p>
-          </div>
-          <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium">
-            여행 {travelPlanItems.length}곳
-          </span>
+        <div className="flex flex-col gap-1">
+          <p className="text-sm text-white/70">나의 제주 체류 계획</p>
+          <p className="text-xl font-semibold">
+            {stayDateRange ?? "아직 체류일을 정하는 중이에요"}
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <ScheduleMetric
@@ -94,12 +89,7 @@ export function JejuScheduleScreen({
       ) : null}
 
       <section className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
-          <span className="text-sm text-muted-foreground">
-            {travelPlanItems.length}곳
-          </span>
-        </div>
+        <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
         {travelPlanItems.length > 0 ? (
           <div className="flex flex-col rounded-2xl border border-border bg-card px-5">
             {travelPlanItems.map((item) => {

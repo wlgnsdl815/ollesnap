@@ -14,7 +14,6 @@ export function FoodSpotsInfiniteGrid() {
   );
   const {
     spots,
-    totalCount,
     hasNextPage,
     isError,
     isFetchingNextPage,
@@ -51,11 +50,6 @@ export function FoodSpotsInfiniteGrid() {
             onClick={() => setCityFilter("seogwipo")}
           />
         </div>
-        {!isPending && (
-          <span className="shrink-0 text-xs text-muted-foreground">
-            {totalCount}곳
-          </span>
-        )}
       </div>
 
       {isPending ? (
