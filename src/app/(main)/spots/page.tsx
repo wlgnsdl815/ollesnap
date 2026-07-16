@@ -9,14 +9,9 @@ export default async function JejuSnapSpotsPage() {
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-black leading-tight text-balance">
-          제주 이곳저곳
-        </h1>
-        <p className="text-sm leading-6 text-muted-foreground">
-          스냅 촬영 앞뒤로 남는 시간, 갈 곳과 먹을 곳을 함께 살펴보세요.
-        </p>
-      </header>
+      <p className="text-sm leading-6 text-muted-foreground">
+        스냅 촬영 앞뒤로 남는 시간, 갈 곳과 먹을 곳을 함께 살펴보세요.
+      </p>
 
       <JejuExploreScreen
         initialSpots={spotsPage.spots}

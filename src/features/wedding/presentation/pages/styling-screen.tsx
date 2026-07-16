@@ -9,7 +9,6 @@ import {
   getStylingShopsForArtist,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import { StylingShopCard } from "../components/styling-shop-card";
 
 type ShopView = "partner" | "all";
@@ -120,7 +119,6 @@ export function StylingScreen({
         </div>
       </section>
 
-      <CatalogDemoNotice />
     </div>
   );
 }

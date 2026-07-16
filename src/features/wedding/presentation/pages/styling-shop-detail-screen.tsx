@@ -21,7 +21,6 @@ import {
   getStylingProductPrice,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 
 interface StylingShopDetailScreenProps {
   shop: StylingShop;
@@ -96,7 +95,6 @@ export function StylingShopDetailScreen({
         ))}
       </section>
 
-      <CatalogDemoNotice />
     </div>
   );
 }

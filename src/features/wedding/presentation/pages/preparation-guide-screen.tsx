@@ -68,34 +68,11 @@ export function PreparationGuideScreen({ catalog }: PreparationGuideScreenProps)
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-8rem)] flex-col gap-7 pb-4">
-      <header className="flex items-center justify-between gap-3">
-        {step === 1 ? (
-          <Link
-            href="/"
-            className="flex min-h-11 items-center gap-1 text-sm font-semibold text-muted-foreground active:text-foreground"
-          >
-            <ChevronLeft className="size-5" />
-            홈
-          </Link>
-        ) : (
-          <button
-            type="button"
-            onClick={goToPreviousStep}
-            className="flex min-h-11 items-center gap-1 text-sm font-semibold text-muted-foreground active:text-foreground"
-          >
-            <ChevronLeft className="size-5" />
-            이전
-          </button>
-        )}
-        <span className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
-          촬영 준비 도우미
-        </span>
-      </header>
-
+    <div className="flex min-h-[calc(100dvh-8rem)] flex-col gap-5 pb-4">
       {step === "result" ? (
         <GuideResult
           artistHref={artistHref}
+          onBack={goToPreviousStep}
           onReset={resetGuide}
           result={result}
         />
@@ -121,6 +98,7 @@ export function PreparationGuideScreen({ catalog }: PreparationGuideScreenProps)
               onSkip={() =>
                 setAnswers((current) => ({ ...current, tone: undefined }))
               }
+              onBack={goToPreviousStep}
               onContinue={() => setStep(3)}
             />
           ) : null}
@@ -133,6 +111,7 @@ export function PreparationGuideScreen({ catalog }: PreparationGuideScreenProps)
               onSkip={() =>
                 setAnswers((current) => ({ ...current, priority: undefined }))
               }
+              onBack={goToPreviousStep}
               onContinue={() => setStep(4)}
             />
           ) : null}
@@ -146,6 +125,7 @@ export function PreparationGuideScreen({ catalog }: PreparationGuideScreenProps)
               onStayLengthChange={(stayLength) =>
                 setAnswers((current) => ({ ...current, stayLength }))
               }
+              onBack={goToPreviousStep}
               onContinue={() => setStep("result")}
             />
           ) : null}
@@ -161,17 +141,16 @@ interface StepProgressProps {
 
 function StepProgress({ step }: StepProgressProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-sm font-semibold text-primary">{step} / {TOTAL_STEPS}</p>
-        <p className="text-xs text-muted-foreground">정답은 없어요. 편한 만큼만 골라요.</p>
-      </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+    <div className="flex items-center gap-3">
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
         <div
           className="h-full rounded-full bg-primary transition-[width] duration-200"
           style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
         />
       </div>
+      <p className="text-sm font-semibold text-primary">
+        {step} / {TOTAL_STEPS}
+      </p>
     </div>
   );
 }
@@ -245,6 +224,7 @@ interface ToneStepProps {
   selectedTone?: WeddingTone;
   onSelect: (tone: WeddingTone) => void;
   onSkip: () => void;
+  onBack: () => void;
   onContinue: () => void;
 }
 
@@ -253,6 +233,7 @@ function ToneStep({
   selectedTone,
   onSelect,
   onSkip,
+  onBack,
   onContinue,
 }: ToneStepProps) {
   return (
@@ -260,6 +241,7 @@ function ToneStep({
       eyebrow="두 번째 단서"
       title="사진의 분위기는 어떤 쪽에 가까울까요?"
       description="잘 모르겠다면 포트폴리오를 보며 나중에 정해도 괜찮아요."
+      onBack={onBack}
       onContinue={onContinue}
     >
       <div className="grid grid-cols-2 gap-3">
@@ -310,6 +292,7 @@ interface PriorityStepProps {
   selectedPriority?: PlanningPriority;
   onSelect: (priority: PlanningPriority) => void;
   onSkip: () => void;
+  onBack: () => void;
   onContinue: () => void;
 }
 
@@ -317,6 +300,7 @@ function PriorityStep({
   selectedPriority,
   onSelect,
   onSkip,
+  onBack,
   onContinue,
 }: PriorityStepProps) {
   const options: ChoiceOption[] = [
@@ -347,6 +331,7 @@ function PriorityStep({
       eyebrow="세 번째 단서"
       title="지금 가장 막막한 건 무엇인가요?"
       description="한 가지만 골라도 다음 순서를 정하는 데 충분해요."
+      onBack={onBack}
       onContinue={onContinue}
     >
       <div className="grid gap-3 sm:grid-cols-2">
@@ -370,6 +355,7 @@ interface DateAndStayStepProps {
   stayLength: StayLength;
   onDateReadinessChange: (value: DateReadiness) => void;
   onStayLengthChange: (value: StayLength) => void;
+  onBack: () => void;
   onContinue: () => void;
 }
 
@@ -378,6 +364,7 @@ function DateAndStayStep({
   stayLength,
   onDateReadinessChange,
   onStayLengthChange,
+  onBack,
   onContinue,
 }: DateAndStayStepProps) {
   return (
@@ -385,6 +372,7 @@ function DateAndStayStep({
       eyebrow="마지막 단서"
       title="날짜가 아직 없어도 괜찮아요"
       description="정확한 날짜 대신, 지금 떠올리는 정도만 알려주세요."
+      onBack={onBack}
       onContinue={onContinue}
       continueLabel="내 준비 순서 보기"
     >
@@ -442,6 +430,7 @@ interface GuideStepLayoutProps {
   eyebrow: string;
   title: string;
   description: string;
+  onBack?: () => void;
   onContinue: () => void;
   continueLabel?: string;
   children: ReactNode;
@@ -451,6 +440,7 @@ function GuideStepLayout({
   eyebrow,
   title,
   description,
+  onBack,
   onContinue,
   continueLabel = "다음으로",
   children,
@@ -465,14 +455,26 @@ function GuideStepLayout({
         <p className="text-sm leading-6 text-muted-foreground">{description}</p>
       </div>
       <div className="flex flex-col gap-4">{children}</div>
-      <button
-        type="button"
-        onClick={onContinue}
-        className="mt-auto flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
-      >
-        {continueLabel}
-        <ArrowRight className="size-4" />
-      </button>
+      <div className="mt-auto flex gap-2">
+        {onBack ? (
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex min-h-12 items-center justify-center gap-1 rounded-md bg-secondary px-4 text-base font-semibold text-secondary-foreground active:bg-muted"
+          >
+            <ChevronLeft className="size-4" />
+            이전
+          </button>
+        ) : null}
+        <button
+          type="button"
+          onClick={onContinue}
+          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
+        >
+          {continueLabel}
+          <ArrowRight className="size-4" />
+        </button>
+      </div>
     </section>
   );
 }
@@ -558,10 +560,11 @@ function SelectableRow({ label, isActive, onClick }: SelectableRowProps) {
 interface GuideResultProps {
   artistHref: string;
   result: ReturnType<typeof createPreparationGuideResult>;
+  onBack: () => void;
   onReset: () => void;
 }
 
-function GuideResult({ artistHref, result, onReset }: GuideResultProps) {
+function GuideResult({ artistHref, result, onBack, onReset }: GuideResultProps) {
   return (
     <section className="flex flex-1 flex-col gap-6">
       <div className="rounded-3xl bg-foreground p-6 text-primary-foreground">
@@ -580,13 +583,23 @@ function GuideResult({ artistHref, result, onReset }: GuideResultProps) {
         items={result.decideWithPhotographer}
       />
 
-      <Link
-        href={artistHref}
-        className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
-      >
-        {result.nextActionLabel}
-        <ArrowRight className="size-4" />
-      </Link>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex min-h-12 items-center justify-center gap-1 rounded-md bg-secondary px-4 text-base font-semibold text-secondary-foreground active:bg-muted"
+        >
+          <ChevronLeft className="size-4" />
+          이전
+        </button>
+        <Link
+          href={artistHref}
+          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
+        >
+          {result.nextActionLabel}
+          <ArrowRight className="size-4" />
+        </Link>
+      </div>
       <button
         type="button"
         onClick={onReset}

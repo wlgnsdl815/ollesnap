@@ -15,7 +15,6 @@ import {
   formatPrice,
   formatPriceFrom,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 
 interface JejuScheduleScreenProps {
   team: SnapTeam | null;
@@ -227,7 +226,6 @@ export function JejuScheduleScreen({
         </section>
       )}
 
-      <CatalogDemoNotice />
     </div>
   );
 }

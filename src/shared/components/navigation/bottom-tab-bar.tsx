@@ -20,7 +20,7 @@ const TAB_ITEMS: TabItem[] = [
     activePaths: ["/artists", "/styling"],
   },
   { href: "/planner", label: "제주 일정", icon: ClipboardList },
-  { href: "/profile", label: "프로필", icon: UserRound },
+  { href: "/profile", label: "내 준비", icon: UserRound },
 ];
 
 export function BottomTabBar() {

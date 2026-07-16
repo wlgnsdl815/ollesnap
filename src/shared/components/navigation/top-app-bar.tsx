@@ -54,7 +54,7 @@ const SCREEN_MATCHERS: Array<{
     screen: { title: "스냅 작가", backHref: "/planner/new" },
   },
   { match: (p) => p === "/planner", screen: { title: "제주 일정" } },
-  { match: (p) => p === "/profile", screen: { title: "프로필" } },
+  { match: (p) => p === "/profile", screen: { title: "내 준비" } },
   {
     match: (p) => p === "/start",
     screen: { title: "촬영 준비 도우미", backHref: "/" },

@@ -16,7 +16,6 @@ import {
   getStylingShopsForArtist,
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import {
   SCENE_IMAGES,
   TONE_PHOTO_FILTERS,
@@ -149,7 +148,6 @@ export function ArtistDetailScreen({
         </div>
       </section>
 
-      <CatalogDemoNotice />
     </div>
   );
 }

@@ -14,7 +14,6 @@ import {
   COMPARISON_MAXIMUM,
   COMPARISON_MINIMUM,
 } from "../../domain/usecase/compare-artists.usecase";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 
 interface CompareArtistsScreenProps {
   savedArtists: SnapArtist[];
@@ -197,7 +196,6 @@ export function CompareArtistsScreen({
         </>
       )}
 
-      <CatalogDemoNotice />
     </div>
   );
 }

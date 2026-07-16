@@ -9,7 +9,6 @@ import {
   getToneLabel,
 } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 import { ArtistListCard } from "@/features/wedding/presentation/components/artist-list-card";
-import { CatalogDemoNotice } from "@/features/wedding/presentation/components/catalog-demo-notice";
 import {
   SCENE_IMAGES,
   TONE_PHOTO_FILTERS,
@@ -214,7 +213,6 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
         </Link>
       </section>
 
-      <CatalogDemoNotice />
     </div>
   );
 }

@@ -16,7 +16,6 @@ import {
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
 import { ArtistListCard } from "../components/artist-list-card";
-import { CatalogDemoNotice } from "../components/catalog-demo-notice";
 import { useSnapArtistInfiniteQuery } from "../hooks/use-snap-artist-infinite-query";
 
 interface ArtistsScreenProps {
@@ -232,7 +231,6 @@ export function ArtistsScreen({
         )}
       </section>
 
-      <CatalogDemoNotice />
     </div>
   );
 }
