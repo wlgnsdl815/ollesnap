@@ -22,7 +22,7 @@ interface HomeScreenProps {
 export function HomeScreen({ catalog }: HomeScreenProps) {
   return (
     <div className="flex flex-col gap-10 pb-4">
-      <section className="relative min-h-[28rem] overflow-hidden rounded-3xl bg-foreground text-white">
+      <section className="relative min-h-112 overflow-hidden rounded-3xl bg-foreground text-white">
         <Image
           src="/images/jeju-snap-hero.png"
           alt="제주 해안에서 웨딩 스냅을 촬영하는 커플"
@@ -32,7 +32,7 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-black/5" />
-        <div className="relative flex min-h-[28rem] flex-col justify-between p-5">
+        <div className="relative flex min-h-112 flex-col justify-between p-5">
           <span className="w-fit rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-foreground">
             장소 대신, 남기고 싶은 분위기부터
           </span>
@@ -152,7 +152,7 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
             <ChevronRight className="size-4" />
           </Link>
         </div>
-        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0">
+        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0">
           {catalog.artists.slice(0, 3).map((artist) => (
             <div key={artist.id} className="w-72 shrink-0 sm:w-auto">
               <ArtistListCard
