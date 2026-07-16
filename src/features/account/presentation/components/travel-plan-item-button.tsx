@@ -1,6 +1,7 @@
 "use client";
 
-import { Heart, LoaderCircle } from "lucide-react";
+import { ChevronRight, Heart, LoaderCircle } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
@@ -29,6 +30,7 @@ export function TravelPlanItemButton({
 }: TravelPlanItemButtonProps) {
   const router = useRouter();
   const [isSaved, setIsSaved] = useState(initialIsSaved);
+  const [justSaved, setJustSaved] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   function handleClick() {
@@ -48,29 +50,41 @@ export function TravelPlanItemButton({
 
       if (result.ok && typeof result.isSaved === "boolean") {
         setIsSaved(result.isSaved);
+        setJustSaved(result.isSaved);
         router.refresh();
       }
     });
   }
 
   return (
-    <button
-      type="button"
-      aria-pressed={isSaved}
-      onClick={handleClick}
-      disabled={isPending}
-      className={`flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold disabled:opacity-60 ${
-        isSaved
-          ? "bg-primary text-primary-foreground"
-          : "bg-primary/10 text-primary active:bg-primary/20"
-      }`}
-    >
-      {isPending ? (
-        <LoaderCircle className="size-4 animate-spin" />
-      ) : (
-        <Heart className={`size-4 ${isSaved ? "fill-current" : ""}`} />
-      )}
-      {isSaved ? "내 여행 일정에서 빼기" : "내 여행 일정에 담기"}
-    </button>
+    <>
+      <button
+        type="button"
+        aria-pressed={isSaved}
+        onClick={handleClick}
+        disabled={isPending}
+        className={`flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold disabled:opacity-60 ${
+          isSaved
+            ? "bg-primary text-primary-foreground"
+            : "bg-primary/10 text-primary active:bg-primary/20"
+        }`}
+      >
+        {isPending ? (
+          <LoaderCircle className="size-4 animate-spin" />
+        ) : (
+          <Heart className={`size-4 ${isSaved ? "fill-current" : ""}`} />
+        )}
+        {isSaved ? "내 여행 일정에서 빼기" : "내 여행 일정에 담기"}
+      </button>
+      {justSaved ? (
+        <Link
+          href="/planner"
+          className="flex min-h-11 items-center justify-center gap-1 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground active:bg-muted"
+        >
+          제주 일정에서 확인하기
+          <ChevronRight className="size-4" />
+        </Link>
+      ) : null}
+    </>
   );
 }
