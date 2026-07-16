@@ -175,6 +175,15 @@ export default async function ProfilePage() {
             label="작가 찾기"
           />
         )}
+        {savedArtists.length >= 2 ? (
+          <Link
+            href="/artists/compare"
+            className="flex min-h-11 w-fit items-center gap-1 text-sm font-semibold text-primary"
+          >
+            나란히 비교하기
+            <ChevronRight className="size-4" />
+          </Link>
+        ) : null}
       </section>
 
       <section className="flex flex-col gap-3">

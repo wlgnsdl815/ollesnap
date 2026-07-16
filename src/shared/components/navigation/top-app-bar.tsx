@@ -29,6 +29,10 @@ const SCREEN_MATCHERS: Array<{
     screen: { title: "제주 이곳저곳", backHref: "/" },
   },
   {
+    match: (p) => p === "/artists/compare",
+    screen: { title: "작가 비교", backHref: "/profile" },
+  },
+  {
     match: (p) => p.startsWith("/artists/"),
     screen: { title: "작가", backHref: "/artists" },
   },
