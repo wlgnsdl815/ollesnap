@@ -157,6 +157,8 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
             <div key={artist.id} className="w-72 shrink-0 sm:w-auto">
               <ArtistListCard
                 artist={artist}
+                scene={artist.scenes[0]}
+                tone={artist.tones[0]}
                 sceneLabel={getSceneLabel(catalog, artist.scenes[0])}
                 toneLabel={getToneLabel(catalog, artist.tones[0])}
               />

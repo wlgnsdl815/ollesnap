@@ -10,6 +10,8 @@ import type {
   WeddingTone,
 } from "../../domain/entity/wedding-catalog.entity";
 import {
+  getArtistDisplayScene,
+  getArtistDisplayTone,
   getSceneLabel,
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
@@ -152,14 +154,24 @@ export function ArtistsScreen({
         ) : artists.length > 0 ? (
           <>
             <div className="grid gap-3 sm:grid-cols-2">
-              {artists.map((artist) => (
-                <ArtistListCard
-                  key={artist.id}
-                  artist={artist}
-                  sceneLabel={getSceneLabel(catalog, artist.scenes[0])}
-                  toneLabel={getToneLabel(catalog, artist.tones[0])}
-                />
-              ))}
+              {artists.map((artist) => {
+                const displayScene = getArtistDisplayScene(
+                  artist,
+                  selectedScene,
+                );
+                const displayTone = getArtistDisplayTone(artist, selectedTone);
+
+                return (
+                  <ArtistListCard
+                    key={artist.id}
+                    artist={artist}
+                    scene={displayScene}
+                    tone={displayTone}
+                    sceneLabel={getSceneLabel(catalog, displayScene)}
+                    toneLabel={getToneLabel(catalog, displayTone)}
+                  />
+                );
+              })}
             </div>
             {hasNextPage ? (
               <div

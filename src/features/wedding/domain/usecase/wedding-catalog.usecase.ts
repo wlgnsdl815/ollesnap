@@ -82,6 +82,24 @@ export function findStylingProduct(
   );
 }
 
+export function getArtistDisplayScene(
+  artist: SnapArtist,
+  selectedScene: SnapScene | undefined,
+): SnapScene {
+  return selectedScene && artist.scenes.includes(selectedScene)
+    ? selectedScene
+    : artist.scenes[0];
+}
+
+export function getArtistDisplayTone(
+  artist: SnapArtist,
+  selectedTone: WeddingTone | undefined,
+): WeddingTone {
+  return selectedTone && artist.tones.includes(selectedTone)
+    ? selectedTone
+    : artist.tones[0];
+}
+
 export function getSceneLabel(
   catalog: WeddingCatalog,
   scene: SnapScene,

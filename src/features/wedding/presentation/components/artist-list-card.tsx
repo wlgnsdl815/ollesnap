@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { SnapArtist } from "../../domain/entity/wedding-catalog.entity";
+import type {
+  SnapArtist,
+  SnapScene,
+  WeddingTone,
+} from "../../domain/entity/wedding-catalog.entity";
 import { formatPriceFrom } from "../../domain/usecase/wedding-catalog.usecase";
 import {
   SCENE_IMAGES,
@@ -10,17 +14,19 @@ import {
 
 interface ArtistListCardProps {
   artist: SnapArtist;
+  scene: SnapScene;
+  tone: WeddingTone;
   sceneLabel: string;
   toneLabel: string;
 }
 
 export function ArtistListCard({
   artist,
+  scene,
+  tone,
   sceneLabel,
   toneLabel,
 }: ArtistListCardProps) {
-  const primaryScene = artist.scenes[0];
-  const primaryTone = artist.tones[0];
 
   return (
     <Link
@@ -29,12 +35,12 @@ export function ArtistListCard({
     >
       <div className="relative aspect-4/3 overflow-hidden">
         <Image
-          src={SCENE_IMAGES[primaryScene]}
+          src={SCENE_IMAGES[scene]}
           alt={`${artist.studioName}의 대표 씬 — ${sceneLabel}, ${toneLabel} 톤`}
           fill
           sizes="(min-width: 640px) 320px, 85vw"
           className="object-cover"
-          style={{ filter: TONE_PHOTO_FILTERS[primaryTone] }}
+          style={{ filter: TONE_PHOTO_FILTERS[tone] }}
         />
         <span className="absolute bottom-2.5 left-2.5 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
           {sceneLabel} · {toneLabel}
