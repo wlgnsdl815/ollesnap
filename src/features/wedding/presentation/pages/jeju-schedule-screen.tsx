@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import type {
   SavedSnapPlan,
@@ -13,8 +14,10 @@ import { buildPlanScheduleEntries } from "@/features/account/domain/usecase/plan
 import { PlanDateSelect } from "@/features/account/presentation/components/plan-date-select";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
-import type { CourseSuggestionGroup } from "@/features/photo-spot/domain/usecase/related-spots.usecase";
-import { CourseSuggestions } from "@/features/photo-spot/presentation/components/course-suggestions";
+import {
+  CourseSuggestionsFallback,
+  CourseSuggestionsSection,
+} from "@/features/photo-spot/presentation/components/course-suggestions-section";
 import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/congestion-visuals";
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
@@ -31,9 +34,8 @@ interface JejuScheduleScreenProps {
   initialSavedPlan: SavedSnapPlan | null;
   isAuthenticated: boolean;
   travelPlanItems: SavedTravelPlanItem[];
-  congestionLevelByItemId: Record<string, CongestionLevel>;
-  shootingDateRecommendation: ShootingDateRecommendation | null;
-  courseSuggestions: CourseSuggestionGroup[];
+  congestionLevelByItemIdPromise: Promise<Record<string, CongestionLevel>>;
+  recommendationPromise: Promise<ShootingDateRecommendation | null>;
 }
 
 export function JejuScheduleScreen({
@@ -41,9 +43,8 @@ export function JejuScheduleScreen({
   initialSavedPlan,
   isAuthenticated,
   travelPlanItems,
-  congestionLevelByItemId,
-  shootingDateRecommendation,
-  courseSuggestions,
+  congestionLevelByItemIdPromise,
+  recommendationPromise,
 }: JejuScheduleScreenProps) {
   const stayDateRange = formatStayDateRange(
     initialSavedPlan?.stayStartDate,
@@ -150,7 +151,8 @@ export function JejuScheduleScreen({
       ) : null}
 
       <PlannerScheduleGroup
-        recommendation={shootingDateRecommendation}
+        recommendationPromise={recommendationPromise}
+        expectsRecommendation={stayDates.length > 0}
         showSaveCard
         plan={{
           artistId: team?.artist.id ?? null,
@@ -216,7 +218,6 @@ export function JejuScheduleScreen({
               }
 
               const item = entry.item;
-              const congestionLevel = congestionLevelByItemId[item.id];
 
               return (
                 <div
@@ -239,13 +240,12 @@ export function JejuScheduleScreen({
                         <span className="truncate">
                           {item.location ?? (item.kind === "food" ? "맛집" : "관광지")}
                         </span>
-                        {congestionLevel && (
-                          <span
-                            className={`shrink-0 font-semibold ${CONGESTION_TEXT_CLASS[congestionLevel]}`}
-                          >
-                            · {getCongestionLevelLabel(congestionLevel)}
-                          </span>
-                        )}
+                        <Suspense fallback={null}>
+                          <ItemCongestionLabel
+                            levelsPromise={congestionLevelByItemIdPromise}
+                            itemId={item.id}
+                          />
+                        </Suspense>
                       </span>
                     </span>
                   </Link>
@@ -281,7 +281,11 @@ export function JejuScheduleScreen({
       </section>
       ) : null}
 
-      <CourseSuggestions groups={courseSuggestions} />
+      {travelPlanItems.some((item) => item.kind === "sight") ? (
+        <Suspense fallback={<CourseSuggestionsFallback />}>
+          <CourseSuggestionsSection travelPlanItems={travelPlanItems} />
+        </Suspense>
+      ) : null}
 
       {team ? (
         <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
@@ -408,6 +412,30 @@ function TeamMemberCard({
         {actionLabel}
       </Link>
     </div>
+  );
+}
+
+interface ItemCongestionLabelProps {
+  levelsPromise: Promise<Record<string, CongestionLevel>>;
+  itemId: string;
+}
+
+// 혼잡도 풀 로딩이 일정 목록 표시를 막지 않도록 라벨만 나중에 채운다.
+async function ItemCongestionLabel({
+  levelsPromise,
+  itemId,
+}: ItemCongestionLabelProps) {
+  const levels = await levelsPromise;
+  const level = levels[itemId];
+
+  if (!level) {
+    return null;
+  }
+
+  return (
+    <span className={`shrink-0 font-semibold ${CONGESTION_TEXT_CLASS[level]}`}>
+      · {getCongestionLevelLabel(level)}
+    </span>
   );
 }
 

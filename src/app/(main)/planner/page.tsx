@@ -1,7 +1,6 @@
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import type { SavedTravelPlanItem } from "@/features/account/domain/entity/user-wedding.entity";
 import { createCongestionRepository } from "@/features/photo-spot/data/repository/congestion.repository.impl";
-import { createRelatedSpotRepository } from "@/features/photo-spot/data/repository/related-spot.repository.impl";
 import type {
   CongestionLevel,
   TourismCongestionEntry,
@@ -11,17 +10,12 @@ import {
   findSpotCongestionForecast,
   pickForecastDay,
 } from "@/features/photo-spot/domain/usecase/congestion.usecase";
-import { buildCourseSuggestions } from "@/features/photo-spot/domain/usecase/related-spots.usecase";
 import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { recommendShootingDates } from "@/features/wedding/domain/usecase/recommend-shooting-dates.usecase";
 import { resolveSnapTeam } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 import { JejuScheduleScreen } from "@/features/wedding/presentation/pages/jeju-schedule-screen";
 
 const congestionRepository = createCongestionRepository();
-const relatedSpotRepository = createRelatedSpotRepository();
-
-// 일정에 담은 장소가 많아도 코스 추천용 연관 관광지 조회는 앞쪽 몇 곳이면 충분하다.
-const COURSE_SUGGESTION_BASE_MAXIMUM = 3;
 
 interface JejuSchedulePageProps {
   searchParams: Promise<{
@@ -37,9 +31,8 @@ export default async function JejuSchedulePage({
   searchParams,
 }: JejuSchedulePageProps) {
   const selection = await searchParams;
-  const [userWeddingState, congestionPool, catalog] = await Promise.all([
+  const [userWeddingState, catalog] = await Promise.all([
     getUserWeddingState(),
-    congestionRepository.getForecastPool(),
     getWeddingCatalog(),
   ]);
   const savedPlan = userWeddingState.snapPlan;
@@ -57,34 +50,23 @@ export default async function JejuSchedulePage({
           : savedPlan?.stylingOptionIds,
       })
     : null;
-  const congestionLevelByItemId = getCongestionLevelByItemId(
-    userWeddingState.travelPlanItems,
-    congestionPool,
+
+  // 혼잡도 풀은 화면 진입을 막지 않도록 await 없이 Suspense 경계로 흘려보낸다.
+  const congestionPoolPromise = congestionRepository.getForecastPool();
+  const congestionLevelByItemIdPromise = congestionPoolPromise.then((pool) =>
+    getCongestionLevelByItemId(userWeddingState.travelPlanItems, pool),
   );
-  const shootingDateRecommendation =
+  const recommendationPromise =
     savedPlan?.stayStartDate && savedPlan?.stayEndDate
-      ? recommendShootingDates({
-          stayStartDate: savedPlan.stayStartDate,
-          stayEndDate: savedPlan.stayEndDate,
-          travelPlanItems: userWeddingState.travelPlanItems,
-          congestionPool,
-        })
-      : null;
-  const courseSuggestionBases = await Promise.all(
-    userWeddingState.travelPlanItems
-      .filter((item) => item.kind === "sight")
-      .slice(0, COURSE_SUGGESTION_BASE_MAXIMUM)
-      .map(async (item) => ({
-        title: item.title,
-        spots: await relatedSpotRepository.getRelatedSpots(
-          extractPlaceName(item.location ?? item.title),
-        ),
-      })),
-  );
-  const courseSuggestions = buildCourseSuggestions(
-    courseSuggestionBases,
-    userWeddingState.travelPlanItems.map((item) => item.title),
-  );
+      ? congestionPoolPromise.then((pool) =>
+          recommendShootingDates({
+            stayStartDate: savedPlan.stayStartDate!,
+            stayEndDate: savedPlan.stayEndDate!,
+            travelPlanItems: userWeddingState.travelPlanItems,
+            congestionPool: pool,
+          }),
+        )
+      : Promise.resolve(null);
 
   return (
     <JejuScheduleScreen
@@ -92,9 +74,8 @@ export default async function JejuSchedulePage({
       initialSavedPlan={savedPlan}
       isAuthenticated={userWeddingState.isAuthenticated}
       travelPlanItems={userWeddingState.travelPlanItems}
-      congestionLevelByItemId={congestionLevelByItemId}
-      shootingDateRecommendation={shootingDateRecommendation}
-      courseSuggestions={courseSuggestions}
+      congestionLevelByItemIdPromise={congestionLevelByItemIdPromise}
+      recommendationPromise={recommendationPromise}
     />
   );
 }
