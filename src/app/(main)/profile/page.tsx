@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
+import { buildPlanScheduleEntries } from "@/features/account/domain/usecase/plan-schedule.usecase";
 import {
   generateProfileName,
   getProfileName,
@@ -69,6 +70,11 @@ export default async function ProfilePage() {
     savedPlan?.stayStartDate ||
       savedPlan?.stayEndDate ||
       userWeddingState.travelPlanItems.length > 0,
+  );
+  const scheduleEntries = buildPlanScheduleEntries(
+    savedPlan?.shootingDate ?? null,
+    userWeddingState.travelPlanItems,
+    { includeUndatedShooting: false },
   );
 
   const teamSection = (
@@ -195,29 +201,49 @@ export default async function ProfilePage() {
             제주 일정에서 도착일과 출발일을 정해보세요.
           </p>
         )}
-        {userWeddingState.travelPlanItems.length > 0 ? (
+        {scheduleEntries.length > 0 ? (
           <div className="flex flex-col divide-y divide-border">
-            {userWeddingState.travelPlanItems.map((item) => (
-              <Link
-                key={item.id}
-                href={
-                  item.kind === "food"
-                    ? `/spots/food/${item.spotId}`
-                    : `/spots/${item.spotId}`
-                }
-                className="flex min-h-12 items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold">{item.title}</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {item.plannedDate
-                      ? `${formatKoreanDate(item.plannedDate)} 방문`
-                      : item.location ?? "날짜 미정"}
-                  </p>
+            {scheduleEntries.map((entry) =>
+              entry.kind === "shooting" ? (
+                <div
+                  key="shooting"
+                  className="flex min-h-12 items-center gap-3 py-3 first:pt-0 last:pb-0"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-bold text-primary">
+                      스냅 촬영일
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {entry.date
+                        ? `${formatKoreanDate(entry.date)} 촬영`
+                        : "날짜 미정"}
+                    </p>
+                  </div>
                 </div>
-                <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-              </Link>
-            ))}
+              ) : (
+                <Link
+                  key={entry.item.id}
+                  href={
+                    entry.item.kind === "food"
+                      ? `/spots/food/${entry.item.spotId}`
+                      : `/spots/${entry.item.spotId}`
+                  }
+                  className="flex min-h-12 items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold">
+                      {entry.item.title}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {entry.item.plannedDate
+                        ? `${formatKoreanDate(entry.item.plannedDate)} 방문`
+                        : entry.item.location ?? "날짜 미정"}
+                    </p>
+                  </div>
+                  <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+                </Link>
+              ),
+            )}
           </div>
         ) : null}
         {hasStayInfo ? (

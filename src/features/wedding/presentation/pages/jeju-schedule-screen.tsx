@@ -5,7 +5,12 @@ import type {
   SavedSnapPlan,
   SavedTravelPlanItem,
 } from "@/features/account/domain/entity/user-wedding.entity";
-import { TravelPlanItemDateSelect } from "@/features/account/presentation/components/travel-plan-item-date-select";
+import {
+  updateShootingDateAction,
+  updateTravelPlanItemDateAction,
+} from "@/features/account/data/actions/user-wedding.actions";
+import { buildPlanScheduleEntries } from "@/features/account/domain/usecase/plan-schedule.usecase";
+import { PlanDateSelect } from "@/features/account/presentation/components/plan-date-select";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import type { CourseSuggestionGroup } from "@/features/photo-spot/domain/usecase/related-spots.usecase";
@@ -51,6 +56,10 @@ export function JejuScheduleScreen({
   const stayDates = enumerateStayDates(
     initialSavedPlan?.stayStartDate,
     initialSavedPlan?.stayEndDate,
+  );
+  const scheduleEntries = buildPlanScheduleEntries(
+    initialSavedPlan?.shootingDate ?? null,
+    travelPlanItems,
   );
   const nextAction =
     stayDates.length === 0
@@ -184,7 +193,29 @@ export function JejuScheduleScreen({
         <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
         {travelPlanItems.length > 0 ? (
           <div className="flex flex-col rounded-2xl border border-border bg-card px-5">
-            {travelPlanItems.map((item) => {
+            {scheduleEntries.map((entry) => {
+              if (entry.kind === "shooting") {
+                return (
+                  <div
+                    key="shooting"
+                    className="flex min-h-16 items-center gap-3 border-b border-border py-3 last:border-b-0"
+                  >
+                    <span className="flex min-h-11 min-w-0 flex-1 items-center">
+                      <span className="truncate text-sm font-bold text-primary">
+                        스냅 촬영일
+                      </span>
+                    </span>
+                    <PlanDateSelect
+                      initialDate={initialSavedPlan?.shootingDate ?? null}
+                      stayDates={stayDates}
+                      ariaLabel="스냅 촬영일"
+                      saveAction={updateShootingDateAction}
+                    />
+                  </div>
+                );
+              }
+
+              const item = entry.item;
               const congestionLevel = congestionLevelByItemId[item.id];
 
               return (
@@ -218,10 +249,14 @@ export function JejuScheduleScreen({
                       </span>
                     </span>
                   </Link>
-                  <TravelPlanItemDateSelect
-                    itemId={item.id}
+                  <PlanDateSelect
                     initialDate={item.plannedDate}
                     stayDates={stayDates}
+                    ariaLabel={`${item.title} 방문 날짜`}
+                    saveAction={updateTravelPlanItemDateAction.bind(
+                      null,
+                      item.id,
+                    )}
                   />
                 </div>
               );

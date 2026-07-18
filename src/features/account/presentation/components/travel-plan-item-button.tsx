@@ -57,16 +57,16 @@ export function TravelPlanItemButton({
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30 border-t border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30">
       <div className="mx-auto flex w-full max-w-md flex-col gap-2 px-4 py-3 sm:max-w-2xl lg:max-w-4xl">
         <button
           type="button"
           aria-pressed={isSaved}
           onClick={handleClick}
           disabled={isPending}
-          className={`flex min-h-12 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold disabled:opacity-60 ${
+          className={`pointer-events-auto flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold shadow-lg disabled:opacity-60 ${
             isSaved
-              ? "bg-primary/10 text-primary active:bg-primary/20"
+              ? "border border-border bg-card text-primary active:bg-muted"
               : "bg-primary text-primary-foreground active:bg-primary/90"
           }`}
         >
@@ -86,7 +86,7 @@ export function TravelPlanItemButton({
         {justSaved ? (
           <Link
             href="/planner"
-            className="flex min-h-11 items-center justify-center gap-1 rounded-md bg-secondary px-4 text-sm font-semibold text-secondary-foreground active:bg-muted"
+            className="pointer-events-auto flex min-h-11 items-center justify-center gap-1 rounded-xl border border-border bg-card px-4 text-sm font-semibold text-secondary-foreground shadow-lg active:bg-muted"
           >
             제주 일정에서 확인하기
             <ChevronRight className="size-4" />

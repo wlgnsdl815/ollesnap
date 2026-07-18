@@ -247,6 +247,34 @@ export async function toggleTravelPlanItemAction(
   return { ok: true, isSaved: true };
 }
 
+export async function updateShootingDateAction(
+  shootingDate: string | null,
+): Promise<ActionResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, message: "로그인이 필요해요." };
+  }
+
+  const { error } = await supabase
+    .from("snap_plans")
+    .upsert(
+      { user_id: user.id, shooting_date: shootingDate },
+      { onConflict: "user_id" },
+    );
+
+  if (error) {
+    return { ok: false, message: "촬영일을 저장하지 못했어요." };
+  }
+
+  revalidatePath("/planner");
+  revalidatePath("/profile");
+  return { ok: true };
+}
+
 export async function updateTravelPlanItemDateAction(
   itemId: string,
   plannedDate: string | null,

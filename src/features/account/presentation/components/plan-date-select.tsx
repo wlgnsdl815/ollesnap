@@ -10,22 +10,24 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
-import { updateTravelPlanItemDateAction } from "../../data/actions/user-wedding.actions";
+import type { ActionResult } from "../../data/actions/user-wedding.actions";
 
 const UNSET_VALUE = "unset";
 
-interface TravelPlanItemDateSelectProps {
-  itemId: string;
+interface PlanDateSelectProps {
   initialDate: string | null;
   /** 체류 기간의 날짜 목록 (ISO). 비어 있으면 자유 날짜 입력으로 대신한다. */
   stayDates: string[];
+  ariaLabel: string;
+  saveAction: (plannedDate: string | null) => Promise<ActionResult>;
 }
 
-export function TravelPlanItemDateSelect({
-  itemId,
+export function PlanDateSelect({
   initialDate,
   stayDates,
-}: TravelPlanItemDateSelectProps) {
+  ariaLabel,
+  saveAction,
+}: PlanDateSelectProps) {
   const [value, setValue] = useState(initialDate ?? "");
   const [isPending, startTransition] = useTransition();
 
@@ -34,10 +36,7 @@ export function TravelPlanItemDateSelect({
     setValue(nextValue);
 
     startTransition(async () => {
-      const result = await updateTravelPlanItemDateAction(
-        itemId,
-        nextValue || null,
-      );
+      const result = await saveAction(nextValue || null);
 
       if (!result.ok) {
         setValue(previousValue);
@@ -52,7 +51,7 @@ export function TravelPlanItemDateSelect({
         value={value}
         disabled={isPending}
         onChange={(event) => handleChange(event.target.value)}
-        aria-label="방문 날짜"
+        aria-label={ariaLabel}
         className="min-h-11 rounded-lg border border-input bg-card px-2 text-xs font-semibold text-foreground outline-none focus:border-foreground disabled:opacity-60"
       />
     );
@@ -75,8 +74,8 @@ export function TravelPlanItemDateSelect({
       disabled={isPending}
     >
       <SelectTrigger
-        aria-label="방문 날짜"
-        className={`shrink-0 bg-card text-xs font-semibold data-[size=default]:h-11 ${
+        aria-label={ariaLabel}
+        className={`min-w-28 shrink-0 justify-between gap-2 rounded-full bg-card pl-4 pr-3 text-sm font-semibold data-[size=default]:h-11 ${
           value ? "" : "text-muted-foreground"
         }`}
       >
