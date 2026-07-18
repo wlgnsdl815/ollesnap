@@ -4,7 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { BackButton } from "@/shared/components/navigation/back-button";
-import { createClient } from "@/shared/supabase/server";
+import { getServerUser } from "@/shared/supabase/get-server-user";
 
 import { LoginForm } from "./login-form";
 
@@ -14,10 +14,7 @@ interface LoginPageProps {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const query = await searchParams;
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getServerUser();
 
   if (user) {
     redirect(getSafeNextPath(query.next));

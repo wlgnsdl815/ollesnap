@@ -16,19 +16,19 @@ import {
   formatPriceFrom,
   resolveSnapTeam,
 } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
+import { getServerUser } from "@/shared/supabase/get-server-user";
 import { createClient } from "@/shared/supabase/server";
 
 import { SignOutButton } from "./sign-out-button";
 
 export default async function ProfilePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getServerUser();
 
   if (!user) {
     redirect("/login?next=/profile");
   }
+
+  const supabase = await createClient();
 
   const [userWeddingState, catalog] = await Promise.all([
     getUserWeddingState(),

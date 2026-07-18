@@ -18,7 +18,9 @@ import type {
 } from "../../domain/entity/wedding-catalog.entity";
 import { WEDDING_SCENES, WEDDING_TONES } from "../../domain/wedding-taxonomy";
 
-const CATALOG_REVALIDATE_SECONDS = 300;
+// 카탈로그는 시드 데이터라 거의 바뀌지 않는다 — 짧은 주기는 만료 직후
+// 첫 방문자의 탭 전환을 수 초씩 늦추므로 1시간으로 둔다.
+const CATALOG_REVALIDATE_SECONDS = 3600;
 
 interface SnapArtistRow {
   id: string;

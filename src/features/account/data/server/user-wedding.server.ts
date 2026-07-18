@@ -5,6 +5,7 @@ import type {
   SavedTravelPlanItem,
   UserWeddingState,
 } from "../../domain/entity/user-wedding.entity";
+import { getServerUser } from "@/shared/supabase/get-server-user";
 import { createClient } from "@/shared/supabase/server";
 
 interface SnapPlanRow {
@@ -30,14 +31,13 @@ interface TravelPlanItemRow {
 }
 
 export async function getUserWeddingState(): Promise<UserWeddingState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getServerUser();
 
   if (!user) {
     return createEmptyUserWeddingState();
   }
+
+  const supabase = await createClient();
 
   const [{ data: savedArtists }, { data: snapPlan }] = await Promise.all([
     supabase
