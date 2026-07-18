@@ -58,7 +58,10 @@ export function SaveSnapPlanCard({
 
   if (!isAuthenticated) {
     return (
-      <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
+      <section
+        id="jeju-dates"
+        className="flex scroll-mt-24 flex-col gap-3 rounded-2xl border border-border bg-card p-5"
+      >
         <div className="flex flex-col gap-1">
           <p className="text-lg font-semibold">이 제주 일정을 저장할까요?</p>
           <p className="text-sm leading-6 text-muted-foreground">
@@ -77,7 +80,10 @@ export function SaveSnapPlanCard({
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5">
+    <section
+      id="jeju-dates"
+      className="flex scroll-mt-24 flex-col gap-4 rounded-2xl border border-border bg-card p-5"
+    >
       <div className="flex flex-col gap-1">
         <p className="text-lg font-semibold">내 제주 일정에 저장</p>
         <p className="text-sm leading-6 text-muted-foreground">

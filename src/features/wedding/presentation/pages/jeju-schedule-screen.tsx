@@ -52,6 +52,25 @@ export function JejuScheduleScreen({
     initialSavedPlan?.stayStartDate,
     initialSavedPlan?.stayEndDate,
   );
+  const nextAction =
+    stayDates.length === 0
+      ? {
+          href: "#jeju-dates",
+          label: "제주 날짜 정하기",
+          description:
+            "도착일과 출발일을 정하면 촬영하기 좋은 날을 추천받을 수 있어요.",
+        }
+      : travelPlanItems.length === 0
+        ? {
+            href: "/spots",
+            label: "여행 아이디어 담기",
+            description: "촬영 전후에 갈 제주 장소를 담아 일정을 채워보세요.",
+          }
+        : {
+            href: "#travel-list",
+            label: "일정 확인하기",
+            description: "담아둔 장소에 날짜를 배치하면 일정이 완성돼요.",
+          };
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -82,6 +101,44 @@ export function JejuScheduleScreen({
           />
         </div>
       </section>
+
+      {team ? (
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-xl font-semibold">나의 촬영팀</h2>
+            <p className="text-sm font-semibold text-primary">
+              {formatPriceFrom(team.totalPriceFrom)}
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <TeamMemberCard
+              label="스냅 작가 · 촬영 상품"
+              name={`${team.artist.studioName} · ${team.snapPackage.name}`}
+              description={`${team.snapPackage.durationHours}시간 · 의상 ${team.snapPackage.outfitCountMinimum}~${team.snapPackage.outfitCountMaximum}벌 · 촬영 씬 ${team.snapPackage.sceneCount}개`}
+              price={formatPriceFrom(team.snapPackage.price)}
+              href={`/artists/${team.artist.id}`}
+              actionLabel="작가와 상품 보기"
+            />
+            <TeamMemberCard
+              label={team.hasPartnerStylingPrice ? "제휴 스드메" : "스드메"}
+              name={`${team.stylingShop.name} · ${team.stylingProduct.name}`}
+              description={team.stylingProduct.includedServices.join(" · ")}
+              price={formatPrice(team.stylingPrice.total)}
+              href={`/artists?tab=styling&artist=${team.artist.id}&package=${team.snapPackage.id}`}
+              actionLabel="스드메 상품 보기"
+            />
+          </div>
+          {team.stylingAddOns.length > 0 ? (
+            <div className="rounded-xl bg-muted/60 px-4 py-3 text-sm text-muted-foreground">
+              선택 옵션:{" "}
+              {team.stylingAddOns.map((addOn) => addOn.name).join(" · ")}
+            </div>
+          ) : null}
+          <p className="text-sm leading-6 text-muted-foreground">
+            실제 촬영 시간과 장소는 작가와 상담하며 확정합니다.
+          </p>
+        </section>
+      ) : null}
 
       <PlannerScheduleGroup
         recommendation={shootingDateRecommendation}
@@ -123,7 +180,7 @@ export function JejuScheduleScreen({
       ) : null}
 
       {!isFreshStart ? (
-      <section className="flex flex-col gap-3">
+      <section id="travel-list" className="flex scroll-mt-24 flex-col gap-3">
         <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
         {travelPlanItems.length > 0 ? (
           <div className="flex flex-col rounded-2xl border border-border bg-card px-5">
@@ -192,59 +249,29 @@ export function JejuScheduleScreen({
       <CourseSuggestions groups={courseSuggestions} />
 
       {team ? (
-        <>
-          <section className="flex flex-col gap-3">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-xl font-semibold">촬영일 준비</h2>
-              <p className="text-sm font-semibold text-primary">
-                {formatPriceFrom(team.totalPriceFrom)}
-              </p>
-            </div>
-            <p className="text-sm leading-6 text-muted-foreground">
-              촬영팀 구성은 일정의 한 부분이에요. 실제 촬영 시간과 장소는
-              작가와 상담하며 확정합니다.
-            </p>
-            <div className="flex flex-col gap-3">
-              <TeamMemberCard
-                label="스냅 작가 · 촬영 상품"
-                name={`${team.artist.studioName} · ${team.snapPackage.name}`}
-                description={`${team.snapPackage.durationHours}시간 · 의상 ${team.snapPackage.outfitCountMinimum}~${team.snapPackage.outfitCountMaximum}벌 · 촬영 씬 ${team.snapPackage.sceneCount}개`}
-                price={formatPriceFrom(team.snapPackage.price)}
-                href={`/artists/${team.artist.id}`}
-                actionLabel="작가와 상품 보기"
-              />
-              <TeamMemberCard
-                label={team.hasPartnerStylingPrice ? "제휴 스드메" : "스드메"}
-                name={`${team.stylingShop.name} · ${team.stylingProduct.name}`}
-                description={team.stylingProduct.includedServices.join(" · ")}
-                price={formatPrice(team.stylingPrice.total)}
-                href={`/artists?tab=styling&artist=${team.artist.id}&package=${team.snapPackage.id}`}
-                actionLabel="스드메 상품 보기"
-              />
-            </div>
-            {team.stylingAddOns.length > 0 ? (
-              <div className="rounded-xl bg-muted/60 px-4 py-3 text-sm text-muted-foreground">
-                선택 옵션:{" "}
-                {team.stylingAddOns.map((addOn) => addOn.name).join(" · ")}
-              </div>
-            ) : null}
-          </section>
-
-          <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
-            <h2 className="text-lg font-semibold">다음에 할 일</h2>
-            <p className="text-sm leading-6 text-muted-foreground">
-              촬영일을 작가와 조율한 뒤, 제주에서 머무는 날에 여행 장소를
-              나누어 담아보세요.
-            </p>
-            <Link
-              href="/artists"
+        <section className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
+          <h2 className="text-lg font-semibold">다음에 할 일</h2>
+          <p className="text-sm leading-6 text-muted-foreground">
+            {nextAction.description}
+          </p>
+          {nextAction.href.startsWith("#") ? (
+            <a
+              href={nextAction.href}
               className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
             >
-              작가 다시 비교하기
+              {nextAction.label}
+              <ChevronRight className="size-4" />
+            </a>
+          ) : (
+            <Link
+              href={nextAction.href}
+              className="flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-4 text-base font-semibold text-primary-foreground active:bg-primary/90"
+            >
+              {nextAction.label}
               <ChevronRight className="size-4" />
             </Link>
-          </section>
-        </>
+          )}
+        </section>
       ) : !isFreshStart ? (
         <section className="flex flex-col gap-3">
           <h2 className="text-xl font-semibold">촬영일 준비</h2>

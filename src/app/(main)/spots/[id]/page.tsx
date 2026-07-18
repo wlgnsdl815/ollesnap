@@ -59,7 +59,7 @@ export default async function SnapSpotDetailPage({
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-4">
+    <div className="flex flex-col gap-6 pb-20">
       <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl bg-muted shadow-sm">
         <Image
           src={spot.fullImageUrl}
@@ -92,7 +92,7 @@ export default async function SnapSpotDetailPage({
           <div className="flex min-w-28 flex-1 items-center gap-2">
             <CalendarDays className="size-4 shrink-0 text-primary" />
             <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">이 사진의 촬영 시기</span>
+              <span className="text-xs text-muted-foreground">공모전 수상작 촬영 시기</span>
               <span className="text-sm font-bold">{spot.filmedAt}</span>
             </div>
           </div>

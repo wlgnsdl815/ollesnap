@@ -2,6 +2,10 @@
 
 import { Loader2 } from "lucide-react";
 
+import {
+  buildTravelPlanKey,
+  useSavedTravelPlanKeys,
+} from "@/features/account/presentation/hooks/use-saved-travel-plan-keys";
 import type { PhotoSpot } from "@/features/photo-spot/domain/entity/photo-spot.entity";
 
 import { PlaceGridCard } from "../components/place-grid-card";
@@ -18,6 +22,7 @@ export function SnapSpotsInfiniteGrid({
 }: SnapSpotsInfiniteGridProps) {
   const { spots, hasMore, isLoading, sentinelRef } =
     useSnapSpotsInfiniteScroll({ initialSpots, initialHasMore });
+  const savedTravelPlanKeys = useSavedTravelPlanKeys();
 
   if (spots.length === 0) {
     return (
@@ -40,6 +45,9 @@ export function SnapSpotsInfiniteGrid({
             imageUrl={spot.imageUrl}
             title={spot.title}
             subtitle={spot.location}
+            isSaved={savedTravelPlanKeys.has(
+              buildTravelPlanKey("sight", spot.id),
+            )}
           />
         ))}
       </div>

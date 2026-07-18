@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+import { Check, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,6 +7,7 @@ interface PlaceGridCardProps {
   imageUrl: string;
   title: string;
   subtitle: string;
+  isSaved?: boolean;
 }
 
 export function PlaceGridCard({
@@ -14,6 +15,7 @@ export function PlaceGridCard({
   imageUrl,
   title,
   subtitle,
+  isSaved = false,
 }: PlaceGridCardProps) {
   return (
     <Link href={href} className="flex flex-col gap-2">
@@ -28,6 +30,12 @@ export function PlaceGridCard({
         <div className="absolute top-2 right-2 flex size-8 items-center justify-center rounded-full bg-white/90 text-muted-foreground">
           <MapPin className="size-4" />
         </div>
+        {isSaved ? (
+          <span className="absolute top-2 left-2 flex items-center gap-1 rounded-full bg-primary/90 px-2.5 py-1 text-[11px] font-semibold text-primary-foreground">
+            <Check className="size-3" />
+            일정에 담음
+          </span>
+        ) : null}
       </div>
       <div className="flex flex-col gap-0.5 px-0.5">
         <p className="truncate text-sm font-bold">{title}</p>

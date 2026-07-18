@@ -4,6 +4,11 @@ import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 
+import {
+  buildTravelPlanKey,
+  useSavedTravelPlanKeys,
+} from "@/features/account/presentation/hooks/use-saved-travel-plan-keys";
+
 import type { JejuCityFilter } from "../../domain/jeju-region";
 import { PlaceGridCard } from "../components/place-grid-card";
 import { useFoodSpotInfiniteQuery } from "../hooks/use-food-spot-infinite-query";
@@ -20,6 +25,7 @@ export function FoodSpotsInfiniteGrid() {
     isPending,
     fetchNextPage,
   } = useFoodSpotInfiniteQuery({ cityFilter });
+  const savedTravelPlanKeys = useSavedTravelPlanKeys();
   const { ref: sentinelRef } = useInView({
     rootMargin: "300px",
     skip: !hasNextPage || isFetchingNextPage,
@@ -78,6 +84,9 @@ export function FoodSpotsInfiniteGrid() {
                 imageUrl={spot.imageUrl}
                 title={spot.title}
                 subtitle={spot.address}
+                isSaved={savedTravelPlanKeys.has(
+                  buildTravelPlanKey("food", spot.id),
+                )}
               />
             ))}
           </div>

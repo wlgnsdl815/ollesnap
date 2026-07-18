@@ -39,7 +39,7 @@ export default async function FoodSpotDetailPage({
       : undefined;
 
   return (
-    <div className="flex flex-col gap-6 pb-4">
+    <div className="flex flex-col gap-6 pb-20">
       <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl bg-muted shadow-sm">
         <Image
           src={spot.imageUrl}
