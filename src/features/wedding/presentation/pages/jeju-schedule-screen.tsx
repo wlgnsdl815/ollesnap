@@ -5,6 +5,7 @@ import type {
   SavedSnapPlan,
   SavedTravelPlanItem,
 } from "@/features/account/domain/entity/user-wedding.entity";
+import { TravelPlanItemDateSelect } from "@/features/account/presentation/components/travel-plan-item-date-select";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import type { CourseSuggestionGroup } from "@/features/photo-spot/domain/usecase/related-spots.usecase";
@@ -13,6 +14,7 @@ import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/co
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
 import type { ShootingDateRecommendation } from "../../domain/usecase/recommend-shooting-dates.usecase";
+import { enumerateStayDates } from "../../domain/usecase/recommend-shooting-dates.usecase";
 import {
   formatPrice,
   formatPriceFrom,
@@ -46,6 +48,10 @@ export function JejuScheduleScreen({
     ? formatKoreanDate(initialSavedPlan.shootingDate)
     : null;
   const isFreshStart = !team && travelPlanItems.length === 0;
+  const stayDates = enumerateStayDates(
+    initialSavedPlan?.stayStartDate,
+    initialSavedPlan?.stayEndDate,
+  );
 
   return (
     <div className="flex flex-col gap-7 pb-4">
@@ -79,7 +85,7 @@ export function JejuScheduleScreen({
 
       <PlannerScheduleGroup
         recommendation={shootingDateRecommendation}
-        showSaveCard={!isFreshStart}
+        showSaveCard
         plan={{
           artistId: team?.artist.id ?? null,
           packageId: team?.snapPackage.id ?? null,
@@ -125,25 +131,25 @@ export function JejuScheduleScreen({
               const congestionLevel = congestionLevelByItemId[item.id];
 
               return (
-                <Link
+                <div
                   key={item.id}
-                  href={
-                    item.kind === "food"
-                      ? `/spots/food/${item.spotId}`
-                      : `/spots/${item.spotId}`
-                  }
-                  className="flex min-h-16 items-center justify-between gap-3 border-b border-border py-3 last:border-b-0"
+                  className="flex min-h-16 items-center gap-3 border-b border-border py-3 last:border-b-0"
                 >
-                  <span className="flex min-w-0 items-center gap-3">
+                  <Link
+                    href={
+                      item.kind === "food"
+                        ? `/spots/food/${item.spotId}`
+                        : `/spots/${item.spotId}`
+                    }
+                    className="flex min-h-11 min-w-0 flex-1 items-center"
+                  >
                     <span className="min-w-0">
                       <span className="block truncate text-sm font-semibold">
                         {item.title}
                       </span>
                       <span className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
                         <span className="truncate">
-                          {item.plannedDate
-                            ? formatKoreanDate(item.plannedDate)
-                            : item.location ?? "날짜는 나중에 정해도 괜찮아요"}
+                          {item.location ?? (item.kind === "food" ? "맛집" : "관광지")}
                         </span>
                         {congestionLevel && (
                           <span
@@ -154,9 +160,13 @@ export function JejuScheduleScreen({
                         )}
                       </span>
                     </span>
-                  </span>
-                  <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
-                </Link>
+                  </Link>
+                  <TravelPlanItemDateSelect
+                    itemId={item.id}
+                    initialDate={item.plannedDate}
+                    stayDates={stayDates}
+                  />
+                </div>
               );
             })}
           </div>

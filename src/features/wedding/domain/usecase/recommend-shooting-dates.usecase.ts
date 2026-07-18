@@ -142,6 +142,17 @@ function collectRatesByDate(
   return ratesByDate;
 }
 
+export function enumerateStayDates(
+  startDate: string | null | undefined,
+  endDate: string | null | undefined,
+): string[] {
+  if (!startDate || !endDate) {
+    return [];
+  }
+
+  return enumerateDates(startDate, endDate);
+}
+
 function enumerateDates(startDate: string, endDate: string): string[] {
   const start = new Date(`${startDate}T00:00:00`);
   const end = new Date(`${endDate}T00:00:00`);

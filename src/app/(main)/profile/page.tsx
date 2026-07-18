@@ -210,7 +210,7 @@ export default async function ProfilePage() {
             </div>
           ) : (
             <p className="text-sm leading-6 text-muted-foreground">
-              촬영팀에서 제주 도착일과 출발일을 저장해보세요.
+              제주 일정에서 도착일과 출발일을 정해보세요.
             </p>
           )}
           {userWeddingState.travelPlanItems.length > 0 ? (

@@ -247,6 +247,44 @@ export async function toggleTravelPlanItemAction(
   return { ok: true, isSaved: true };
 }
 
+export async function updateTravelPlanItemDateAction(
+  itemId: string,
+  plannedDate: string | null,
+): Promise<ActionResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, message: "로그인이 필요해요." };
+  }
+
+  const { data: plan, error: planError } = await supabase
+    .from("snap_plans")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (planError || !plan) {
+    return { ok: false, message: "여행 일정을 불러오지 못했어요." };
+  }
+
+  const { error } = await supabase
+    .from("travel_plan_items")
+    .update({ planned_date: plannedDate })
+    .eq("id", itemId)
+    .eq("plan_id", plan.id);
+
+  if (error) {
+    return { ok: false, message: "날짜를 저장하지 못했어요." };
+  }
+
+  revalidatePath("/planner");
+  revalidatePath("/profile");
+  return { ok: true };
+}
+
 function revalidateTravelPaths(spotId: string, kind: "sight" | "food") {
   revalidatePath("/spots");
   revalidatePath(
