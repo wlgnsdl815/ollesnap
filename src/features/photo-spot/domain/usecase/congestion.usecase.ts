@@ -59,7 +59,7 @@ export function getCongestionLevelLabel(level: CongestionLevel): string {
 
 // 한국관광공사 API는 집중률(%) 수치만 제공하고 등급 기준을 정의하지 않아
 // 데모 표시용으로 임의 구간을 나눈 값입니다.
-function toCongestionLevel(rate: number): CongestionLevel {
+export function toCongestionLevel(rate: number): CongestionLevel {
   if (rate >= 70) {
     return "high";
   }

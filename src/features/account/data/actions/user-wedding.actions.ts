@@ -15,10 +15,10 @@ export interface ToggleSavedArtistResult extends ActionResult {
 }
 
 export interface SaveSnapPlanInput {
-  artistId: string;
-  packageId: string;
-  stylingShopId: string;
-  stylingProductId: string;
+  artistId: string | null;
+  packageId: string | null;
+  stylingShopId: string | null;
+  stylingProductId: string | null;
   stylingOptionIds: string[];
   shootingDate: string | null;
   stayStartDate: string | null;

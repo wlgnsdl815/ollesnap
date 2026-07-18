@@ -11,6 +11,7 @@ import {
   pickForecastDay,
 } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
+import { recommendShootingDates } from "@/features/wedding/domain/usecase/recommend-shooting-dates.usecase";
 import { resolveSnapTeam } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 import { JejuScheduleScreen } from "@/features/wedding/presentation/pages/jeju-schedule-screen";
 
@@ -54,6 +55,15 @@ export default async function JejuSchedulePage({
     userWeddingState.travelPlanItems,
     congestionPool,
   );
+  const shootingDateRecommendation =
+    savedPlan?.stayStartDate && savedPlan?.stayEndDate
+      ? recommendShootingDates({
+          stayStartDate: savedPlan.stayStartDate,
+          stayEndDate: savedPlan.stayEndDate,
+          travelPlanItems: userWeddingState.travelPlanItems,
+          congestionPool,
+        })
+      : null;
 
   return (
     <JejuScheduleScreen
@@ -62,6 +72,7 @@ export default async function JejuSchedulePage({
       isAuthenticated={userWeddingState.isAuthenticated}
       travelPlanItems={userWeddingState.travelPlanItems}
       congestionLevelByItemId={congestionLevelByItemId}
+      shootingDateRecommendation={shootingDateRecommendation}
     />
   );
 }

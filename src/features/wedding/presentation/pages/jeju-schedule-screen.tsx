@@ -11,10 +11,12 @@ import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/co
 import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/congestion-visuals";
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
+import type { ShootingDateRecommendation } from "../../domain/usecase/recommend-shooting-dates.usecase";
 import {
   formatPrice,
   formatPriceFrom,
 } from "../../domain/usecase/wedding-catalog.usecase";
+import { ShootingDateRecommendationSection } from "../components/shooting-date-recommendation";
 
 interface JejuScheduleScreenProps {
   team: SnapTeam | null;
@@ -22,6 +24,7 @@ interface JejuScheduleScreenProps {
   isAuthenticated: boolean;
   travelPlanItems: SavedTravelPlanItem[];
   congestionLevelByItemId: Record<string, CongestionLevel>;
+  shootingDateRecommendation: ShootingDateRecommendation | null;
 }
 
 export function JejuScheduleScreen({
@@ -30,6 +33,7 @@ export function JejuScheduleScreen({
   isAuthenticated,
   travelPlanItems,
   congestionLevelByItemId,
+  shootingDateRecommendation,
 }: JejuScheduleScreenProps) {
   const stayDateRange = formatStayDateRange(
     initialSavedPlan?.stayStartDate,
@@ -70,21 +74,28 @@ export function JejuScheduleScreen({
         </div>
       </section>
 
-      {team ? (
+      {shootingDateRecommendation ? (
+        <ShootingDateRecommendationSection
+          recommendation={shootingDateRecommendation}
+        />
+      ) : null}
+
+      {!isFreshStart ? (
         <SaveSnapPlanCard
           plan={{
-            artistId: team.artist.id,
-            packageId: team.snapPackage.id,
-            stylingShopId: team.stylingShop.id,
-            stylingProductId: team.stylingProduct.id,
-            stylingOptionIds: team.stylingAddOns.map((addOn) => addOn.id),
+            artistId: team?.artist.id ?? null,
+            packageId: team?.snapPackage.id ?? null,
+            stylingShopId: team?.stylingShop.id ?? null,
+            stylingProductId: team?.stylingProduct.id ?? null,
+            stylingOptionIds:
+              team?.stylingAddOns.map((addOn) => addOn.id) ?? [],
             shootingDate: null,
             stayStartDate: null,
             stayEndDate: null,
           }}
           initialSavedPlan={initialSavedPlan}
           isAuthenticated={isAuthenticated}
-          returnPath={buildPlannerHref(team)}
+          returnPath={team ? buildPlannerHref(team) : "/planner"}
         />
       ) : null}
 
