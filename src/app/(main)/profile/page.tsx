@@ -57,7 +57,10 @@ export default async function ProfilePage() {
   }
 
   const displayName =
-    existingProfileName ?? generatedProfileName ?? user.email ?? "올레스냅 사용자";
+    existingProfileName ??
+    generatedProfileName ??
+    user.email ??
+    "올레스냅 사용자";
   const avatarUrl: string | undefined =
     user.user_metadata.avatar_url ?? user.user_metadata.picture;
 
@@ -114,7 +117,8 @@ export default async function ProfilePage() {
                     {savedTeam.artist.studioName}
                   </p>
                   <p className="truncate text-sm leading-5 text-muted-foreground">
-                    {savedTeam.snapPackage.name} · {savedTeam.stylingShop.name} · {savedTeam.stylingProduct.name}
+                    {savedTeam.snapPackage.name} · {savedTeam.stylingShop.name}{" "}
+                    · {savedTeam.stylingProduct.name}
                   </p>
                 </div>
               </div>
@@ -161,7 +165,9 @@ export default async function ProfilePage() {
                     />
                   </span>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold">{artist.studioName}</p>
+                    <p className="truncate text-sm font-semibold">
+                      {artist.studioName}
+                    </p>
                     <p className="truncate text-xs text-muted-foreground">
                       {artist.artistName} 작가 · {artist.keywords.join(" · ")}
                     </p>
@@ -220,7 +226,9 @@ export default async function ProfilePage() {
                   className="flex min-h-12 items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold">{item.title}</p>
+                    <p className="truncate text-sm font-semibold">
+                      {item.title}
+                    </p>
                     {item.location ? (
                       <p className="truncate text-xs text-muted-foreground">
                         {item.location}
