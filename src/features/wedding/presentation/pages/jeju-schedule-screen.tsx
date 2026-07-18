@@ -7,6 +7,8 @@ import type {
 } from "@/features/account/domain/entity/user-wedding.entity";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
+import type { CourseSuggestionGroup } from "@/features/photo-spot/domain/usecase/related-spots.usecase";
+import { CourseSuggestions } from "@/features/photo-spot/presentation/components/course-suggestions";
 import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/congestion-visuals";
 
 import type { SnapTeam } from "../../domain/entity/wedding-catalog.entity";
@@ -24,6 +26,7 @@ interface JejuScheduleScreenProps {
   travelPlanItems: SavedTravelPlanItem[];
   congestionLevelByItemId: Record<string, CongestionLevel>;
   shootingDateRecommendation: ShootingDateRecommendation | null;
+  courseSuggestions: CourseSuggestionGroup[];
 }
 
 export function JejuScheduleScreen({
@@ -33,6 +36,7 @@ export function JejuScheduleScreen({
   travelPlanItems,
   congestionLevelByItemId,
   shootingDateRecommendation,
+  courseSuggestions,
 }: JejuScheduleScreenProps) {
   const stayDateRange = formatStayDateRange(
     initialSavedPlan?.stayStartDate,
@@ -174,6 +178,8 @@ export function JejuScheduleScreen({
         </Link>
       </section>
       ) : null}
+
+      <CourseSuggestions groups={courseSuggestions} />
 
       {team ? (
         <>
