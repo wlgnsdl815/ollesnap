@@ -10,7 +10,7 @@ import {
   findSpotCongestionForecast,
   pickForecastDay,
 } from "@/features/photo-spot/domain/usecase/congestion.usecase";
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
+import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { resolveSnapTeam } from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 import { JejuScheduleScreen } from "@/features/wedding/presentation/pages/jeju-schedule-screen";
 
@@ -30,14 +30,15 @@ export default async function JejuSchedulePage({
   searchParams,
 }: JejuSchedulePageProps) {
   const selection = await searchParams;
-  const [userWeddingState, congestionPool] = await Promise.all([
+  const [userWeddingState, congestionPool, catalog] = await Promise.all([
     getUserWeddingState(),
     congestionRepository.getForecastPool(),
+    getWeddingCatalog(),
   ]);
   const savedPlan = userWeddingState.snapPlan;
   const selectedArtistId = selection.artist ?? savedPlan?.artistId ?? undefined;
   const team = selectedArtistId
-    ? resolveSnapTeam(weddingCatalogMock, {
+    ? resolveSnapTeam(catalog, {
         artistId: selectedArtistId,
         packageId: selection.package ?? savedPlan?.packageId ?? undefined,
         stylingShopId:

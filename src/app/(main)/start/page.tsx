@@ -1,6 +1,8 @@
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
+import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { PreparationGuideScreen } from "@/features/wedding/presentation/pages/preparation-guide-screen";
 
-export default function PreparationGuidePage() {
-  return <PreparationGuideScreen catalog={weddingCatalogMock} />;
+export default async function PreparationGuidePage() {
+  const catalog = await getWeddingCatalog();
+
+  return <PreparationGuideScreen catalog={catalog} />;
 }

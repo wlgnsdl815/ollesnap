@@ -1,10 +1,10 @@
-import { weddingCatalogMock } from "../mock/wedding-catalog.mock";
 import type {
   SnapArtistPage,
   SnapScene,
   WeddingTone,
 } from "../../domain/entity/wedding-catalog.entity";
 import { filterSnapArtists } from "../../domain/usecase/wedding-catalog.usecase";
+import { getWeddingCatalog } from "./get-wedding-catalog";
 
 const SNAP_ARTISTS_PAGE_SIZE = 10;
 
@@ -14,13 +14,14 @@ export interface GetSnapArtistPageInput {
   tone?: WeddingTone;
 }
 
-export function getSnapArtistPage({
+export async function getSnapArtistPage({
   page,
   scene,
   tone,
-}: GetSnapArtistPageInput): SnapArtistPage {
+}: GetSnapArtistPageInput): Promise<SnapArtistPage> {
+  const catalog = await getWeddingCatalog();
   const normalizedPage = Math.max(1, Math.floor(page));
-  const artists = filterSnapArtists(weddingCatalogMock.artists, { scene, tone });
+  const artists = filterSnapArtists(catalog.artists, { scene, tone });
   const startIndex = (normalizedPage - 1) * SNAP_ARTISTS_PAGE_SIZE;
   const paginatedArtists = artists.slice(
     startIndex,

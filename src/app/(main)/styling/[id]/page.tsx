@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
+import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { StylingShopDetailScreen } from "@/features/wedding/presentation/pages/styling-shop-detail-screen";
 
 interface StylingShopPageProps {
@@ -12,16 +12,18 @@ export default async function StylingShopPage({
   params,
   searchParams,
 }: StylingShopPageProps) {
-  const [{ id }, query] = await Promise.all([params, searchParams]);
-  const shop = weddingCatalogMock.stylingShops.find((item) => item.id === id);
+  const [{ id }, query, catalog] = await Promise.all([
+    params,
+    searchParams,
+    getWeddingCatalog(),
+  ]);
+  const shop = catalog.stylingShops.find((item) => item.id === id);
 
   if (!shop) {
     notFound();
   }
 
-  const artist = weddingCatalogMock.artists.find(
-    (item) => item.id === query.artist,
-  );
+  const artist = catalog.artists.find((item) => item.id === query.artist);
 
   return (
     <StylingShopDetailScreen

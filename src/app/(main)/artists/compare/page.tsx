@@ -1,17 +1,20 @@
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
+import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { CompareArtistsScreen } from "@/features/wedding/presentation/pages/compare-artists-screen";
 
 export default async function CompareArtistsPage() {
-  const userWeddingState = await getUserWeddingState();
-  const savedArtists = weddingCatalogMock.artists.filter((artist) =>
+  const [userWeddingState, catalog] = await Promise.all([
+    getUserWeddingState(),
+    getWeddingCatalog(),
+  ]);
+  const savedArtists = catalog.artists.filter((artist) =>
     userWeddingState.savedArtistIds.includes(artist.id),
   );
 
   return (
     <CompareArtistsScreen
       savedArtists={savedArtists}
-      catalog={weddingCatalogMock}
+      catalog={catalog}
       isAuthenticated={userWeddingState.isAuthenticated}
     />
   );

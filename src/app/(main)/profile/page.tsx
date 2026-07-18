@@ -9,7 +9,7 @@ import {
   getProfileName,
 } from "@/features/account/domain/usecase/profile-name.usecase";
 import { ProfileNameEditor } from "@/features/account/presentation/components/profile-name-editor";
-import { weddingCatalogMock } from "@/features/wedding/data/mock/wedding-catalog.mock";
+import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import {
   formatPriceFrom,
   resolveSnapTeam,
@@ -28,13 +28,16 @@ export default async function ProfilePage() {
     redirect("/login?next=/profile");
   }
 
-  const userWeddingState = await getUserWeddingState();
-  const savedArtists = weddingCatalogMock.artists.filter((artist) =>
+  const [userWeddingState, catalog] = await Promise.all([
+    getUserWeddingState(),
+    getWeddingCatalog(),
+  ]);
+  const savedArtists = catalog.artists.filter((artist) =>
     userWeddingState.savedArtistIds.includes(artist.id),
   );
   const savedPlan = userWeddingState.snapPlan;
   const savedTeam = savedPlan?.artistId
-    ? resolveSnapTeam(weddingCatalogMock, {
+    ? resolveSnapTeam(catalog, {
         artistId: savedPlan.artistId,
         packageId: savedPlan.packageId ?? undefined,
         stylingShopId: savedPlan.stylingShopId ?? undefined,
