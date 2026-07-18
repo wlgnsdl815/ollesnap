@@ -5,7 +5,6 @@ import type {
   SavedSnapPlan,
   SavedTravelPlanItem,
 } from "@/features/account/domain/entity/user-wedding.entity";
-import { SaveSnapPlanCard } from "@/features/account/presentation/components/save-snap-plan-card";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import { CONGESTION_TEXT_CLASS } from "@/features/photo-spot/presentation/lib/congestion-visuals";
@@ -16,7 +15,7 @@ import {
   formatPrice,
   formatPriceFrom,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import { ShootingDateRecommendationSection } from "../components/shooting-date-recommendation";
+import { PlannerScheduleGroup } from "../components/planner-schedule-group";
 
 interface JejuScheduleScreenProps {
   team: SnapTeam | null;
@@ -74,30 +73,23 @@ export function JejuScheduleScreen({
         </div>
       </section>
 
-      {shootingDateRecommendation ? (
-        <ShootingDateRecommendationSection
-          recommendation={shootingDateRecommendation}
-        />
-      ) : null}
-
-      {!isFreshStart ? (
-        <SaveSnapPlanCard
-          plan={{
-            artistId: team?.artist.id ?? null,
-            packageId: team?.snapPackage.id ?? null,
-            stylingShopId: team?.stylingShop.id ?? null,
-            stylingProductId: team?.stylingProduct.id ?? null,
-            stylingOptionIds:
-              team?.stylingAddOns.map((addOn) => addOn.id) ?? [],
-            shootingDate: null,
-            stayStartDate: null,
-            stayEndDate: null,
-          }}
-          initialSavedPlan={initialSavedPlan}
-          isAuthenticated={isAuthenticated}
-          returnPath={team ? buildPlannerHref(team) : "/planner"}
-        />
-      ) : null}
+      <PlannerScheduleGroup
+        recommendation={shootingDateRecommendation}
+        showSaveCard={!isFreshStart}
+        plan={{
+          artistId: team?.artist.id ?? null,
+          packageId: team?.snapPackage.id ?? null,
+          stylingShopId: team?.stylingShop.id ?? null,
+          stylingProductId: team?.stylingProduct.id ?? null,
+          stylingOptionIds: team?.stylingAddOns.map((addOn) => addOn.id) ?? [],
+          shootingDate: null,
+          stayStartDate: null,
+          stayEndDate: null,
+        }}
+        initialSavedPlan={initialSavedPlan}
+        isAuthenticated={isAuthenticated}
+        returnPath={team ? buildPlannerHref(team) : "/planner"}
+      />
 
       {isFreshStart ? (
         <section className="flex flex-col gap-3">

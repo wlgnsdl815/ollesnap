@@ -15,6 +15,8 @@ interface SaveSnapPlanCardProps {
   initialSavedPlan: SavedSnapPlan | null;
   isAuthenticated: boolean;
   returnPath: string;
+  shootingDate: string;
+  onShootingDateChange: (value: string) => void;
 }
 
 export function SaveSnapPlanCard({
@@ -22,10 +24,9 @@ export function SaveSnapPlanCard({
   initialSavedPlan,
   isAuthenticated,
   returnPath,
+  shootingDate,
+  onShootingDateChange,
 }: SaveSnapPlanCardProps) {
-  const [shootingDate, setShootingDate] = useState(
-    initialSavedPlan?.shootingDate ?? "",
-  );
   const [stayStartDate, setStayStartDate] = useState(
     initialSavedPlan?.stayStartDate ?? "",
   );
@@ -89,7 +90,7 @@ export function SaveSnapPlanCard({
         <DateField
           label="촬영 예정일"
           value={shootingDate}
-          onChange={setShootingDate}
+          onChange={onShootingDateChange}
         />
         <div className="grid grid-cols-2 gap-3">
           <DateField
