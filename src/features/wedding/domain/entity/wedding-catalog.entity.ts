@@ -53,6 +53,8 @@ export interface SnapArtist {
   artistName: string;
   introduction: string;
   profileImageUrl: string;
+  /** 실제 작가 포트폴리오 사진 URL 목록. 운영 데이터가 채워지기 전까지는 비어 있다. */
+  portfolioImageUrls?: string[];
   scenes: SnapScene[];
   tones: WeddingTone[];
   keywords: string[];

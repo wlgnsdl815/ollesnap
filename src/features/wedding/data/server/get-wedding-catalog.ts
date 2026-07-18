@@ -28,6 +28,7 @@ interface SnapArtistRow {
   artist_name: string;
   introduction: string;
   profile_image_url: string;
+  portfolio_image_urls: string[] | null;
   scenes: SnapScene[];
   tones: WeddingTone[];
   keywords: string[];
@@ -130,6 +131,7 @@ async function fetchWeddingCatalog(): Promise<WeddingCatalog> {
     artistName: row.artist_name,
     introduction: row.introduction,
     profileImageUrl: row.profile_image_url,
+    portfolioImageUrls: row.portfolio_image_urls ?? [],
     scenes: row.scenes,
     tones: row.tones,
     keywords: row.keywords,
