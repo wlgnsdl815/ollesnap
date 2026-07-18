@@ -4,7 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import { getPreparationItemStates } from "@/features/account/data/server/preparation.server";
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
+import { buildPreparationChecklist } from "@/features/account/domain/preparation-checklist";
 import { buildPlanScheduleEntries } from "@/features/account/domain/usecase/plan-schedule.usecase";
 import {
   generateProfileName,
@@ -34,10 +36,12 @@ export default async function ProfilePage() {
 
   const supabase = await createClient();
 
-  const [userWeddingState, catalog] = await Promise.all([
+  const [userWeddingState, catalog, preparationItemStates] = await Promise.all([
     getUserWeddingState(),
     getWeddingCatalog(),
+    getPreparationItemStates(),
   ]);
+  const preparationChecklist = buildPreparationChecklist(preparationItemStates);
   const savedArtists = catalog.artists.filter((artist) =>
     userWeddingState.savedArtistIds.includes(artist.id),
   );
@@ -280,6 +284,33 @@ export default async function ProfilePage() {
     </section>
   );
 
+  const preparationSection = (
+    <section className="flex flex-col gap-3">
+      <h2 className="text-xl font-semibold">촬영 준비물</h2>
+      <Link
+        href="/planner#preparation"
+        className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 active:bg-muted"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-semibold">
+            {preparationChecklist.checkedCount > 0
+              ? `${preparationChecklist.checkedCount}/${preparationChecklist.totalCount} 챙겼어요`
+              : "촬영 전에 챙길 것들을 확인해보세요"}
+          </p>
+          <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+        </div>
+        <span className="h-1.5 overflow-hidden rounded-full bg-muted">
+          <span
+            className="block h-full rounded-full bg-primary"
+            style={{
+              width: `${Math.round((preparationChecklist.checkedCount / Math.max(preparationChecklist.totalCount, 1)) * 100)}%`,
+            }}
+          />
+        </span>
+      </Link>
+    </section>
+  );
+
   const sections = [
     { key: "team", hasContent: Boolean(savedTeam), content: teamSection },
     {
@@ -288,6 +319,11 @@ export default async function ProfilePage() {
       content: artistsSection,
     },
     { key: "stay", hasContent: hasStayInfo, content: staySection },
+    {
+      key: "preparation",
+      hasContent: preparationChecklist.checkedCount > 0,
+      content: preparationSection,
+    },
   ];
   const orderedSections = [
     ...sections.filter((section) => section.hasContent),

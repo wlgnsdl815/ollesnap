@@ -23,8 +23,23 @@ const TAB_ITEMS: TabItem[] = [
   { href: "/profile", label: "내 준비", icon: UserRound },
 ];
 
+// 탭바는 각 탭의 루트 화면에서만 보이고, 상세처럼 뎁스가 있는 화면에서는
+// 상단 앱바의 뒤로 가기로만 이동하도록 숨긴다.
+const ROOT_PATHS = new Set([
+  "/",
+  "/artists",
+  "/planner",
+  "/profile",
+  "/spots",
+  "/styling",
+]);
+
 export function BottomTabBar() {
   const pathname = usePathname();
+
+  if (!ROOT_PATHS.has(pathname)) {
+    return null;
+  }
 
   return (
     <nav

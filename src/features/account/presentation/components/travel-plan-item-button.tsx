@@ -67,8 +67,8 @@ export function TravelPlanItemButton({
   }
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-30">
-      <div className="mx-auto flex w-full max-w-md flex-col gap-2 px-4 py-3 sm:max-w-2xl lg:max-w-4xl">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-2 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] sm:max-w-2xl lg:max-w-4xl">
         <button
           type="button"
           aria-pressed={isSaved}

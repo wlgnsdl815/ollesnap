@@ -14,7 +14,9 @@ import {
   buildPlanScheduleEntries,
   groupPlanScheduleEntriesByDate,
 } from "@/features/account/domain/usecase/plan-schedule.usecase";
+import type { PreparationItemState } from "@/features/account/domain/preparation-checklist";
 import { PlanDateSelect } from "@/features/account/presentation/components/plan-date-select";
+import { PreparationChecklist } from "@/features/account/presentation/components/preparation-checklist";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
 import {
@@ -39,6 +41,7 @@ interface JejuScheduleScreenProps {
   travelPlanItems: SavedTravelPlanItem[];
   congestionLevelByItemIdPromise: Promise<Record<string, CongestionLevel>>;
   recommendationPromise: Promise<ShootingDateRecommendation | null>;
+  preparationItemStates: PreparationItemState[];
 }
 
 export function JejuScheduleScreen({
@@ -48,6 +51,7 @@ export function JejuScheduleScreen({
   travelPlanItems,
   congestionLevelByItemIdPromise,
   recommendationPromise,
+  preparationItemStates,
 }: JejuScheduleScreenProps) {
   const stayDateRange = formatStayDateRange(
     initialSavedPlan?.stayStartDate,
@@ -301,6 +305,14 @@ export function JejuScheduleScreen({
         <Suspense fallback={<CourseSuggestionsFallback />}>
           <CourseSuggestionsSection travelPlanItems={travelPlanItems} />
         </Suspense>
+      ) : null}
+
+      {!isFreshStart ? (
+        <PreparationChecklist
+          initialStates={preparationItemStates}
+          isAuthenticated={isAuthenticated}
+          returnPath="/planner"
+        />
       ) : null}
 
       {team ? (

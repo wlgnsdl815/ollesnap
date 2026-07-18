@@ -1,3 +1,4 @@
+import { getPreparationItemStates } from "@/features/account/data/server/preparation.server";
 import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import type { SavedTravelPlanItem } from "@/features/account/domain/entity/user-wedding.entity";
 import { createCongestionRepository } from "@/features/photo-spot/data/repository/congestion.repository.impl";
@@ -35,9 +36,10 @@ export default async function JejuSchedulePage({
   searchParams,
 }: JejuSchedulePageProps) {
   const selection = await searchParams;
-  const [userWeddingState, catalog] = await Promise.all([
+  const [userWeddingState, catalog, preparationItemStates] = await Promise.all([
     getUserWeddingState(),
     getWeddingCatalog(),
+    getPreparationItemStates(),
   ]);
   const savedPlan = userWeddingState.snapPlan;
   const selectedArtistId = selection.artist ?? savedPlan?.artistId ?? undefined;
@@ -80,6 +82,7 @@ export default async function JejuSchedulePage({
       travelPlanItems={userWeddingState.travelPlanItems}
       congestionLevelByItemIdPromise={congestionLevelByItemIdPromise}
       recommendationPromise={recommendationPromise}
+      preparationItemStates={preparationItemStates}
     />
   );
 }
