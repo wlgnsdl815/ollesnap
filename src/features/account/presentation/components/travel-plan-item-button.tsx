@@ -1,11 +1,13 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { ChevronRight, Heart, LoaderCircle, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 import { toggleTravelPlanItemAction } from "../../data/actions/user-wedding.actions";
+import { TRAVEL_PLAN_KEYS_QUERY_KEY } from "../hooks/use-saved-travel-plan-keys";
 
 interface TravelPlanItemButtonProps {
   spotId: string;
@@ -29,6 +31,7 @@ export function TravelPlanItemButton({
   returnPath,
 }: TravelPlanItemButtonProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isSaved, setIsSaved] = useState(initialIsSaved);
   const [justSaved, setJustSaved] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -51,6 +54,10 @@ export function TravelPlanItemButton({
       if (result.ok && typeof result.isSaved === "boolean") {
         setIsSaved(result.isSaved);
         setJustSaved(result.isSaved);
+        // 목록 화면의 "일정에 담음" 배지가 바로 반영되도록 캐시를 비운다.
+        void queryClient.invalidateQueries({
+          queryKey: TRAVEL_PLAN_KEYS_QUERY_KEY,
+        });
         router.refresh();
       }
     });

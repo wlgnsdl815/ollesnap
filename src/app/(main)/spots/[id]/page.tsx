@@ -1,5 +1,6 @@
 import { CalendarDays, Camera, Globe, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
+import { Suspense } from "react";
 
 import { createAttractionRepository } from "@/features/photo-spot/data/repository/attraction.repository.impl";
 import { createCongestionRepository } from "@/features/photo-spot/data/repository/congestion.repository.impl";
@@ -26,20 +27,12 @@ export default async function SnapSpotDetailPage({
   params,
 }: SnapSpotDetailPageProps) {
   const { id } = await params;
-  const [spot, userWeddingState, congestionPool] = await Promise.all([
+  // 혼잡도·연관 관광지는 화면 진입을 막지 않도록 Suspense로 나중에 채운다.
+  const [spot, userWeddingState] = await Promise.all([
     getJejuSnapSpotDetail(photoSpotRepository, attractionRepository, id),
     getUserWeddingState(),
-    congestionRepository.getForecastPool(),
   ]);
   const attraction = spot?.attraction;
-  const congestionForecast = spot
-    ? findSpotCongestionForecast(congestionPool, extractPlaceName(spot.location))
-    : null;
-  const relatedSpots = spot
-    ? await relatedSpotRepository.getRelatedSpots(
-        extractPlaceName(spot.location),
-      )
-    : [];
   const mapLink =
     attraction?.mapx && attraction?.mapy
       ? `https://map.kakao.com/link/map/${encodeURIComponent(spot?.title ?? "")},${attraction.mapy},${attraction.mapx}`
@@ -174,16 +167,18 @@ export default async function SnapSpotDetailPage({
           </div>
         )}
 
-        {congestionForecast && (
-          <CongestionForecastCalendar forecast={congestionForecast} />
-        )}
-
-        {relatedSpots.length > 0 && (
-          <RelatedSpotsSection
-            baseSpotTitle={spot.title}
-            relatedSpots={relatedSpots}
+        <Suspense fallback={null}>
+          <CongestionCalendarAsync
+            placeName={extractPlaceName(spot.location)}
           />
-        )}
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <RelatedSpotsAsync
+            placeName={extractPlaceName(spot.location)}
+            baseSpotTitle={spot.title}
+          />
+        </Suspense>
 
         <TravelPlanItemButton
           spotId={spot.id}
@@ -203,5 +198,37 @@ export default async function SnapSpotDetailPage({
         </p>
       </div>
     </div>
+  );
+}
+
+async function CongestionCalendarAsync({ placeName }: { placeName: string }) {
+  const congestionPool = await congestionRepository.getForecastPool();
+  const forecast = findSpotCongestionForecast(congestionPool, placeName);
+
+  if (!forecast) {
+    return null;
+  }
+
+  return <CongestionForecastCalendar forecast={forecast} />;
+}
+
+async function RelatedSpotsAsync({
+  placeName,
+  baseSpotTitle,
+}: {
+  placeName: string;
+  baseSpotTitle: string;
+}) {
+  const relatedSpots = await relatedSpotRepository.getRelatedSpots(placeName);
+
+  if (relatedSpots.length === 0) {
+    return null;
+  }
+
+  return (
+    <RelatedSpotsSection
+      baseSpotTitle={baseSpotTitle}
+      relatedSpots={relatedSpots}
+    />
   );
 }

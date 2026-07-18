@@ -8,6 +8,8 @@ interface TravelPlanItemKey {
   kind: "sight" | "food";
 }
 
+export const TRAVEL_PLAN_KEYS_QUERY_KEY = ["travel-plan-item-keys"] as const;
+
 export function buildTravelPlanKey(
   kind: TravelPlanItemKey["kind"],
   spotId: string,
@@ -18,7 +20,7 @@ export function buildTravelPlanKey(
 /** 현재 로그인 사용자가 일정에 담아둔 장소 키("kind:spotId") 집합. */
 export function useSavedTravelPlanKeys(): Set<string> {
   const { data } = useQuery({
-    queryKey: ["travel-plan-item-keys"],
+    queryKey: TRAVEL_PLAN_KEYS_QUERY_KEY,
     staleTime: 30_000,
     queryFn: async (): Promise<TravelPlanItemKey[]> => {
       const response = await fetch("/api/travel-plan/items");
