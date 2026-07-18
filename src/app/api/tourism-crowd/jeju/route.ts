@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { createCongestionRepository } from "@/features/photo-spot/data/repository/congestion.repository.impl";
 
-export const revalidate = 21600;
+export const revalidate = 3600;
 
 const congestionRepository = createCongestionRepository();
 

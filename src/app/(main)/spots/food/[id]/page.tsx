@@ -113,7 +113,7 @@ export default async function FoodSpotDetailPage({
 
         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Globe className="size-3.5 shrink-0" />
-          정보 제공: 한국관광공사 관광정보
+          정보 제공: 공공 관광데이터
         </p>
       </div>
     </div>

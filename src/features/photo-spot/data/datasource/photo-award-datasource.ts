@@ -32,7 +32,7 @@ export async function fetchPhotoAwardList({
   numOfRows = 10,
   pageNo = 1,
   arrange = "C",
-  revalidateSeconds = 21600,
+  revalidateSeconds = 3600,
 }: FetchPhotoAwardListParams): Promise<PhotoAwardListResult> {
   const query = new URLSearchParams({
     numOfRows: String(numOfRows),

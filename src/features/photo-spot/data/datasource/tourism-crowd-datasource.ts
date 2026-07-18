@@ -25,7 +25,7 @@ export async function fetchTourismCrowdList({
   signguCd,
   numOfRows = 1000,
   pageNo = 1,
-  revalidateSeconds = 21600,
+  revalidateSeconds = 3600,
 }: FetchTourismCrowdListParams): Promise<TourismCrowdApiItem[]> {
   const query = new URLSearchParams({
     numOfRows: String(numOfRows),

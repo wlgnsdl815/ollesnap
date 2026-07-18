@@ -23,7 +23,7 @@ export async function searchKeyword2({
   keyword,
   lDongRegnCd,
   numOfRows = 5,
-  revalidateSeconds = 21600,
+  revalidateSeconds = 3600,
 }: KorServiceFetchOptions & {
   keyword: string;
   lDongRegnCd?: string;
@@ -67,7 +67,7 @@ export async function searchKeyword2({
 export async function fetchDetailCommon2({
   serviceKey,
   contentId,
-  revalidateSeconds = 21600,
+  revalidateSeconds = 3600,
 }: KorServiceFetchOptions & {
   contentId: string;
 }): Promise<KorServiceCommonDetail | null> {
@@ -118,7 +118,7 @@ export async function areaBasedList2({
   numOfRows = 10,
   pageNo = 1,
   arrange = "O",
-  revalidateSeconds = 21600,
+  revalidateSeconds = 3600,
 }: KorServiceFetchOptions & {
   contentTypeId: string;
   lDongRegnCd: string;

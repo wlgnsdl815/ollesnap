@@ -184,7 +184,7 @@ export default async function SnapSpotDetailPage({
         />
 
         <p className="text-xs text-muted-foreground">
-          사진 제공: 한국관광공사 관광공모전 수상작
+          사진 제공: 관광공모전 수상작 공공데이터
         </p>
       </div>
     </div>

@@ -28,7 +28,7 @@ export function CongestionForecastCalendar({
       <div className="flex flex-col gap-1">
         <p className="text-sm font-bold">언제 가면 여유로울까요?</p>
         <p className="text-xs text-muted-foreground">
-          한국관광공사 관광지 집중률 예측 데이터 기준 · 향후 30일
+          관광지 집중률 예측 공공데이터 기준 · 향후 30일
         </p>
       </div>
       <Calendar
