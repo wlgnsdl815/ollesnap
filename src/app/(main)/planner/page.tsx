@@ -27,6 +27,10 @@ interface JejuSchedulePageProps {
   }>;
 }
 
+export const metadata = {
+  title: "제주 일정",
+};
+
 export default async function JejuSchedulePage({
   searchParams,
 }: JejuSchedulePageProps) {

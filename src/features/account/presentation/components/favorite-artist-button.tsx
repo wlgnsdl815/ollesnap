@@ -4,6 +4,7 @@ import { ArrowRight, Heart, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import { toggleSavedArtistAction } from "../../data/actions/user-wedding.actions";
 
@@ -39,6 +40,8 @@ export function FavoriteArtistButton({
         setIsSaved(result.isSaved);
         setSavedCount(result.savedCount ?? null);
         router.refresh();
+      } else if (!result.ok) {
+        toast.error(result.message ?? "찜 목록을 변경하지 못했어요.");
       }
     });
   }

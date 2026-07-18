@@ -12,6 +12,10 @@ interface LoginPageProps {
   searchParams: Promise<{ next?: string }>;
 }
 
+export const metadata = {
+  title: "로그인",
+};
+
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const query = await searchParams;
   const user = await getServerUser();

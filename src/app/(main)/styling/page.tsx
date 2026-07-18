@@ -7,6 +7,10 @@ interface StylingPageProps {
   }>;
 }
 
+export const metadata = {
+  title: "스드메 찾기",
+};
+
 export default async function StylingPage({ searchParams }: StylingPageProps) {
   const query = await searchParams;
   const redirectParams = new URLSearchParams({ tab: "styling" });

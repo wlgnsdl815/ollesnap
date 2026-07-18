@@ -12,6 +12,10 @@ interface ArtistsPageProps {
   }>;
 }
 
+export const metadata = {
+  title: "작가 찾기",
+};
+
 export default async function ArtistsPage({ searchParams }: ArtistsPageProps) {
   const [query, userWeddingState, catalog] = await Promise.all([
     searchParams,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -40,6 +41,7 @@ export function PlanDateSelect({
 
       if (!result.ok) {
         setValue(previousValue);
+        toast.error(result.message ?? "날짜를 저장하지 못했어요.");
       }
     });
   }

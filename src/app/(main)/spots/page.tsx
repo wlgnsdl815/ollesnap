@@ -4,6 +4,10 @@ import { JejuExploreScreen } from "@/features/photo-spot/presentation/pages/jeju
 
 const photoSpotRepository = createPhotoSpotRepository();
 
+export const metadata = {
+  title: "제주 이곳저곳",
+};
+
 export default async function JejuSnapSpotsPage() {
   const spotsPage = await getJejuSnapSpotsPage(photoSpotRepository, 1);
 

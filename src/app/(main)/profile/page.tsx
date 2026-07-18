@@ -21,6 +21,10 @@ import { createClient } from "@/shared/supabase/server";
 
 import { SignOutButton } from "./sign-out-button";
 
+export const metadata = {
+  title: "내 준비",
+};
+
 export default async function ProfilePage() {
   const user = await getServerUser();
 

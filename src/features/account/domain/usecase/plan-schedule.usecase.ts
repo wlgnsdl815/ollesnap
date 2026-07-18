@@ -30,6 +30,30 @@ export function buildPlanScheduleEntries(
   return entries.sort(compareEntries);
 }
 
+export interface PlanScheduleDayGroup {
+  date: string | null;
+  entries: PlanScheduleEntry[];
+}
+
+// 정렬된 일정 항목을 날짜별 묶음으로 나눈다. 미정(date null) 묶음은 항상 마지막.
+export function groupPlanScheduleEntriesByDate(
+  entries: PlanScheduleEntry[],
+): PlanScheduleDayGroup[] {
+  const groups: PlanScheduleDayGroup[] = [];
+
+  for (const entry of entries) {
+    const lastGroup = groups[groups.length - 1];
+
+    if (lastGroup && lastGroup.date === entry.date) {
+      lastGroup.entries.push(entry);
+    } else {
+      groups.push({ date: entry.date, entries: [entry] });
+    }
+  }
+
+  return groups;
+}
+
 function compareEntries(a: PlanScheduleEntry, b: PlanScheduleEntry): number {
   if (a.date && b.date) {
     if (a.date !== b.date) {

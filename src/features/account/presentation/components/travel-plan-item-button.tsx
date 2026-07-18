@@ -5,6 +5,7 @@ import { ChevronRight, Heart, LoaderCircle, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
 import { toggleTravelPlanItemAction } from "../../data/actions/user-wedding.actions";
 import { TRAVEL_PLAN_KEYS_QUERY_KEY } from "../hooks/use-saved-travel-plan-keys";
@@ -59,6 +60,8 @@ export function TravelPlanItemButton({
           queryKey: TRAVEL_PLAN_KEYS_QUERY_KEY,
         });
         router.refresh();
+      } else if (!result.ok) {
+        toast.error(result.message ?? "일정을 변경하지 못했어요.");
       }
     });
   }

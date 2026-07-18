@@ -10,7 +10,10 @@ import {
   updateShootingDateAction,
   updateTravelPlanItemDateAction,
 } from "@/features/account/data/actions/user-wedding.actions";
-import { buildPlanScheduleEntries } from "@/features/account/domain/usecase/plan-schedule.usecase";
+import {
+  buildPlanScheduleEntries,
+  groupPlanScheduleEntriesByDate,
+} from "@/features/account/domain/usecase/plan-schedule.usecase";
 import { PlanDateSelect } from "@/features/account/presentation/components/plan-date-select";
 import type { CongestionLevel } from "@/features/photo-spot/domain/entity/congestion-forecast.entity";
 import { getCongestionLevelLabel } from "@/features/photo-spot/domain/usecase/congestion.usecase";
@@ -58,9 +61,11 @@ export function JejuScheduleScreen({
     initialSavedPlan?.stayStartDate,
     initialSavedPlan?.stayEndDate,
   );
-  const scheduleEntries = buildPlanScheduleEntries(
-    initialSavedPlan?.shootingDate ?? null,
-    travelPlanItems,
+  const scheduleGroups = groupPlanScheduleEntriesByDate(
+    buildPlanScheduleEntries(
+      initialSavedPlan?.shootingDate ?? null,
+      travelPlanItems,
+    ),
   );
   const nextAction =
     stayDates.length === 0
@@ -194,73 +199,84 @@ export function JejuScheduleScreen({
       <section id="travel-list" className="flex scroll-mt-24 flex-col gap-3">
         <h2 className="text-xl font-semibold">일정에 담은 제주</h2>
         {travelPlanItems.length > 0 ? (
-          <div className="flex flex-col rounded-2xl border border-border bg-card px-5">
-            {scheduleEntries.map((entry) => {
-              if (entry.kind === "shooting") {
-                return (
-                  <div
-                    key="shooting"
-                    className="flex min-h-16 items-center gap-3 border-b border-border py-3 last:border-b-0"
-                  >
-                    <span className="flex min-h-11 min-w-0 flex-1 items-center">
-                      <span className="truncate text-sm font-bold text-primary">
-                        스냅 촬영일
-                      </span>
-                    </span>
-                    <PlanDateSelect
-                      initialDate={initialSavedPlan?.shootingDate ?? null}
-                      stayDates={stayDates}
-                      ariaLabel="스냅 촬영일"
-                      saveAction={updateShootingDateAction}
-                    />
-                  </div>
-                );
-              }
-
-              const item = entry.item;
-
-              return (
-                <div
-                  key={item.id}
-                  className="flex min-h-16 items-center gap-3 border-b border-border py-3 last:border-b-0"
-                >
-                  <Link
-                    href={
-                      item.kind === "food"
-                        ? `/spots/food/${item.spotId}`
-                        : `/spots/${item.spotId}`
-                    }
-                    className="flex min-h-11 min-w-0 flex-1 items-center"
-                  >
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-semibold">
-                        {item.title}
-                      </span>
-                      <span className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
-                        <span className="truncate">
-                          {item.location ?? (item.kind === "food" ? "맛집" : "관광지")}
+          <div className="flex flex-col rounded-2xl border border-border bg-card px-5 py-2">
+            {scheduleGroups.map((group) => (
+              <div
+                key={group.date ?? "unset"}
+                className="flex flex-col border-t border-border pb-2 first:border-t-0"
+              >
+                <p className="pt-3 text-xs font-semibold text-muted-foreground">
+                  {group.date ? formatDayGroupLabel(group.date) : "날짜 미정"}
+                </p>
+                {group.entries.map((entry) => {
+                  if (entry.kind === "shooting") {
+                    return (
+                      <div
+                        key="shooting"
+                        className="flex min-h-14 items-center gap-3 py-2"
+                      >
+                        <span className="flex min-h-11 min-w-0 flex-1 items-center">
+                          <span className="truncate text-sm font-bold text-primary">
+                            스냅 촬영일
+                          </span>
                         </span>
-                        <Suspense fallback={null}>
-                          <ItemCongestionLabel
-                            levelsPromise={congestionLevelByItemIdPromise}
-                            itemId={item.id}
-                          />
-                        </Suspense>
-                      </span>
-                    </span>
-                  </Link>
-                  <PlanDateSelect
-                    initialDate={item.plannedDate}
-                    stayDates={stayDates}
-                    ariaLabel={`${item.title} 방문 날짜`}
-                    saveAction={updateTravelPlanItemDateAction.bind(
-                      null,
-                      item.id,
-                    )}
-                  />
-                </div>
-              );
-            })}
+                        <PlanDateSelect
+                          initialDate={initialSavedPlan?.shootingDate ?? null}
+                          stayDates={stayDates}
+                          ariaLabel="스냅 촬영일"
+                          saveAction={updateShootingDateAction}
+                        />
+                      </div>
+                    );
+                  }
+
+                  const item = entry.item;
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex min-h-14 items-center gap-3 py-2"
+                    >
+                      <Link
+                        href={
+                          item.kind === "food"
+                            ? `/spots/food/${item.spotId}`
+                            : `/spots/${item.spotId}`
+                        }
+                        className="flex min-h-11 min-w-0 flex-1 items-center"
+                      >
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold">
+                            {item.title}
+                          </span>
+                          <span className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                            <span className="truncate">
+                              {item.location ??
+                                (item.kind === "food" ? "맛집" : "관광지")}
+                            </span>
+                            <Suspense fallback={null}>
+                              <ItemCongestionLabel
+                                levelsPromise={congestionLevelByItemIdPromise}
+                                itemId={item.id}
+                              />
+                            </Suspense>
+                          </span>
+                        </span>
+                      </Link>
+                      <PlanDateSelect
+                        initialDate={item.plannedDate}
+                        stayDates={stayDates}
+                        ariaLabel={`${item.title} 방문 날짜`}
+                        saveAction={updateTravelPlanItemDateAction.bind(
+                          null,
+                          item.id,
+                        )}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
           </div>
         ) : (
           <div className="flex flex-col gap-2 rounded-2xl border border-border bg-muted/50 p-5">
@@ -457,6 +473,18 @@ function buildPlannerHref(team: SnapTeam) {
 
 function formatKoreanDate(value: string) {
   return value.replaceAll("-", ".");
+}
+
+const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"];
+
+function formatDayGroupLabel(dateIso: string) {
+  const date = new Date(`${dateIso}T00:00:00`);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateIso;
+  }
+
+  return `${date.getMonth() + 1}.${date.getDate()} (${WEEKDAY_LABELS[date.getDay()]})`;
 }
 
 function formatStayDateRange(
