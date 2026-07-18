@@ -1,14 +1,17 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronRight, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import type { PhotoSpot } from "@/features/photo-spot/domain/entity/photo-spot.entity";
+import { extractPlaceName } from "@/features/photo-spot/domain/extract-place-name";
 import type { WeddingCatalog } from "@/features/wedding/domain/entity/wedding-catalog.entity";
 
 import { HomeTastePicker } from "../components/home-taste-picker";
 
 interface HomeScreenProps {
   catalog: WeddingCatalog;
+  heroSpot: PhotoSpot | null;
 }
 
 const PREPARATION_STEPS = [
@@ -29,23 +32,24 @@ const PREPARATION_STEPS = [
   },
 ];
 
-export function HomeScreen({ catalog }: HomeScreenProps) {
+export function HomeScreen({ catalog, heroSpot }: HomeScreenProps) {
   return (
     <div className="flex flex-col gap-10 pb-4">
       <section className="relative min-h-112 overflow-hidden rounded-3xl bg-foreground text-white">
         <Image
-          src="/images/jeju-snap-hero.png"
-          alt="제주 해안에서 웨딩 스냅을 촬영하는 커플"
+          src={heroSpot?.fullImageUrl ?? "/images/jeju-snap-hero.png"}
+          alt={
+            heroSpot
+              ? `${extractPlaceName(heroSpot.location)}에서 촬영한 관광공모전 수상작`
+              : "제주 해안에서 웨딩 스냅을 촬영하는 커플"
+          }
           fill
           priority
           sizes="(min-width: 1024px) 896px, (min-width: 640px) 672px, 100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/20 to-black/5" />
-        <div className="relative flex min-h-112 flex-col justify-between p-5">
-          <span className="w-fit rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-foreground">
-            장소 대신, 남기고 싶은 분위기부터
-          </span>
+        <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-black/10" />
+        <div className="relative flex min-h-112 flex-col justify-end p-5">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <h1 className="max-w-80 text-3xl font-black leading-tight text-balance">
@@ -70,6 +74,17 @@ export function HomeScreen({ catalog }: HomeScreenProps) {
               >
                 아직 아무것도 못 골랐어요
               </Link>
+              {heroSpot ? (
+                <Link
+                  href={`/spots/${heroSpot.id}`}
+                  className="flex min-h-11 items-center justify-center gap-1.5 text-xs font-medium text-white/75 active:text-white"
+                >
+                  <MapPin className="size-3.5" />
+                  오늘의 씬 · {extractPlaceName(heroSpot.location)} — 관광공모전
+                  수상작
+                  <ChevronRight className="size-3.5" />
+                </Link>
+              ) : null}
             </div>
           </div>
         </div>
