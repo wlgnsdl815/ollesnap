@@ -1,82 +1,54 @@
-Project Guidelines
+# Ollesnap Repository Instructions
 
-Project Context
+## Read before work
 
-- This project is a submission for the 2026 관광데이터 활용 공모전.
-- Judges are expected to review the application primarily on mobile devices.
-- Treat mobile as the primary platform, not desktop.
-- Design, implement, and test every screen mobile-first. Build and verify the mobile experience before adding tablet or desktop layouts.
-- Design and validate the primary UI using a reference viewport of approximately 390px.
-- The application must remain fully functional on any viewport width from 360px upward.
-- Use responsive breakpoints only to enhance larger screens (`sm:`/`md:`/`lg:` and up) — never design for desktop first and scale down with `max-width` overrides.
-- On larger viewports (foldables, tablets, desktops), the layout must adapt naturally to the available space — e.g. wider containers, multi-column arrangements, adjusted spacing — rather than simply stretching or centering the mobile layout with empty space on the sides.
-- If a design or implementation tradeoff is required, always prioritize the mobile user experience, even if it results in a less-than-ideal desktop layout.
-- UI components should provide touch-friendly interactions, including sufficiently large tap targets (approximately 44px) and spacing. Avoid hover-only interactions.
-- The goal is a genuine mobile web app experience that also scales into a polished desktop experience — not a desktop site adapted for mobile, and not a mobile layout awkwardly stretched for desktop.
+- UI work: read `docs/design.md`, the target feature, and relevant `src/shared/components/ui` components. For new screens or significant visual changes, also load the `frontend-design` skill if available — but `docs/design.md` tokens and the existing screens' visual language always override the skill's suggestions (no new palettes, typefaces, or "signature" elements).
+- API/data work: read the relevant `docs/reference/api-manual` files and the target feature's `domain` and `data` layers.
+- Route work: read the target `app/` route and its presentation page.
+- Do not load unrelated reference PDFs or refactor unrelated code. Preserve existing user changes.
 
-Tech Stack
+## Repo map (src/features/)
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- pnpm
+- `home`: 홈 화면 — `/` (오늘의 히어로 스팟, 진입점)
+- `wedding`: 핵심 기능 — 작가 비교(`/artists`), 스드메(`/styling`), 준비 가이드(`/start`), 촬영팀 구성
+- `photo-spot`: 관광데이터 기반 스팟 탐색 — `/spots`
+- `planner`: 촬영 후 체류 일정 — `/planner`
+- `account`: 프로필/로그인 — `/profile`, `/login`
 
-Code Style
+## Non-negotiable product rules
 
-- Use React with TypeScript.
-- Prefer interface for object type definitions.
-- Use type only for unions, intersections, or utility types.
-- Keep components small and focused on a single responsibility.
-- Avoid unnecessary abstraction.
-- Prioritize readability and maintainability.
+- This is a 2026 관광데이터 활용 공모전 submission, reviewed primarily on mobile.
+- Build and validate mobile first at 390px; support 360px and wider without horizontal overflow. Enhance larger viewports with `sm:`/`md:`/`lg:` utilities only.
+- Keep interactive targets about 44px or larger. Do not rely on hover alone.
+- Never expose photographers' private shooting spots or let users choose an exact shooting location.
+- Use public tourism data only to support post-shoot stays and travel ideas, not as a shooting-location recommendation.
 
-Architecture
+## Implementation
 
-Use a feature-first, clean architecture-inspired structure when the project grows.
+- Use Next.js App Router, React, TypeScript, Tailwind CSS, and pnpm.
+- Use `interface` for object shapes; reserve `type` for unions, intersections, and utilities.
+- Prefer Server Components. Add `"use client"` only for interaction, hooks, or browser APIs.
+- Keep server state separate from UI state. Avoid unnecessary `useEffect` and duplicated state.
+- Use async/await. Use template literals for conditional Tailwind classes; avoid class-name helpers unless needed.
+- Reuse existing `src/shared/components/ui` components before adding shadcn/ui or hand-rolling a component. Prefer `lucide-react` icons.
+- UI copy and commit messages are Korean. Commit subjects use `feat:`/`fix:`/`design:` prefixes.
 
-- app: Next.js routes, layouts, and API routes. Keep `page.tsx`/`layout.tsx` files thin — they should only handle routing concerns (params, searchParams, metadata, composing layouts, server-side data fetching) and render a feature's presentation component. Trivial route stubs with no state or logic (e.g. a static empty-state page) may stay inline.
-- features/<feature>: one folder per feature, each containing its own
-  - domain: business logic, entities, and use cases for that feature
-  - data: repositories, API clients, and external data access for that feature
-  - presentation: the feature's UI layer, split into
-    - pages: top-level screen components that `app/` route files import and render directly (one per route)
-    - components: sub-components composed within this feature's pages, not directly rendered by any route
-    - hooks: stateful logic (state + effects) extracted out of pages/components once it's non-trivial enough to obscure the JSX — skip this for a single `useState` with no derived logic
-- shared: shared utilities, constants, and common components used across features. Only move a presentation component here once it's actually reused by more than one feature — don't pre-emptively generalize a component that currently has one caller.
+## Architecture
 
-Business logic should be placed in a feature's domain layer, not directly inside UI components. Only lift code out of a feature folder into `shared` once it's actually needed by more than one feature.
+- `app/` contains routing, route-level data fetching, metadata, and composition only.
+- `features/<feature>/domain` contains entities and business rules and must not depend on `data` or `presentation`.
+- `data` contains API/Supabase access, DTOs, mappers, and repository implementations.
+- `presentation` contains pages, components, and non-trivial stateful hooks.
+- Move code to `shared` only after it is used by two or more features.
 
-Styling
+## Design
 
-- Follow docs/design.md for all color, typography, spacing, radius, and component styling decisions. Its tokens are mirrored in src/app/globals.css as CSS variables (`--primary`, `--background`, etc.) — use those variables (via Tailwind's `bg-primary`, `text-foreground`, etc.) rather than hardcoding hex values.
-- Use Tailwind CSS.
-- Prefer template literals for conditional Tailwind classes.
-- Do not use class name join helpers unless necessary.
-- Prefer icons from `lucide-react` over custom SVGs or other icon sets.
-- Before building a UI component from scratch, check whether a shadcn/ui component already covers it and use that first. Only hand-roll a component when shadcn has no equivalent.
+- `docs/design.md` defines UI behavior and visual decisions. `src/app/globals.css` is the executable source of truth for semantic Tailwind tokens.
+- Use semantic tokens such as `bg-primary`, `text-muted-foreground`, and `border-hairline`; do not add raw hex values in components.
+- Use orange only for primary actions. Use tint surfaces and hairlines instead of drop shadows.
 
-Example:
+## Verify
 
-const buttonClassName = `  rounded-md px-4 py-2
-  ${isActive ? 'bg-black text-white' : 'bg-white text-black'}`;
-
-Next.js Rules
-
-- Use the App Router.
-- Prefer Server Components by default.
-- Use Client Components only when interactivity, browser APIs, or React hooks are needed.
-- Keep data fetching close to the route or server component when appropriate.
-- Do not add unnecessary client-side state.
-
-Commands
-
-pnpm dev
-pnpm build
-pnpm lint
-
-Reference Docs
-
-- docs/design.md: 디자인 시스템 문서 (컬러/타이포/컴포넌트 스펙, 보이스&톤, 브랜드 원칙). 컬러/타이포/스페이싱/라운드/컴포넌트 스타일은 LikeLion Design System에서 차용했고, voice&tone·브랜드 서사·원칙은 ollesnap 고유 내용. UI 관련 작업 시 반드시 참고할 것.
-- docs/reference: 참고용 PDF 등 문서를 두는 폴더. 여기에 있는 파일은 관련 작업 시 참고할 것.
-- docs/reference/api-manual: API 명세/매뉴얼 문서를 두는 폴더 (PDF, CSV, MD 등). API 연동 작업 시 참고할 것. xlsx/docx는 csv/md/txt로 변환 후 넣을 것.
+- Run `pnpm lint` after code changes.
+- Run `pnpm build` after route, configuration, or cross-feature contract changes.
+- In the handoff, state changed files and any behavior that was not verified.

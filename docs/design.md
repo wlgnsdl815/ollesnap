@@ -1,269 +1,90 @@
----
-id: ollesnap
-name: Ollesnap
-display_name_kr: 올레스냅
-country: KR
-category: travel
-homepage: ""
-primary_color: "#ff6000"
-logo:
-  type: file
-  slug: "/logo.svg"
-verified: "2026-07-11"
-added: "2026-07-11"
-theme_source:
-  name: "LikeLion Design System (borrowed)"
-  url: "https://designsystem.likelion.net/"
-  note: >
-    Sections 1-9 (color, typography, spacing, radius, shadow, component specs) are
-    borrowed verbatim from LikeLion's public design system as ollesnap's starting
-    visual theme. Sections 10-15 (voice, brand narrative, principles, personas,
-    states, motion) are ollesnap's own — not LikeLion's.
-omd: "0.1-adapted"
-tokens:
-  source: borrowed-from-likelion
-  extracted: "2026-07-11"
-  note: "Identical to LikeLion DS tokens. See src/app/globals.css for the mapping onto shadcn CSS variables."
-  colors:
-    primary: "#ff6000"
-    primary-hover: "#cc4d00"
-    primary-tint: "#ffdfcc"
-    primary-faint: "#ffefe5"
-    ink: "#222222"
-    gray-950: "#191f28"
-    neutral-900: "#191c1f"
-    black: "#000000"
-    label: "#333d4b"
-    muted: "#737373"
-    faint: "#a3a3a3"
-    disabled: "#b1b8c0"
-    border: "#d1d6dc"
-    hairline: "#e5e7ea"
-    hairline-alt: "#e5e5e5"
-    surface: "#f3f4f6"
-    surface-alt: "#f5f5f5"
-    surface-faint: "#f9fafb"
-    canvas: "#ffffff"
-    cream: "#fcf4ee"
-    cream-alt: "#fff8e4"
-    yellow: "#ffb700"
-    success: "#0da796"
-    error: "#f64c4c"
-  typography:
-    family: { primary: "Pretendard", note: "Pretendard Variable" }
-    display-d1:  { size: 52, weight: 600, lineHeight: 1.30, use: "Largest display headline" }
-    display-d2:  { size: 44, weight: 600, lineHeight: 1.30, use: "Secondary display headline" }
-    display-d3:  { size: 32, weight: 600, lineHeight: 1.30, use: "Section display" }
-    heading-h1:  { size: 31, weight: 600, lineHeight: 1.30, use: "Page heading" }
-    subtitle:    { size: 17, weight: 600, lineHeight: 1.30, tracking: -0.3, use: "Subtitle / emphasis lead" }
-    body:        { size: 16, weight: 400, lineHeight: 1.50, use: "Standard reading text / nav" }
-    body-sm:     { size: 15, weight: 400, lineHeight: 1.60, tracking: -0.3, use: "Chip / tab / tag labels" }
-    button:      { size: 16, weight: 600, lineHeight: 1.00, use: "Button label" }
-    caption:     { size: 13, weight: 400, lineHeight: 1.50, use: "Captions, metadata" }
-  spacing: { xs: 2, sm: 4, base: 8, md: 12, lg: 16, xl: 20, xxl: 24, block: 32, section: 48 }
-  rounded: { xs: 2, sm: 4, md: 6, base: 8, lg: 12, xl: 16, xxl: 24, pill: 999, full: 9999 }
-  shadow:
-    none: "none"
-    hairline-ring: "rgba(0,0,0,0.01) 0px 0px 0px 1px"
-  components:
-    button-primary: { type: button, bg: "#ff6000", fg: "#ffffff", radius: "6px", height: "48px", padding: "0 16px", font: "16px / 600", states: "hover #cc4d00 · disabled bg #f3f4f6 fg #b1b8c0", use: "Primary action" }
-    button-neutral: { type: button, bg: "#191c1f", fg: "#ffffff", radius: "6px", height: "48px", padding: "0 16px", font: "16px / 600", use: "Secondary dark / neutral action" }
-    button-assistive: { type: button, bg: "#f3f4f6", fg: "#333d4b", radius: "6px", height: "48px", padding: "0 16px", font: "16px / 600", use: "Tertiary / low-emphasis action" }
-    textfield: { type: input, bg: "#ffffff", fg: "#000000", border: "1px solid #d1d6dc", radius: "8px", height: "48px", padding: "0 12px", font: "16px / 400", states: "focus border #333d4b", use: "Text input, 15px placeholder #333d4b" }
-    chip-selected: { type: badge, bg: "#ff6000", fg: "#ffffff", radius: "999px", height: "30px", padding: "0 12px", font: "15px / 400", use: "Selected filter chip (filled) — e.g. spot category filters" }
-    chip-outline: { type: badge, bg: "#ffefe5", fg: "#ff6000", border: "1px solid #ff6000", radius: "999px", height: "30px", padding: "0 12px", font: "15px / 400", use: "Selected chip, tinted outline variant" }
-    tab-pill: { type: tab, bg: "#ffffff", fg: "#333d4b", border: "1px solid #d1d6dc", radius: "999px", height: "40px", padding: "0 16px", font: "15px / 400", active: "#ffffff text on #191f28 fill", use: "Segmented pill tab — e.g. 스팟/플래너 switch" }
-    badge-count: { type: badge, bg: "#ff6000", fg: "#ffffff", radius: "10px", height: "20px", padding: "0 6.5px", font: "16px / 400", use: "Notification / count badge" }
-    tag: { type: badge, bg: "#ff6000", fg: "#ffffff", radius: "4px", height: "28px", padding: "0 8px", font: "15px / 400", use: "Category tag — e.g. 코스, 맛집, 자연" }
-    card-warm: { type: card, bg: "#fcf4ee", fg: "#222222", radius: "16px", padding: "40px", use: "Warm promo card" }
-    card-plain: { type: card, bg: "#ffffff", fg: "#222222", border: "1px solid #e5e5e5", radius: "12px", use: "Spot / course card with hairline outline" }
-  components_harvested: true
----
+# Ollesnap Design Guide
 
-## 1. Visual Theme & Atmosphere
+## Purpose and source of truth
 
-Ollesnap(올레스냅)은 제주 웨딩 스냅을 준비하는 커플이 작가와 스드메를 취향으로 비교하고 촬영팀을 구성하는 앱으로, 2026 관광데이터 활용 공모전 제출작이다. 심사가 모바일 위주로 이뤄지는 만큼 UI는 390px 기준 뷰포트에서 먼저 완성되고, 큰 화면은 그 위에 자연스럽게 확장된다. 시각 테마는 LikeLion Design System에서 빌려왔다: 순백(`#ffffff`) 캔버스 위에 단일 채도의 오렌지(`#ff6000`)가 "다음 행동"을 표시하고, 나머지는 차분한 블루그레이 뉴트럴과 따뜻한 크림 서피스로 구성된다. 그림자는 거의 쓰지 않고, 톤 구분과 헤어라인으로 깊이를 표현한다.
+Ollesnap helps couples compare 제주 wedding-snap photographers and compatible styling services, then form a shooting team. It is a 2026 관광데이터 활용 공모전 submission designed mobile-first for a 390px viewport.
 
-**Key Characteristics:**
-- 단일 오렌지(`#ff6000`)를 액션 컬러로만 사용 — 작가 선택, 촬영팀 구성 같은 핵심 액션에 집중
-- Pretendard 전역 사용: 헤드라인은 weight 600, 본문/UI는 weight 400
-- 블루그레이 뉴트럴 톤(`#191f28` → `#333d4b` → `#d1d6dc` → `#f9fafb`)으로 텍스트/보더 구성
-- 크림 톤(`#fcf4ee`, `#fff8e4`)으로 프로모/하이라이트 카드에 온기 부여
-- 거의 그림자 없는 플랫 시스템 — 헤어라인과 틴트 서피스로 구분
-- 친근한 라운드: 버튼 6px, 인풋 8px, 카드 12–16px, 칩/탭은 완전 필(pill)
+- Visual tokens and component behavior are adapted from the LikeLion Design System.
+- Brand narrative, product rules, voice, and UX principles are Ollesnap's own.
+- `src/app/globals.css` is the executable source of truth for colors and Tailwind token names. Use semantic utilities in components instead of raw hex values.
+- Light mode is the supported product theme. The existing `.dark` variables are library compatibility only; do not introduce dark-mode UI or a theme switch unless requested.
 
-## 2. Color Palette & Roles
+## Product boundaries
 
-### Primary
-- **Primary Orange** (`#ff6000`): 저장/추가/다음 단계 같은 핵심 액션 전용 색상.
-- **Orange Hover** (`#cc4d00`): 프라이머리 버튼 hover/pressed.
-- **Orange Tint** (`#ffdfcc`): 은은한 강조 배경.
-- **Orange Faint** (`#ffefe5`): 선택된 칩의 outline 배경.
+- Ask for the desired 제주 scene and photo tone before suggesting a photographer.
+- Do not expose private photo spots or let users select an exact shooting location. The photographer makes the final location decision according to weather and light.
+- Use public tourism data for post-shoot stay and travel ideas, not as a shooting-location replacement.
 
-### Text
-- **Ink** (`#222222`): 기본 헤딩/본문 텍스트.
-- **Gray-950** (`#191f28`): 강조 텍스트, 선택된 탭의 다크 필.
-- **Label** (`#333d4b`): 보조 텍스트, 인풋 포커스 보더.
-- **Muted** (`#737373`) / **Faint** (`#a3a3a3`): 저강조 텍스트, 메타 정보(거리/시간 등).
-- **Disabled** (`#b1b8c0`): 비활성 버튼 텍스트.
+## Visual system
 
-### Surface & Border
-- **Canvas** (`#ffffff`): 페이지 배경.
-- **Border** (`#d1d6dc`) / **Hairline** (`#e5e7ea`, `#e5e5e5`): 카드 보더, 구분선.
-- **Surface** (`#f3f4f6`) / **Surface Alt** (`#f5f5f5`) / **Surface Faint** (`#f9fafb`): 섹션/보조 배경.
-- **Cream** (`#fcf4ee`) / **Cream Alt** (`#fff8e4`): 프로모/추천 스팟 카드 배경.
-
-### Semantic
-- **Yellow** (`#ffb700`): 별점, 하이라이트.
-- **Success** (`#0da796`): 저장 완료, 일정 등록 성공.
-- **Error** (`#f64c4c`): 폼 에러, 삭제 확인.
-
-## 3. Typography Rules
-
-- **Family**: Pretendard Variable 단일 사용.
-- 헤드라인/타이틀은 weight 600, 본문·UI 라벨은 weight 400.
-- 서브타이틀·칩·탭 등 작은 라벨은 -0.3px 자간으로 살짝 조여준다.
-- 본문/UI는 15–16px 하한 유지 (모바일 가독성).
-
-| Role | Size | Weight | Line Height | 용도 |
-|------|------|--------|-------------|------|
-| Display D1 | 52px | 600 | 1.30 | 온보딩/랜딩 헤드라인 |
-| Heading H1 | 31px | 600 | 1.30 | 페이지 타이틀 (스팟 상세 등) |
-| Subtitle | 17px | 600 | 1.30 | 섹션 타이틀 |
-| Body | 16px | 400 | 1.50 | 본문, 설명 |
-| Body Small | 15px | 400 | 1.60 | 칩/탭/태그 라벨 |
-| Button | 16px | 600 | 1.00 | 버튼 라벨 |
-| Caption | 13px | 400 | 1.50 | 메타 정보, 캡션 |
-
-## 4. Component Stylings
-
-### Buttons
-- **Primary**: bg `#ff6000`, fg `#ffffff`, radius 6px, height 48px, 16px/600. hover `#cc4d00`, disabled bg `#f3f4f6` fg `#b1b8c0`. → 저장, 일정 추가, 다음 단계.
-- **Neutral**: bg `#191c1f`, fg `#ffffff`, 나머지 동일. → 보조 강조 액션.
-- **Assistive**: bg `#f3f4f6`, fg `#333d4b`, 나머지 동일. → 취소, 낮은 우선순위 액션.
-
-### Inputs
-- **TextField**: bg `#ffffff`, border 1px `#d1d6dc`, radius 8px, height 48px, 16px/400. focus border `#333d4b`.
-
-### Cards
-- **Spot Card (card-plain)**: bg `#ffffff`, border 1px `#e5e5e5`, radius 12px, no shadow.
-- **Promo/추천 Card (card-warm)**: bg `#fcf4ee`, radius 16px, padding 40px.
-
-### Chips & Tags
-- **Filter chip (selected)**: bg `#ff6000`, fg `#ffffff`, radius 999px, height 30px.
-- **Filter chip (unselected)**: bg `#ffffff`, fg `#333d4b`, border 1px `#d1d6dc`, radius 999px.
-- **Category tag**: bg `#ff6000`, fg `#ffffff`, radius 4px, height 28px.
-
-### Tabs
-- **Segmented pill**: height 40px, radius 999px. inactive bg `#ffffff` fg `#333d4b` border `#d1d6dc`; active bg `#191f28` fg `#ffffff`. → 예: 스팟/플래너 뷰 전환, 카테고리 탭.
-
-## 5. Layout Principles
-
-- 4px 기반, 8px 리듬 (`2/4/8/12/16/20/24/32/48`).
-- 모바일(390px) 기준: 단일 컬럼, 카드 리스트는 세로 스택 또는 가로 스크롤 캐러셀.
-- 섹션 구분은 배경 틴트(`#f5f5f5`/`#f9fafb` vs `#ffffff`)와 헤어라인으로, 그림자 사용하지 않음.
-- 라운드 스케일: 버튼 6px · 인풋 8px · 카드 12–16px · 칩/탭 999px.
-
-## 6. Depth & Elevation
-
-| Level | 처리 | 용도 |
-|-------|------|------|
-| Flat | shadow 없음 | 기본 배경, 대부분의 서피스 |
-| Tint | `#f5f5f5`/`#f9fafb` 배경 전환 | 섹션 구분 |
-| Hairline | 1px `#e5e5e5`/`#d1d6dc` 보더 | 카드 아웃라인, 구분선 |
-
-그림자 대신 색과 헤어라인으로 위계를 표현한다.
-
-## 7. Do's and Don'ts
-
-### Do
-- 오렌지는 핵심 액션(저장/추가/다음)에만 사용
-- 헤드라인은 Pretendard 600, 본문은 400
-- 섹션 구분은 틴트 배경 + 헤어라인
-- 버튼 6px, 인풋 8px, 카드 12–16px, 칩/탭 999px 라운드 유지
-
-### Don't
-- 오렌지를 여러 요소에 분산시키지 말 것 — 액션 신호가 흐려짐
-- 드롭섀도우로 입체감 주지 말 것
-- 두 번째 채도색을 브랜드 컬러로 추가하지 말 것
-
-## 8. Responsive Behavior
-
-| Breakpoint | 범위 | 변화 |
-|------|-------|------|
-| Mobile (기준) | 360–639px | 단일 컬럼, 카드 가로 스크롤 |
-| Tablet | 640–1023px | 2열 카드 그리드 |
-| Desktop | 1024px+ | 넓은 컨테이너, 다열 레이아웃 |
-
-- 탭 타겟은 44px 이상 유지 (버튼 48px, 칩 30px는 패딩으로 보완).
-- 큰 화면에서는 여백을 늘리고 컬럼을 늘리되, 모바일 레이아웃을 단순히 늘리지 않는다.
-
-## 9. Agent Prompt Guide
-
-- "스팟 카드: 흰 배경, 1px #e5e5e5 보더, 12px radius, 그림자 없음. 타이틀 17px/600 #222222, 메타 15px/400 #737373."
-- "카테고리 필터 칩: 미선택은 흰 배경 #333d4b 텍스트 1px #d1d6dc 보더 999px; 선택 시 #ff6000 배경 흰 텍스트."
-- "저장 버튼: #ff6000 배경, 흰 텍스트, 6px radius, 48px height, 16px/600, hover #cc4d00."
-- "스팟/플래너 세그먼트 탭: 40px height, 999px radius, 비활성 흰 배경, 활성 #191f28 배경 흰 텍스트."
-
----
-
-## 10. Voice & Tone
-
-올레스냅의 톤은 **친절하고 실용적인 촬영 준비 동반자**다. 장소를 나열하기보다, "어떤 제주를 사진에 남기고 싶은지"를 먼저 묻고 작가·드레스·메이크업 선택을 짧고 명확하게 돕는다. 공공 관광데이터는 촬영 포토스팟을 대체하지 않고 촬영 후 체류일의 여행 아이디어를 보조한다.
-
-| 상황 | 톤 |
-|---|---|
-| 작가 추천 | 분위기·사진 톤·촬영 구성 중심 ("바다·해안", "필름 무드") |
-| 촬영팀 CTA | 가볍고 직관적 ("이 작가로 팀 만들기", "스드메 조합 보기") |
-| 빈 상태 | 부담 없는 안내, 씬·톤 필터 조정 제시 |
-| 에러/제약 | 담백하게 원인과 대안 제시 |
-
-**금지 톤**: 과장된 홍보 문구, 불필요한 이모지 남발, 근거 없는 추천 문구.
-
-## 11. Brand Narrative
-
-올레스냅은 제주 웨딩 스냅을 준비하는 커플이 흩어진 작가·드레스·메이크업 정보를 한 흐름에서 비교하도록 돕는다. 작가별 비공개 포토스팟을 노출하거나 사용자가 정확한 장소를 고르게 하지 않는다. 대신 오름·바다·목장·돌담·숲길·노을처럼 원하는 제주 씬과 사진 톤을 고르면, 작가가 촬영일의 날씨와 빛에 맞는 장소를 안내하는 방식이다.
-
-관광공모전의 공공 데이터는 촬영 당일의 장소 선택이 아닌, 제주에 며칠 더 머무는 커플을 위한 여행 아이디어로 활용한다. 시각 테마는 LikeLion Design System에서 빌려왔지만, 서비스의 정체성은 색이 아니라 "촬영 준비와 제주 체류를 얼마나 자연스럽게 이어 주는가"에 있다.
-
-## 12. Principles
-
-1. **취향부터 물을 것.** *UI 반영:* 정확한 스팟 대신 제주 씬과 사진 톤을 먼저 선택한다.
-2. **작가의 전문성을 지킬 것.** *UI 반영:* 비공개 포토스팟은 노출하지 않고, 작가가 날씨와 빛에 맞춰 최종 안내한다.
-3. **한 번에 비교할 것.** *UI 반영:* 작가 선택 뒤 호환 스드메와 예상 시작가를 같은 흐름에서 보여준다.
-4. **모바일이 먼저다.** *UI 반영:* 390px 기준으로 먼저 완성하고, 큰 화면은 레이아웃을 확장한다.
-
-## 13. Personas
-
-*아래는 제주 웨딩 스냅 준비 맥락을 바탕으로 만든 가상 페르소나다.*
-
-**이수민, 29, 서울.** 제주 웨딩 스냅을 준비 중인 예비 신부. SNS에서 작가별 분위기는 봤지만 정확한 포토스팟이나 스드메 조합을 혼자 정하기는 부담스럽다. 바다·오름 같은 원하는 씬과 사진 톤으로 작가를 빠르게 좁히고 싶어 한다.
-
-**박도현, 31, 경기.** 촬영을 위해 제주에 3박 이상 머무르는 예비 신랑. 촬영일은 작가에게 맡기되, 남은 날의 여행을 복잡한 일정표 없이 가볍게 참고하고 싶어 한다.
-
-**심사위원 페르소나.** 짧은 시간 안에 모바일 화면으로 앱을 훑어보며 관광데이터 활용도와 완성도를 평가한다. 첫 화면에서 핵심 가치(제주 웨딩 스냅 촬영팀 구성)가 읽히고, 관광 데이터가 체류일 보조 콘텐츠로 과하지 않게 연결되는지 확인한다.
-
-## 14. States
-
-| State | 처리 |
-|---|---|
-| 빈 상태 (검색 결과 없음) | 흰 배경, `#222222` 한 줄 안내 + 오렌지 CTA로 필터 초기화 |
-| 빈 상태 (맞는 작가 없음) | `#737373` 안내 문구 + 씬·톤 필터 초기화 CTA |
-| 로딩 (스팟 목록) | `#f5f5f5`/`#f9fafb` 톤의 스켈레톤 카드, 최종 카드와 동일한 radius |
-| 에러 (데이터 로드 실패) | `#222222` 안내 + 재시도 버튼, 원인 대신 다음 행동 제시 |
-| 성공 (일정에 담기) | 짧은 인라인 확인 (선택적으로 `#0da796`), 바로 다음 행동 링크 |
-| 비활성 | bg `#f3f4f6`, fg `#b1b8c0` |
-
-## 15. Motion & Easing
-
-| Token | 값 | 용도 |
+| Role | Semantic token | Use |
 |---|---|---|
-| `motion-fast` | 120ms | hover, 칩/탭 프레스 |
-| `motion-standard` | 200ms | 카드 등장, 시트, 토스트 |
-| `motion-slow` | 320ms | 페이지 전환 |
+| Primary orange | `primary` | One primary action per context: save, add, next |
+| Primary tint/faint | `primary-tint`, `primary-faint` | Gentle emphasis and selected-outline chip |
+| Foreground/label | `foreground`, `label` | Main and secondary text |
+| Dark emphasis | `ink-strong` | Active segmented-tab fill, neutral button fill |
+| Muted/faint | `muted-foreground`, `faint` | Metadata and low-emphasis text |
+| Surface | `secondary`, `surface`, `surface-faint` | Section separation and skeletons |
+| Border/hairline | `border`, `hairline` | Inputs, cards, and dividers |
+| Cream | `cream`, `accent` | Warm promo and recommendation surfaces |
+| Semantic feedback | `success`, `destructive`, `yellow` | Success, error, and ratings only |
 
-`ease-enter: cubic-bezier(0.2, 0.6, 0.25, 1)`로 카드/토스트가 자연스럽게 등장하고, `prefers-reduced-motion: reduce`에서는 모든 트랜지션이 즉시 적용된다.
+- Use Pretendard Variable throughout. Headings use weight 600; body and UI labels use weight 400.
+- Maintain a 4px-based rhythm: `2/4/8/12/16/20/24/32/48`.
+- Use no drop shadows. Establish depth with surfaces and 1px hairlines.
+- Radius: button 6px, input 8px, standard card 12px, promo card 16px, chips/tabs pill.
 
----
+| Role | Size / weight / line-height | Use |
+|---|---|---|
+| Display | 52px / 600 / 1.3 | Landing or onboarding headline |
+| H1 | 31px / 600 / 1.3 | Page title |
+| Subtitle | 17px / 600 / 1.3 | Section title |
+| Body | 16px / 400 / 1.5 | Reading text and navigation |
+| Body small | 15px / 400 / 1.6 | Chips, tabs, tags |
+| Button | 16px / 600 / 1 | Button label |
+| Caption | 13px / 400 / 1.5 | Metadata |
 
-**Note**: Section 1-9 (테마/컬러/타이포/컴포넌트/레이아웃)는 LikeLion Design System(`designsystem.likelion.net`)에서 차용. Section 10-15(보이스, 브랜드 서사, 원칙, 페르소나, 상태, 모션)는 ollesnap 자체 내용.
+## Blend-in rules (avoid the generic AI look)
+
+New UI must look like it was always part of the app. Before inventing a layout, find the closest existing screen and reuse its structure and spacing.
+
+- No gradients, gradient text, glassmorphism, or drop shadows. Depth comes from surfaces and hairlines only.
+- No colors, typefaces, or radius values beyond the tokens above.
+- No decorative numbered markers (01/02/03), no emoji as icons (use `lucide-react`), no oversized hero stat blocks — unless the content genuinely is a sequence or a metric.
+- One emphasis per screen: a single `primary` action and at most one `cream` highlight surface. Everything else stays quiet.
+
+## Component rules
+
+| Component | Specification |
+|---|---|
+| Primary button | `bg-primary`, white label, 48px height, 6px radius. Pressed/hover uses `primary-hover`; disabled uses `secondary` and disabled text. |
+| Neutral / assistive button | Neutral is `ink-strong` filled with white text; assistive is `secondary` with `label` text. Keep the same 48px height. |
+| Text field | White surface, `border`, 48px height, 8px radius; focus with `label` border. |
+| Plain card | White surface, `hairline` border, 12px radius, no shadow. |
+| Warm promo card | `cream` surface, 16px radius. Use 40px padding only for a full promo block; use the spacing scale for regular cards. |
+| Filter chip | Default: white, `border`, `label` text. Selected: `primary` fill and white text. Visual height is 30px; its tap target must still be at least 44px. |
+| Selected-outline chip | `primary-faint` surface, `primary` border and text. Use only as a documented alternative selection style; do not mix it with filled selected chips in one control. |
+| Segmented tab | 40px visual height, pill radius. Inactive: white with `border` and `label`; active: `ink-strong` fill with white text. |
+
+## Responsive and accessibility behavior
+
+- Mobile (360–639px): one column; use vertical lists or intentional horizontal carousels.
+- Tablet (640–1023px): use a two-column card grid where content benefits from it.
+- Desktop (1024px+): expand containers and columns; do not merely stretch the mobile column.
+- Keep text at 15px or larger for normal mobile UI. Use `focus-visible`, active/pressed states, and accessible labels for icon-only controls.
+- Use `next/image` when suitable and provide meaningful alternative text. Respect `prefers-reduced-motion`; motion must never be required to understand or operate a control.
+
+## Content, feedback, and motion
+
+The voice is a friendly, practical shooting-preparation companion: concise, concrete, and centered on scene, tone, and team composition. Avoid exaggerated marketing language, emoji overuse, and unsupported recommendations.
+
+| State | Treatment |
+|---|---|
+| Empty | Brief guidance and a primary action to reset or adjust scene/tone filters. |
+| Loading | `surface`/`surface-faint` skeletons matching the final card radius. |
+| Error | Plain explanation with a retry action; focus on the next action rather than technical cause. |
+| Success | Brief inline confirmation, optionally `success`, plus the next action. |
+| Disabled | `secondary` surface and disabled text. |
+
+- Fast interaction: 120ms; standard feedback: 200ms; slow page-level transition: 320ms.
+- Use `cubic-bezier(0.2, 0.6, 0.25, 1)` for entry motion. Honor reduced-motion preferences.
