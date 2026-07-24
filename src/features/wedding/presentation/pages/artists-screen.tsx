@@ -160,7 +160,7 @@ export function ArtistsScreen({
           <ArtistLoadError onRetry={() => void refetch()} />
         ) : artists.length > 0 ? (
           <>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3">
               {artists.map((artist) => {
                 const displayScene = getArtistDisplayScene(
                   artist,
@@ -172,7 +172,6 @@ export function ArtistsScreen({
                   <ArtistListCard
                     key={artist.id}
                     artist={artist}
-                    scene={displayScene}
                     tone={displayTone}
                     sceneLabel={getSceneLabel(catalog, displayScene)}
                     toneLabel={getToneLabel(catalog, displayTone)}
@@ -276,13 +275,13 @@ function ArtistLoadError({ onRetry }: ArtistLoadErrorProps) {
 function ArtistListSkeleton() {
   return (
     <div
-      className="grid gap-3 sm:grid-cols-2"
+      className="grid grid-cols-2 gap-3"
       aria-label="작가 목록 불러오는 중"
     >
-      {Array.from({ length: 3 }, (_, index) => (
+      {Array.from({ length: 4 }, (_, index) => (
         <div
           key={index}
-          className="h-40 animate-pulse rounded-2xl border border-border bg-muted/60"
+          className="h-64 animate-pulse rounded-2xl border border-border bg-muted/60"
         />
       ))}
     </div>

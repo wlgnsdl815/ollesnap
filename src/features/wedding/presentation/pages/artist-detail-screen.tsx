@@ -18,10 +18,7 @@ import {
   getStylingShopsForArtist,
   getToneLabel,
 } from "../../domain/usecase/wedding-catalog.usecase";
-import {
-  SCENE_IMAGES,
-  TONE_PHOTO_FILTERS,
-} from "../lib/scene-tone-visuals";
+import { TONE_PHOTO_FILTERS } from "../lib/scene-tone-visuals";
 
 interface ArtistDetailScreenProps {
   artist: SnapArtist;
@@ -39,24 +36,71 @@ export function ArtistDetailScreen({
   const linkedStylingShops = getStylingShopsForArtist(catalog, artist).filter(
     (shop) => shop.partnerArtistIds.includes(artist.id),
   );
+  const portfolioImageUrl = artist.portfolioImageUrls?.[0];
 
   return (
     <div className="flex flex-col gap-7 pb-4">
       <header className="flex flex-col gap-4">
-        <section className="relative overflow-hidden rounded-3xl text-white">
-          <Image
-            src={SCENE_IMAGES[artist.scenes[0]]}
-            alt={`${artist.studioName}의 대표 씬 — ${getSceneLabel(catalog, artist.scenes[0])}`}
-            fill
-            priority
-            sizes="(min-width: 1024px) 896px, (min-width: 640px) 672px, 100vw"
-            className="object-cover"
-            style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/15" />
-          <div className="relative flex flex-col gap-6 p-6 pt-20">
-            <div className="flex flex-col gap-3">
-              <span className="relative size-14 shrink-0 overflow-hidden rounded-full ring-2 ring-white/50">
+        {portfolioImageUrl ? (
+          <section className="relative aspect-4/5 overflow-hidden rounded-3xl text-white">
+            <Image
+              src={portfolioImageUrl}
+              alt={`${artist.studioName}의 대표 씬 — ${getSceneLabel(catalog, artist.scenes[0])}`}
+              fill
+              priority
+              sizes="(min-width: 1024px) 896px, (min-width: 640px) 672px, 100vw"
+              className="object-cover"
+              style={{ filter: TONE_PHOTO_FILTERS[artist.tones[0]] }}
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/40 to-black/15" />
+            <div className="absolute inset-0 flex flex-col justify-end gap-6 p-6">
+              <div className="flex flex-col gap-3">
+                <span className="relative size-14 shrink-0 overflow-hidden rounded-full ring-2 ring-white/50">
+                  <Image
+                    src={artist.profileImageUrl}
+                    alt={`${artist.artistName} 작가`}
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </span>
+                <h1 className="text-3xl font-semibold leading-tight text-balance">
+                  {artist.studioName}
+                </h1>
+                <p className="text-sm leading-6 text-white/85">
+                  {artist.artistName} 작가 · {artist.introduction}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {artist.scenes.map((scene) => (
+                  <span
+                    key={scene}
+                    className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
+                  >
+                    {getSceneLabel(catalog, scene)}
+                  </span>
+                ))}
+                {artist.tones.map((tone) => (
+                  <span
+                    key={tone}
+                    className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
+                  >
+                    {getToneLabel(catalog, tone)}
+                  </span>
+                ))}
+              </div>
+              <FavoriteArtistButton
+                artistId={artist.id}
+                initialIsSaved={isArtistSaved}
+                isAuthenticated={isAuthenticated}
+                returnPath={`/artists/${artist.id}`}
+              />
+            </div>
+          </section>
+        ) : (
+          <section className="flex flex-col gap-4 rounded-3xl border border-border bg-card p-6">
+            <div className="flex items-center gap-3">
+              <span className="relative size-14 shrink-0 overflow-hidden rounded-full">
                 <Image
                   src={artist.profileImageUrl}
                   alt={`${artist.artistName} 작가`}
@@ -65,18 +109,23 @@ export function ArtistDetailScreen({
                   className="object-cover"
                 />
               </span>
-              <h1 className="text-3xl font-semibold leading-tight text-balance">
-                {artist.studioName}
-              </h1>
-              <p className="text-sm leading-6 text-white/85">
-                {artist.artistName} 작가 · {artist.introduction}
-              </p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-2xl font-semibold leading-tight text-balance">
+                  {artist.studioName}
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  {artist.artistName} 작가
+                </p>
+              </div>
             </div>
+            <p className="text-sm leading-6 text-muted-foreground">
+              {artist.introduction}
+            </p>
             <div className="flex flex-wrap gap-2">
               {artist.scenes.map((scene) => (
                 <span
                   key={scene}
-                  className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
+                  className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground"
                 >
                   {getSceneLabel(catalog, scene)}
                 </span>
@@ -84,7 +133,7 @@ export function ArtistDetailScreen({
               {artist.tones.map((tone) => (
                 <span
                   key={tone}
-                  className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium backdrop-blur-sm"
+                  className="rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground"
                 >
                   {getToneLabel(catalog, tone)}
                 </span>
@@ -96,8 +145,8 @@ export function ArtistDetailScreen({
               isAuthenticated={isAuthenticated}
               returnPath={`/artists/${artist.id}`}
             />
-          </div>
-        </section>
+          </section>
+        )}
       </header>
 
       <section className="grid grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-card">

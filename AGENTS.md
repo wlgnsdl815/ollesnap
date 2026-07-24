@@ -51,4 +51,5 @@
 
 - Run `pnpm lint` after code changes.
 - Run `pnpm build` after route, configuration, or cross-feature contract changes.
+- Next.js allows only one dev server per project directory, regardless of port — if the user already has `pnpm dev` running (port 10000, see `package.json`), you cannot start a second instance alongside it. Don't kill their server to free the port. For a quick read-only check, curl their existing `localhost:10000` sparingly (avoid rapid/repeated requests — hammering pages triggers Supabase Auth's rate limit via `getServerUser()`, breaking their session). Otherwise ask the user to check in their own browser.
 - In the handoff, state changed files and any behavior that was not verified.

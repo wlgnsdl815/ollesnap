@@ -17,12 +17,7 @@ export function ArtistPortfolioGallery({
 
   return (
     <section className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-semibold">포트폴리오</h2>
-        <p className="text-sm leading-6 text-muted-foreground">
-          {studioName}가 직접 촬영한 사진이에요.
-        </p>
-      </div>
+      <h2 className="text-xl font-semibold">포트폴리오</h2>
       <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden">
         {imageUrls.map((imageUrl, index) => (
           <span
