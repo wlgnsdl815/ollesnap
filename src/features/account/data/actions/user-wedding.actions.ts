@@ -14,6 +14,10 @@ export interface ToggleSavedArtistResult extends ActionResult {
   savedCount?: number;
 }
 
+export interface ToggleSavedStylingShopResult extends ActionResult {
+  isSaved?: boolean;
+}
+
 export interface SaveSnapPlanInput {
   artistId: string | null;
   packageId: string | null;
@@ -134,6 +138,61 @@ async function countSavedArtists(userId: string): Promise<number | undefined> {
     .eq("user_id", userId);
 
   return error ? undefined : count ?? undefined;
+}
+
+export async function toggleSavedStylingShopAction(
+  shopId: string,
+): Promise<ToggleSavedStylingShopResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, message: "로그인이 필요해요." };
+  }
+
+  const { data: savedShop, error: findError } = await supabase
+    .from("saved_styling_shops")
+    .select("shop_id")
+    .eq("user_id", user.id)
+    .eq("shop_id", shopId)
+    .maybeSingle();
+
+  if (findError) {
+    return { ok: false, message: "찜 목록을 불러오지 못했어요." };
+  }
+
+  if (savedShop) {
+    const { error } = await supabase
+      .from("saved_styling_shops")
+      .delete()
+      .eq("user_id", user.id)
+      .eq("shop_id", shopId);
+
+    if (error) {
+      return { ok: false, message: "찜을 해제하지 못했어요." };
+    }
+
+    revalidatePath("/styling");
+    revalidatePath(`/styling/${shopId}`);
+    revalidatePath("/profile");
+    return { ok: true, isSaved: false };
+  }
+
+  const { error } = await supabase.from("saved_styling_shops").insert({
+    user_id: user.id,
+    shop_id: shopId,
+  });
+
+  if (error) {
+    return { ok: false, message: "샵을 찜하지 못했어요." };
+  }
+
+  revalidatePath("/styling");
+  revalidatePath(`/styling/${shopId}`);
+  revalidatePath("/profile");
+  return { ok: true, isSaved: true };
 }
 
 export async function saveSnapPlanAction(

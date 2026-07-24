@@ -45,6 +45,9 @@ export default async function ProfilePage() {
   const savedArtists = catalog.artists.filter((artist) =>
     userWeddingState.savedArtistIds.includes(artist.id),
   );
+  const savedStylingShops = catalog.stylingShops.filter((shop) =>
+    userWeddingState.savedStylingShopIds.includes(shop.id),
+  );
   const savedPlan = userWeddingState.snapPlan;
   const savedTeam = savedPlan?.artistId
     ? resolveSnapTeam(catalog, {
@@ -190,6 +193,37 @@ export default async function ProfilePage() {
     </section>
   );
 
+  const stylingShopsSection = (
+    <section className="flex flex-col gap-3">
+      <h2 className="text-xl font-semibold">찜한 스드메 샵</h2>
+      {savedStylingShops.length > 0 ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {savedStylingShops.map((shop) => (
+            <Link
+              key={shop.id}
+              href={`/styling/${shop.id}`}
+              className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 active:bg-muted"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold">{shop.name}</p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {shop.keywords.join(" · ")}
+                </p>
+              </div>
+              <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          description="마음에 드는 스드메 샵의 상세 화면에서 찜을 누르면 여기서 다시 볼 수 있어요."
+          href="/styling"
+          label="스드메 샵 찾기"
+        />
+      )}
+    </section>
+  );
+
   const staySection = (
     <section className="flex flex-col gap-3">
       <h2 className="text-xl font-semibold">제주 체류 일정</h2>
@@ -317,6 +351,11 @@ export default async function ProfilePage() {
       key: "artists",
       hasContent: savedArtists.length > 0,
       content: artistsSection,
+    },
+    {
+      key: "stylingShops",
+      hasContent: savedStylingShops.length > 0,
+      content: stylingShopsSection,
     },
     { key: "stay", hasContent: hasStayInfo, content: staySection },
     {

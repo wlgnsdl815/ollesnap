@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import { getWeddingCatalog } from "@/features/wedding/data/server/get-wedding-catalog";
 import { StylingShopDetailScreen } from "@/features/wedding/presentation/pages/styling-shop-detail-screen";
 
@@ -12,10 +13,11 @@ export default async function StylingShopPage({
   params,
   searchParams,
 }: StylingShopPageProps) {
-  const [{ id }, query, catalog] = await Promise.all([
+  const [{ id }, query, catalog, userWeddingState] = await Promise.all([
     params,
     searchParams,
     getWeddingCatalog(),
+    getUserWeddingState(),
   ]);
   const shop = catalog.stylingShops.find((item) => item.id === id);
 
@@ -30,6 +32,8 @@ export default async function StylingShopPage({
       shop={shop}
       artist={artist}
       selectedSnapPackageId={query.package}
+      isShopSaved={userWeddingState.savedStylingShopIds.includes(shop.id)}
+      isAuthenticated={userWeddingState.isAuthenticated}
     />
   );
 }

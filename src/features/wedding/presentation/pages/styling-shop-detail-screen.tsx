@@ -10,6 +10,8 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
+import { FavoriteStylingShopButton } from "@/features/account/presentation/components/favorite-styling-shop-button";
+
 import type {
   SnapArtist,
   StylingProduct,
@@ -28,12 +30,16 @@ interface StylingShopDetailScreenProps {
   shop: StylingShop;
   artist?: SnapArtist;
   selectedSnapPackageId?: string;
+  isShopSaved: boolean;
+  isAuthenticated: boolean;
 }
 
 export function StylingShopDetailScreen({
   shop,
   artist,
   selectedSnapPackageId,
+  isShopSaved,
+  isAuthenticated,
 }: StylingShopDetailScreenProps) {
   const [selectedKind, setSelectedKind] = useState<StylingProductKind>("package");
   const products = shop.products.filter((product) => product.kind === selectedKind);
@@ -60,6 +66,12 @@ export function StylingShopDetailScreen({
           </h1>
           <p className="text-sm leading-6 text-muted-foreground">{shop.introduction}</p>
         </div>
+        <FavoriteStylingShopButton
+          shopId={shop.id}
+          initialIsSaved={isShopSaved}
+          isAuthenticated={isAuthenticated}
+          returnPath={`/styling/${shop.id}`}
+        />
       </header>
 
       <PortfolioGallery

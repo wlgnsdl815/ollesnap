@@ -25,6 +25,7 @@ export interface SavedTravelPlanItem {
 export interface UserWeddingState {
   isAuthenticated: boolean;
   savedArtistIds: string[];
+  savedStylingShopIds: string[];
   snapPlan: SavedSnapPlan | null;
   travelPlanItems: SavedTravelPlanItem[];
 }

@@ -39,20 +39,28 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
 
   const supabase = await createClient();
 
-  const [{ data: savedArtists }, { data: snapPlan }] = await Promise.all([
-    supabase
-      .from("saved_artists")
-      .select("artist_id")
-      .eq("user_id", user.id),
-    supabase
-      .from("snap_plans")
-      .select(
-        "id, artist_id, package_id, styling_shop_id, styling_product_id, styling_option_ids, shooting_date, stay_start_date, stay_end_date",
-      )
-      .eq("user_id", user.id)
-      .maybeSingle(),
-  ]);
+  const [{ data: savedArtists }, { data: savedStylingShops }, { data: snapPlan }] =
+    await Promise.all([
+      supabase
+        .from("saved_artists")
+        .select("artist_id")
+        .eq("user_id", user.id),
+      supabase
+        .from("saved_styling_shops")
+        .select("shop_id")
+        .eq("user_id", user.id),
+      supabase
+        .from("snap_plans")
+        .select(
+          "id, artist_id, package_id, styling_shop_id, styling_product_id, styling_option_ids, shooting_date, stay_start_date, stay_end_date",
+        )
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
   const savedArtistIds = (savedArtists ?? []).map((item) => item.artist_id);
+  const savedStylingShopIds = (savedStylingShops ?? []).map(
+    (item) => item.shop_id,
+  );
   const mappedSnapPlan = snapPlan
     ? mapSnapPlan(snapPlan as SnapPlanRow)
     : null;
@@ -61,6 +69,7 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
     return {
       isAuthenticated: true,
       savedArtistIds,
+      savedStylingShopIds,
       snapPlan: null,
       travelPlanItems: [],
     };
@@ -77,6 +86,7 @@ export async function getUserWeddingState(): Promise<UserWeddingState> {
   return {
     isAuthenticated: true,
     savedArtistIds,
+    savedStylingShopIds,
     snapPlan: mappedSnapPlan,
     travelPlanItems: (travelPlanItems ?? []).map((item) =>
       mapTravelPlanItem(item as TravelPlanItemRow),
@@ -88,6 +98,7 @@ function createEmptyUserWeddingState(): UserWeddingState {
   return {
     isAuthenticated: false,
     savedArtistIds: [],
+    savedStylingShopIds: [],
     snapPlan: null,
     travelPlanItems: [],
   };
