@@ -1,3 +1,4 @@
+import { getUserWeddingState } from "@/features/account/data/server/user-wedding.server";
 import { createPhotoSpotRepository } from "@/features/photo-spot/data/repository/photo-spot.repository.impl";
 import { getJejuSnapSpots } from "@/features/photo-spot/domain/usecase/get-jeju-snap-spots";
 import { pickDailyHeroSpot } from "@/features/home/domain/pick-daily-hero-spot";
@@ -10,13 +11,20 @@ const photoSpotRepository = createPhotoSpotRepository();
 const HERO_POOL_SIZE = 40;
 
 export default async function HomePage() {
-  const [catalog, heroPool] = await Promise.all([
+  const [catalog, heroPool, userWeddingState] = await Promise.all([
     getWeddingCatalog(),
     getJejuSnapSpots(photoSpotRepository, HERO_POOL_SIZE).catch(
       (): never[] => [],
     ),
+    getUserWeddingState(),
   ]);
   const heroSpot = pickDailyHeroSpot(heroPool, new Date());
 
-  return <HomeScreen catalog={catalog} heroSpot={heroSpot} />;
+  return (
+    <HomeScreen
+      catalog={catalog}
+      heroSpot={heroSpot}
+      savedArtistIds={userWeddingState.savedArtistIds}
+    />
+  );
 }

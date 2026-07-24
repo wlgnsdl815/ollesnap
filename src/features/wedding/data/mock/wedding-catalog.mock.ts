@@ -24,6 +24,7 @@ const artists = artistSeeds.map((seed, index): SnapArtist => {
   return {
     ...seed,
     profileImageUrl: getArtistProfileImageUrl(index),
+    savedCount: 0,
     packageSummary: `${representativePackage.durationHours}시간 촬영 · 색감 보정본 ${representativePackage.colorCorrectedCount}장 · 인물 보정 ${representativePackage.basicRetouchedCount + representativePackage.selectedRetouchedCount}장`,
     priceFrom: representativePackage.price,
     durationHours: representativePackage.durationHours,
@@ -78,6 +79,7 @@ function createStylingShop(
     name: dressSeed.name,
     introduction: `${dressSeed.introduction} ${makeupSeed.introduction}`,
     keywords: [...dressSeed.keywords.slice(0, 2), makeupSeed.keywords[0]],
+    savedCount: 0,
     inventoryDescription:
       index === 0
         ? "드레스는 종류와 사이즈별로 약 600벌을 보유하고, 턱시도는 95·100·105 사이즈를 기본으로 준비해요."

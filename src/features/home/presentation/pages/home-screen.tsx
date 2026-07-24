@@ -6,12 +6,21 @@ import type { ReactNode } from "react";
 import type { PhotoSpot } from "@/features/photo-spot/domain/entity/photo-spot.entity";
 import { extractPlaceName } from "@/features/photo-spot/domain/extract-place-name";
 import type { WeddingCatalog } from "@/features/wedding/domain/entity/wedding-catalog.entity";
+import {
+  getTopArtists,
+  getTopStylingShops,
+} from "@/features/wedding/domain/usecase/wedding-catalog.usecase";
 
 import { HomeTastePicker } from "../components/home-taste-picker";
+import {
+  PopularArtistsSection,
+  PopularStylingShopsSection,
+} from "../components/home-popular-section";
 
 interface HomeScreenProps {
   catalog: WeddingCatalog;
   heroSpot: PhotoSpot | null;
+  savedArtistIds: string[];
 }
 
 const PREPARATION_STEPS = [
@@ -32,7 +41,14 @@ const PREPARATION_STEPS = [
   },
 ];
 
-export function HomeScreen({ catalog, heroSpot }: HomeScreenProps) {
+export function HomeScreen({
+  catalog,
+  heroSpot,
+  savedArtistIds,
+}: HomeScreenProps) {
+  const popularArtists = getTopArtists(catalog.artists, 5);
+  const popularStylingShops = getTopStylingShops(catalog.stylingShops, 5);
+
   return (
     <div className="flex flex-col gap-10 pb-4">
       <section className="relative min-h-112 overflow-hidden rounded-3xl bg-foreground text-white">
@@ -102,6 +118,13 @@ export function HomeScreen({ catalog, heroSpot }: HomeScreenProps) {
         </div>
         <HomeTastePicker scenes={catalog.scenes} tones={catalog.tones} />
       </FullBleedBand>
+
+      <PopularArtistsSection
+        artists={popularArtists}
+        savedArtistIds={savedArtistIds}
+      />
+
+      <PopularStylingShopsSection stylingShops={popularStylingShops} />
 
       <section className="flex flex-col gap-5">
         <div className="flex flex-col gap-1">

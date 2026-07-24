@@ -29,6 +29,7 @@ interface SnapArtistRow {
   introduction: string;
   profile_image_url: string;
   portfolio_image_urls: string[] | null;
+  saved_count: number;
   scenes: SnapScene[];
   tones: WeddingTone[];
   keywords: string[];
@@ -64,6 +65,7 @@ interface StylingShopRow {
   keywords: string[];
   inventory_description: string;
   portfolio_image_urls: string[] | null;
+  saved_count: number;
 }
 
 interface StylingProductRow {
@@ -133,6 +135,7 @@ async function fetchWeddingCatalog(): Promise<WeddingCatalog> {
     introduction: row.introduction,
     profileImageUrl: row.profile_image_url,
     portfolioImageUrls: row.portfolio_image_urls ?? [],
+    savedCount: row.saved_count,
     scenes: row.scenes,
     tones: row.tones,
     keywords: row.keywords,
@@ -154,6 +157,7 @@ async function fetchWeddingCatalog(): Promise<WeddingCatalog> {
     keywords: row.keywords,
     inventoryDescription: row.inventory_description,
     portfolioImageUrls: row.portfolio_image_urls ?? [],
+    savedCount: row.saved_count,
     partnerArtistIds: (artistIdsByShopId.get(row.id) ?? []).map(
       (partner) => partner.artist_id,
     ),

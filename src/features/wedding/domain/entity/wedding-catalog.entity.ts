@@ -55,6 +55,8 @@ export interface SnapArtist {
   profileImageUrl: string;
   /** 실제 작가 포트폴리오 사진 URL 목록. 운영 데이터가 채워지기 전까지는 비어 있다. */
   portfolioImageUrls?: string[];
+  /** 홈 화면 "인기 작가" 노출용 찜 수. 현재는 데모 시드 값이다. */
+  savedCount: number;
   scenes: SnapScene[];
   tones: WeddingTone[];
   keywords: string[];
@@ -107,6 +109,8 @@ export interface StylingShop {
   keywords: string[];
   inventoryDescription: string;
   portfolioImageUrls?: string[];
+  /** 홈 화면 "인기 샵" 노출용 찜 수. 현재는 데모 시드 값이다. */
+  savedCount: number;
   partnerArtistIds: string[];
   products: StylingProduct[];
 }

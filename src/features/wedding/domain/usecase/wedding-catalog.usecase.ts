@@ -24,6 +24,24 @@ export interface SnapTeamSelectionInput {
   stylingOptionIds?: string[];
 }
 
+export function getTopArtists(
+  artists: SnapArtist[],
+  count: number,
+): SnapArtist[] {
+  return [...artists]
+    .sort((a, b) => b.savedCount - a.savedCount)
+    .slice(0, count);
+}
+
+export function getTopStylingShops(
+  stylingShops: StylingShop[],
+  count: number,
+): StylingShop[] {
+  return [...stylingShops]
+    .sort((a, b) => b.savedCount - a.savedCount)
+    .slice(0, count);
+}
+
 export function filterSnapArtists(
   artists: SnapArtist[],
   filter: ArtistFilter,
