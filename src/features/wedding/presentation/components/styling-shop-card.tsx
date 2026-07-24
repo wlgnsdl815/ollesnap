@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import type {
@@ -6,7 +6,6 @@ import type {
   StylingShop,
 } from "../../domain/entity/wedding-catalog.entity";
 import {
-  formatPrice,
   formatPriceFrom,
   getMaxPartnerDiscount,
   isPartnerStylingShop,
@@ -44,37 +43,36 @@ export function StylingShopCard({
   const href = searchParams.size
     ? `/styling/${shop.id}?${searchParams.toString()}`
     : `/styling/${shop.id}`;
+  const portfolioImageUrl = shop.portfolioImageUrls?.[0];
 
   return (
     <Link
       href={href}
-      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 active:bg-muted"
+      className="flex flex-col self-start overflow-hidden rounded-2xl border border-border bg-card transition-colors active:bg-muted"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          {isPartner ? (
-            <p className="mb-1 text-xs font-semibold text-primary">
-              {maxPartnerDiscount > 0
-                ? `${artist?.artistName} 작가 제휴 · 최대 ${formatPrice(maxPartnerDiscount)} 할인`
-                : "제휴 작가 혜택"}
-            </p>
-          ) : null}
-          <p className="text-base font-semibold">{shop.name}</p>
-          <p className="mt-1 line-clamp-2 text-sm leading-5 text-muted-foreground">
-            {shop.introduction}
+      {portfolioImageUrl ? (
+        <div className="relative aspect-4/5 overflow-hidden">
+          <Image
+            src={portfolioImageUrl}
+            alt={`${shop.name} 촬영 사진`}
+            fill
+            sizes="(min-width: 640px) 240px, 45vw"
+            className="object-cover"
+          />
+        </div>
+      ) : null}
+      <div className="flex flex-col gap-1.5 p-3">
+        {isPartner ? (
+          <p className="truncate text-xs font-semibold text-primary">
+            {maxPartnerDiscount > 0
+              ? `${artist?.artistName} 작가 제휴`
+              : "제휴 작가 혜택"}
           </p>
-        </div>
-        <ArrowUpRight className="size-5 shrink-0 text-muted-foreground" />
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-wrap gap-1.5">
-          <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
-            패키지 {packageProducts.length}개
-          </span>
-          <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
-            단품 {singleProducts.length}개
-          </span>
-        </div>
+        ) : null}
+        <p className="truncate text-sm font-semibold">{shop.name}</p>
+        <p className="truncate text-xs text-muted-foreground">
+          패키지 {packageProducts.length}개 · 단품 {singleProducts.length}개
+        </p>
         <p className="text-sm font-semibold text-primary">
           단품 {formatPriceFrom(singleProducts[0]?.regularPrice.total ?? 0)}
         </p>

@@ -63,6 +63,7 @@ interface StylingShopRow {
   introduction: string;
   keywords: string[];
   inventory_description: string;
+  portfolio_image_urls: string[] | null;
 }
 
 interface StylingProductRow {
@@ -152,6 +153,7 @@ async function fetchWeddingCatalog(): Promise<WeddingCatalog> {
     introduction: row.introduction,
     keywords: row.keywords,
     inventoryDescription: row.inventory_description,
+    portfolioImageUrls: row.portfolio_image_urls ?? [],
     partnerArtistIds: (artistIdsByShopId.get(row.id) ?? []).map(
       (partner) => partner.artist_id,
     ),

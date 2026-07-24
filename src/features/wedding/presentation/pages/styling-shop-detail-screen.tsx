@@ -21,6 +21,7 @@ import {
   getStylingProductPrice,
   isPartnerStylingShop,
 } from "../../domain/usecase/wedding-catalog.usecase";
+import { PortfolioGallery } from "../components/portfolio-gallery";
 import { SnapSelectionBar } from "../components/snap-selection-bar";
 
 interface StylingShopDetailScreenProps {
@@ -60,6 +61,11 @@ export function StylingShopDetailScreen({
           <p className="text-sm leading-6 text-muted-foreground">{shop.introduction}</p>
         </div>
       </header>
+
+      <PortfolioGallery
+        imageUrls={shop.portfolioImageUrls ?? []}
+        altPrefix={shop.name}
+      />
 
       <section className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-4">
         <p className="text-sm font-semibold">준비 구성</p>

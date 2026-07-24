@@ -106,6 +106,7 @@ export interface StylingShop {
   introduction: string;
   keywords: string[];
   inventoryDescription: string;
+  portfolioImageUrls?: string[];
   partnerArtistIds: string[];
   products: StylingProduct[];
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { FavoriteArtistButton } from "@/features/account/presentation/components/favorite-artist-button";
 
-import { ArtistPortfolioGallery } from "../components/artist-portfolio-gallery";
+import { PortfolioGallery } from "../components/portfolio-gallery";
 
 import type {
   SnapArtist,
@@ -155,9 +155,9 @@ export function ArtistDetailScreen({
         <InfoMetric label="예약" value={`${artist.reservationLeadDays}일 전`} />
       </section>
 
-      <ArtistPortfolioGallery
+      <PortfolioGallery
         imageUrls={artist.portfolioImageUrls ?? []}
-        studioName={artist.studioName}
+        altPrefix={artist.studioName}
       />
 
       <section className="flex flex-col gap-3">

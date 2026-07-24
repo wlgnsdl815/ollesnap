@@ -1,16 +1,16 @@
 import Image from "next/image";
 
-interface ArtistPortfolioGalleryProps {
+interface PortfolioGalleryProps {
   imageUrls: string[];
-  studioName: string;
+  altPrefix: string;
 }
 
-// 실제 작가 포트폴리오 갤러리. snap_artists.portfolio_image_urls에
+// 작가/스드메 샵 공용 포트폴리오 갤러리. 해당 portfolio_image_urls에
 // 사진 URL이 채워지면 나타나고, 비어 있는 동안에는 렌더링되지 않는다.
-export function ArtistPortfolioGallery({
+export function PortfolioGallery({
   imageUrls,
-  studioName,
-}: ArtistPortfolioGalleryProps) {
+  altPrefix,
+}: PortfolioGalleryProps) {
   if (imageUrls.length === 0) {
     return null;
   }
@@ -26,7 +26,7 @@ export function ArtistPortfolioGallery({
           >
             <Image
               src={imageUrl}
-              alt={`${studioName} 포트폴리오 ${index + 1}`}
+              alt={`${altPrefix} 포트폴리오 ${index + 1}`}
               fill
               sizes="176px"
               className="object-cover"
