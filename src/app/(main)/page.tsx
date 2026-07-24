@@ -25,6 +25,7 @@ export default async function HomePage() {
       catalog={catalog}
       heroSpot={heroSpot}
       savedArtistIds={userWeddingState.savedArtistIds}
+      savedStylingShopIds={userWeddingState.savedStylingShopIds}
     />
   );
 }

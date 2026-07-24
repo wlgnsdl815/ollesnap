@@ -39,6 +39,10 @@ const SCREEN_MATCHERS: Array<{
   },
   { match: (p) => p === "/artists", screen: { title: "촬영 준비" } },
   {
+    match: (p) => p === "/styling/compare",
+    screen: { title: "스드메 샵 비교", backHref: "/profile" },
+  },
+  {
     match: (p) => p.startsWith("/styling/"),
     screen: { title: "스드메 샵", backHref: "/artists?tab=styling" },
   },

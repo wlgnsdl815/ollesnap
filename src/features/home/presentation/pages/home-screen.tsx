@@ -21,6 +21,7 @@ interface HomeScreenProps {
   catalog: WeddingCatalog;
   heroSpot: PhotoSpot | null;
   savedArtistIds: string[];
+  savedStylingShopIds: string[];
 }
 
 const PREPARATION_STEPS = [
@@ -45,6 +46,7 @@ export function HomeScreen({
   catalog,
   heroSpot,
   savedArtistIds,
+  savedStylingShopIds,
 }: HomeScreenProps) {
   const popularArtists = getTopArtists(catalog.artists, 5);
   const popularStylingShops = getTopStylingShops(catalog.stylingShops, 5);
@@ -124,7 +126,10 @@ export function HomeScreen({
         savedArtistIds={savedArtistIds}
       />
 
-      <PopularStylingShopsSection stylingShops={popularStylingShops} />
+      <PopularStylingShopsSection
+        stylingShops={popularStylingShops}
+        savedStylingShopIds={savedStylingShopIds}
+      />
 
       <section className="flex flex-col gap-5">
         <div className="flex flex-col gap-1">

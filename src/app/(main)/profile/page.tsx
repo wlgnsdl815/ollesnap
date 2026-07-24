@@ -221,6 +221,15 @@ export default async function ProfilePage() {
           label="스드메 샵 찾기"
         />
       )}
+      {savedStylingShops.length >= 2 ? (
+        <Link
+          href="/styling/compare"
+          className="flex min-h-11 w-fit items-center gap-1 text-sm font-semibold text-primary"
+        >
+          나란히 비교하기
+          <ChevronRight className="size-4" />
+        </Link>
+      ) : null}
     </section>
   );
 

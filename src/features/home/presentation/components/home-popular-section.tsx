@@ -74,10 +74,12 @@ export function PopularArtistsSection({
 
 interface PopularStylingShopsSectionProps {
   stylingShops: StylingShop[];
+  savedStylingShopIds: string[];
 }
 
 export function PopularStylingShopsSection({
   stylingShops,
+  savedStylingShopIds,
 }: PopularStylingShopsSectionProps) {
   if (stylingShops.length === 0) {
     return null;
@@ -96,6 +98,7 @@ export function PopularStylingShopsSection({
           const packageCount = shop.products.filter(
             (product) => product.kind === "package",
           ).length;
+          const isSaved = savedStylingShopIds.includes(shop.id);
 
           return (
             <Link
@@ -114,7 +117,9 @@ export function PopularStylingShopsSection({
                   />
                 ) : null}
                 <span className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-medium text-white backdrop-blur-sm">
-                  <Heart className="size-3 fill-white" />
+                  <Heart
+                    className={`size-3 ${isSaved ? "fill-primary text-primary" : "fill-white"}`}
+                  />
                   {shop.savedCount}
                 </span>
               </div>
